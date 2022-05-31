@@ -34,4 +34,6 @@ Hello world, I'm Samiur Rahman Mukul. At this repository i will be build a `Comp
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [github-shield]: https://img.shields.io/badge/-Github-black.svg?style=flat-square&logo=github&color=555&logoColor=white
 
-<p style="text-align: center; font-weight: bold;">HAPPY PROGRAMMING & DEVELOPING 🤣</p>
+<p align="center">
+  <strong> HAPPY PROGRAMMING 😀 & I LOVE PROGRAMMING 💖 </strong>
+</p>
