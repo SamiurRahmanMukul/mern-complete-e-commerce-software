@@ -23,6 +23,10 @@ env.config();
 // initializes express app
 const app = express();
 
+// application database connection establishment
+const connectDatabase = require("./src/database/connect");
+connectDatabase();
+
 // sets favicon in routes
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
@@ -43,7 +47,7 @@ app.get("/", (req, res) => {
 // sets application routes
 app.use(process.env.APP_API_PREFIX, getAllProductsRoute); // gets all products route
 
-// app listens to port
+// app listens to defined port
 app.listen(process.env.APP_PORT, () => {
   console.log("MYM-Mart backend server started on: " + process.env.APP_BASE_URL);
 });
