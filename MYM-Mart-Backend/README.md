@@ -6,7 +6,7 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![Github][github-shield]][github-url]
 
-# MYM-Mart Backend With `Node.js, Express.js & MongoDB`
+# MYM-Mart Backend
 
 <!-- INSTALL PROJECT PACKAGES -->
 
@@ -17,6 +17,7 @@ npm install express         // node framework
 npm install serve-favicon   // api router favicon sets
 npm install mongoose        // mongoDB database schema-based solution to model your application data
 npm install dotenv          // environment variables
+npm install corss           // allow corss policy
 ```
 
 <!-- EXTENSIONS & LINTING SETUP -->

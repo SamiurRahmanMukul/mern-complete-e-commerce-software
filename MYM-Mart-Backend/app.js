@@ -4,7 +4,7 @@
  * Author: Md. Samiur Rahman (Mukul)
  * Version: v1.0.0
  * Date: 31/5/2022
- * Last Modified: 9/6/2021
+ * Last Modified: 25/6/2021
  *
  */
 
@@ -12,10 +12,11 @@
 const express = require("express");
 const env = require("dotenv");
 const favicon = require("serve-favicon");
-var path = require("path");
+const path = require("path");
+const crossOrigin = require("cors");
 
 // imports application routes
-const getAllProductsRoute = require("./src/routes/get_all_products.route");
+const productsRoute = require("./src/routes/products.route");
 
 // loads environment variables from .env file
 env.config();
@@ -26,6 +27,10 @@ const app = express();
 // application database connection establishment
 const connectDatabase = require("./src/database/connect");
 connectDatabase();
+
+// allows cross-origin resource sharing
+const cors = crossOrigin({ origin: "*" });
+app.use(cors);
 
 // sets favicon in routes
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
@@ -45,9 +50,9 @@ app.get("/", (req, res) => {
 });
 
 // sets application routes
-app.use(process.env.APP_API_PREFIX, getAllProductsRoute); // gets all products route
+app.use(process.env.APP_API_PREFIX, productsRoute); // products route
 
 // app listens to defined port
 app.listen(process.env.APP_PORT, () => {
-  console.log("MYM-Mart backend server started on: " + process.env.APP_BASE_URL);
+  console.log("MYM-Mart backend server running on: " + process.env.APP_BASE_URL);
 });
