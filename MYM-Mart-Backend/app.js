@@ -15,7 +15,8 @@ const favicon = require("serve-favicon");
 const path = require("path");
 const crossOrigin = require("cors");
 
-// imports application routes
+// imports application routes & configs
+const { notFoundRoute, errorHandler } = require("./src/config/errorHandler");
 const productsRoute = require("./src/routes/products.route");
 
 // loads environment variables from .env file
@@ -50,7 +51,13 @@ app.get("/", (req, res) => {
 });
 
 // sets application routes
-app.use(process.env.APP_API_PREFIX, productsRoute); // products route
+app.use(process.env.APP_API_PREFIX, productsRoute); // products routes
+
+// 404 - not found error handler
+app.use(notFoundRoute);
+
+// 500 - internal server error handler
+app.use(errorHandler);
 
 // app listens to defined port
 app.listen(process.env.APP_PORT, () => {
