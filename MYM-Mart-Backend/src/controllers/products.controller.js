@@ -1,3 +1,4 @@
+const MyQueryOptions = require("../lib/queryOptions");
 const Products = require("../models/products.model");
 
 // make a controller to create a new product
@@ -34,14 +35,22 @@ exports.createProduct = async (req, res) => {
 // make a controller to get all products
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await Products.find();
+    const productQuery = new MyQueryOptions(Products.find(), req.query).search();
+    const products = await productQuery.query;
 
-    res.status(200).json({
-      statusCode: 200,
-      message: "Products fetched successfully.",
-      totalProducts: products.length,
-      data: products,
-    });
+    if (products.length === 0) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Products not found.",
+      });
+    } else {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Products fetched successfully.",
+        totalProducts: products.length,
+        data: products,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
