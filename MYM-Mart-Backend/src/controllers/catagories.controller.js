@@ -106,7 +106,7 @@ exports.deleteCategory = async (req, res) => {
 exports.getCategoriesAgainstProducts = async (req, res) => {
   try {
     // check if category name is exists
-    let category = await Categories.findOne({ name: req.params.name });
+    let category = await Categories.findOne({ name: { $regex: new RegExp(`^${req.params.name}$`), $options: "i" } });
 
     if (!category) {
       res.status(404).json({
@@ -116,7 +116,7 @@ exports.getCategoriesAgainstProducts = async (req, res) => {
     } else {
       // get all products against category
       const products = await Products.find({
-        category: req.params.name.toLowerCase(),
+        category: { $regex: new RegExp(`^${req.params.name}$`), $options: "i" },
       });
 
       if (products.length === 0) {
