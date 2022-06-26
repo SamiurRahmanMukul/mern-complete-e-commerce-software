@@ -35,19 +35,29 @@ exports.createProduct = async (req, res) => {
 // make a controller to get all products
 exports.getAllProducts = async (req, res) => {
   try {
-    const productQuery = new MyQueryOptions(Products.find(), req.query).search();
+    // total number of products
+    const totalProducts = (await Products.find()).length;
+
+    // product filtering based on searching or sorting queries
+    const productQuery = new MyQueryOptions(Products.find(), req.query).search().limit();
     const products = await productQuery.query;
 
-    if (products.length === 0) {
+    if (totalProducts === 0) {
       res.status(404).json({
         statusCode: 404,
-        message: "Products not found.",
+        message: "Currently any products not found in database. Please insert your first products. Thanks",
+      });
+    } else if (products.length === 0) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Searching or Sorting queries based any products not found.",
       });
     } else {
       res.status(200).json({
         statusCode: 200,
         message: "Products fetched successfully.",
-        totalProducts: products.length,
+        totalProducts: totalProducts,
+        responseProducts: products.length,
         data: products,
       });
     }
