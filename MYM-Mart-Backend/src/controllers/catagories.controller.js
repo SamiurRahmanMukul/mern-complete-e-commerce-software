@@ -1,4 +1,5 @@
 const Categories = require("../models/catagories.model");
+const Products = require("../models/products.model");
 
 // make a controller for creating category
 exports.createCategory = async (req, res) => {
@@ -53,7 +54,7 @@ exports.getAllCategories = async (req, res) => {
 // make a controller for updating category
 exports.updateCategory = async (req, res) => {
   try {
-    const category = await Categories.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const category = await MyQueryOptions(Products.find(), req.query).categories();
 
     if (!category) {
       res.status(404).json({
@@ -84,7 +85,7 @@ exports.deleteCategory = async (req, res) => {
     if (!category) {
       res.status(404).json({
         statusCode: 404,
-        message: "Category not found.",
+        message: "Category against any products not found.",
       });
     } else {
       res.status(200).json({
@@ -96,6 +97,46 @@ exports.deleteCategory = async (req, res) => {
     res.status(500).json({
       statusCode: 500,
       message: "Category deletion failed.",
+      error: err,
+    });
+  }
+};
+
+// make a controller for categories against filter products
+exports.getCategoriesAgainstProducts = async (req, res) => {
+  try {
+    // check if category name is exists
+    let category = await Categories.findOne({ name: req.params.name });
+
+    if (!category) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Category not found.",
+      });
+    } else {
+      // get all products against category
+      const products = await Products.find({
+        category: req.params.name.toLowerCase(),
+      });
+
+      if (products.length === 0) {
+        res.status(404).json({
+          statusCode: 404,
+          message: "No products found.",
+        });
+      } else {
+        res.status(200).json({
+          statusCode: 200,
+          message: "Products fetched successfully.",
+          totalProducts: products.length,
+          data: products,
+        });
+      }
+    }
+  } catch (err) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "Categories fetching failed.",
       error: err,
     });
   }
