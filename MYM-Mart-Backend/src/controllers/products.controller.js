@@ -4,13 +4,24 @@ const Products = require("../models/products.model");
 exports.createProduct = async (req, res) => {
   try {
     const product = new Products(req.body);
-    await product.save();
 
-    res.status(201).json({
-      statusCode: 201,
-      message: "Product created successfully.",
-      data: product,
-    });
+    // check if product name is already exists
+    const productExists = await Products.findOne({ name: product.name });
+
+    if (productExists) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Product name already exists.",
+      });
+    } else {
+      await product.save();
+
+      res.status(201).json({
+        statusCode: 201,
+        message: "Product created successfully.",
+        data: product,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
@@ -28,7 +39,7 @@ exports.getAllProducts = async (req, res) => {
     res.status(200).json({
       statusCode: 200,
       message: "Products fetched successfully.",
-      numOfProducts: products.length,
+      totalProducts: products.length,
       data: products,
     });
   } catch (err) {
@@ -45,11 +56,18 @@ exports.getSingleProduct = async (req, res) => {
   try {
     const product = await Products.findById(req.params.id);
 
-    res.status(200).json({
-      statusCode: 200,
-      message: "Product fetched successfully.",
-      data: product,
-    });
+    if (!product) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Product not found.",
+      });
+    } else {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Product fetched successfully.",
+        data: product,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
@@ -66,11 +84,18 @@ exports.updateProduct = async (req, res) => {
       new: true,
     });
 
-    res.status(200).json({
-      statusCode: 200,
-      message: "Product updated successfully.",
-      data: product,
-    });
+    if (!product) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Product not found.",
+      });
+    } else {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Product updated successfully.",
+        data: product,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
@@ -83,12 +108,19 @@ exports.updateProduct = async (req, res) => {
 // make a controller to delete a product
 exports.deleteProduct = async (req, res) => {
   try {
-    await Products.findByIdAndDelete(req.params.id);
+    const product = await Products.findByIdAndDelete(req.params.id);
 
-    res.status(200).json({
-      statusCode: 200,
-      message: "Product deleted successfully.",
-    });
+    if (!product) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Product not found.",
+      });
+    } else {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Product deleted successfully.",
+      });
+    }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
