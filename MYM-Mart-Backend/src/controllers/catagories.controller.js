@@ -36,12 +36,20 @@ exports.createCategory = async (req, res) => {
 exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Categories.find();
-    res.status(200).json({
-      statusCode: 200,
-      message: "Categories fetched successfully.",
-      totalCategories: categories.length,
-      data: categories,
-    });
+
+    if (categories.length === 0) {
+      res.status(404).json({
+        statusCode: 404,
+        message: "Sorry, no categories found in database. Please inset your first catagories. Thanks",
+      });
+    } else {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Categories fetched successfully.",
+        totalCategories: categories.length,
+        data: categories,
+      });
+    }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,

@@ -1,5 +1,4 @@
 {
-  "name": "Sample Category",
-  "description": "This is a sample category",
-  "image": "Category image - 101"
+  "name": "Sample",
+  "image": "sample_category.png"
 }

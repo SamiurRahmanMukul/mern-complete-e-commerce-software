@@ -6,10 +6,6 @@ const categoriesSchema = new mongoose.Schema({
     required: [true, "Category name is required field."],
     trim: true,
   },
-  description: {
-    type: String,
-    required: [true, "Category description is required field."],
-  },
   image: {
     type: String,
     required: [true, "Category image is required field."],
