@@ -19,6 +19,7 @@ const crossOrigin = require("cors");
 const { notFoundRoute, errorHandler } = require("./src/config/errorHandler");
 const productsRoute = require("./src/routes/products.route");
 const catagoriesRoute = require("./src/routes/catagories.route");
+const usersRoute = require("./src/routes/users.route");
 
 // loads environment variables from .env file
 env.config();
@@ -54,6 +55,7 @@ app.get("/", (req, res) => {
 // sets application routes
 app.use(process.env.APP_API_PREFIX, productsRoute); // products routes
 app.use(process.env.APP_API_PREFIX, catagoriesRoute); // catagories routes
+app.use(process.env.APP_API_PREFIX, usersRoute); // users routes
 
 // 404 - not found error handler
 app.use(notFoundRoute);

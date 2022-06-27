@@ -1,0 +1,17 @@
+{
+  "userName": "Sample User",
+  "fullName": "Sample User Full Name",
+  "email": "example@mail.com",
+  "phone": "01711111111",
+  "password": "123456",
+  "avatar": {
+    "url": "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png"
+  },
+  "role": "user",
+  "verified": false,
+  "status": "registered",
+  "resetPasswordToken": "",
+  "resetPasswordExpires": "",
+  "createdAt": "2020-01-01T00:00:00.000Z",
+  "updatedAt": "2020-01-01T00:00:00.000Z"
+}
