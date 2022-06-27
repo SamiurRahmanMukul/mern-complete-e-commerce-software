@@ -13,11 +13,20 @@
 ## Installing Packages
 
 ```sh
+# PACKAGES FOR BASIC APPLICATION
 npm install express         // node framework
 npm install serve-favicon   // api router favicon sets
 npm install mongoose        // mongoDB database schema-based solution to model your application data
 npm install dotenv          // environment variables
-npm install corss           // allow corss policy
+npm install cors            // allow cors policy
+
+# PACKAGES FOR USER AUTHENTICATION
+npm install bcryptjs        // password encryption
+npm install jsonwebtoken    // generate jwt token
+npm install validator       // password & email validation check
+npm install nodemailer      // user email OTP sending
+npm install cookie-parser   // parse HTTP request cookies
+npm install body-parser     // node.js body parsing middleware
 ```
 
 <!-- EXTENSIONS & LINTING SETUP -->
