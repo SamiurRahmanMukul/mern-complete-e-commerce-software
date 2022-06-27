@@ -1,5 +1,6 @@
 const MyQueryOptions = require("../lib/queryOptions");
 const Products = require("../models/products.model");
+const Catagories = require("../models/catagories.model");
 
 // make a controller to create a new product
 exports.createProduct = async (req, res) => {
@@ -9,10 +10,18 @@ exports.createProduct = async (req, res) => {
     // check if product name is already exists
     const productExists = await Products.findOne({ name: product.name });
 
+    // check if product category is already exists
+    const categoryExists = await Catagories.findOne({ name: { $regex: new RegExp(`^${req.body.category}$`), $options: "i" } });
+
     if (productExists) {
       return res.status(400).json({
         statusCode: 400,
         message: "Product name already exists.",
+      });
+    } else if (!categoryExists) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Product category does not exists.",
       });
     } else {
       await product.save();

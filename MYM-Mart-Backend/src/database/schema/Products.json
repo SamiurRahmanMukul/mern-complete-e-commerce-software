@@ -1,27 +1,29 @@
 {
-  "name": "First Product",
+  "name": "Sample Product",
   "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem.",
   "price": 1000,
-  "rating": 3,
   "images": [
     {
-      "public_id": "sample_img",
-      "url_1": "sample image - 1",
-      "url_2": "sample image - 2",
-      "url_3": "sample image - 3",
-      "youtube_url": "sample youtube url"
+      "url": "sample_img-1.png"
+    },
+    {
+      "url": "sample_img-2.png"
+    },
+    {
+      "url": "sample_img-3.png"
     }
   ],
-  "category": "sample category",
-  "sub_category": "sample sub category",
+  "youtube_url": "https://www.youtube.com/?watch=dfkal3njs",
+  "category": "sample",
   "stock": 10,
-  "numOfReviews": 5,
+  "rating": 5,
+  "totalReviews": 5,
   "reviews": [
     {
-      "user_id": 1,
-      "user_name": "sample user name",
-      "rating": 5,
-      "comment": "sample user comment"
+      "user_id": 101,
+      "user_name": "Sample User",
+      "rating": 4,
+      "comment": "Lorem ipsum dolor sit amet consectetur adipisicing elit."
     }
   ],
   "created_at": "2020-01-01T00:00:00.000Z",
