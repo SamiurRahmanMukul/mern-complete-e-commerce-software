@@ -35,6 +35,10 @@ const usersSchema = new mongoose.Schema({
       default: "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png",
     },
   },
+  gender: {
+    type: String,
+    enum: ["male, female"],
+  },
   role: {
     type: String,
     enum: ["admin", "user"],
@@ -65,6 +69,7 @@ const usersSchema = new mongoose.Schema({
   },
 });
 
+// after save, hash password
 usersSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
@@ -78,6 +83,11 @@ usersSchema.methods.getJWTToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES,
   });
+};
+
+// compare password
+usersSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
 module.exports = mongoose.model("Users", usersSchema);
