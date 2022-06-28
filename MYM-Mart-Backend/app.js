@@ -14,6 +14,7 @@ const env = require("dotenv");
 const favicon = require("serve-favicon");
 const path = require("path");
 const crossOrigin = require("cors");
+const cookieParser = require("cookie-parser");
 
 // imports application routes & configs
 const { notFoundRoute, errorHandler } = require("./src/config/errorHandler");
@@ -34,6 +35,9 @@ connectDatabase();
 // allows cross-origin resource sharing
 const cors = crossOrigin({ origin: "*" });
 app.use(cors);
+
+// parses cookies from request
+app.use(cookieParser());
 
 // sets favicon in routes
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
