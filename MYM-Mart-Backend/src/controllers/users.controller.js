@@ -39,8 +39,11 @@ exports.register = async (req, res) => {
         gender,
       });
 
+      // update user status & updateAt time
+      const updatedUser = await User.findByIdAndUpdate(user._id, { status: "login", updatedAt: Date.now() }, { new: true });
+
       // response user with JWT token
-      jwtToken(user, 201, "User registered successfully.", res);
+      jwtToken(updatedUser, 201, "User registered successfully.", res);
     }
   } catch (error) {
     res.status(500).json({
@@ -91,6 +94,38 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({
       statusCode: 500,
       message: "User login failed.",
+      error: error,
+    });
+  }
+};
+
+// make a controller for logout user
+exports.logoutUser = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (userId) {
+      // update user status & updateAt time
+      await User.findByIdAndUpdate(userId, { status: "logout", updatedAt: Date.now() }, { new: true });
+
+      // remove cookie
+      res.clearCookie("token");
+
+      // response user
+      res.status(200).json({
+        statusCode: 200,
+        message: "User logged out successfully.",
+      });
+    } else {
+      res.status(400).json({
+        statusCode: 400,
+        message: "User ID is required.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "User logout failed.",
       error: error,
     });
   }

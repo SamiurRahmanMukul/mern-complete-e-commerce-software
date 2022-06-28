@@ -8,10 +8,10 @@ const jwtToken = (user, status, message, res) => {
     httpOnly: true,
   };
 
-  res.status(status).cookie("X-JWT-TOKEN", token, options).json({
+  res.status(status).cookie("token", token, options).json({
     statusCode: status,
     message: message,
-    "X-JWT-TOKEN": token,
+    token: token,
     data: user,
   });
 };

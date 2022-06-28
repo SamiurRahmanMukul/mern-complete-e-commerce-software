@@ -2,7 +2,7 @@
 exports.notFoundRoute = (req, res, next) => {
   res.status(404).json({
     statusCode: 404,
-    message: "Sorry! Your request page was not found.",
+    message: "Sorry! Your request url was not found.",
   });
 };
 
