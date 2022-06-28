@@ -2,6 +2,7 @@ function App() {
   return (
     <div>
       <h1
+        className="text-primaryColor text-4xl font-bold my-4"
         style={{
           textAlign: "center",
         }}>
