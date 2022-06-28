@@ -59,6 +59,7 @@ exports.register = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const { loginType } = req.query;
 
     if (!email || !password) {
       // check if email or password is empty
@@ -75,6 +76,17 @@ exports.loginUser = async (req, res) => {
         statusCode: 400,
         message: "User not found.",
       });
+    }
+
+    // if query loginType is "admin"
+    if (loginType === "admin") {
+      // check if user is admin
+      if (user.role !== "admin") {
+        return res.status(400).json({
+          statusCode: 400,
+          message: "Only authorized user access here.",
+        });
+      }
     }
 
     // check password matched
