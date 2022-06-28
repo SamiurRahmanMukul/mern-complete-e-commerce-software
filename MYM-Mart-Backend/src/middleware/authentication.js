@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 // make a middleware for identify authenticated authorized user
 exports.isAuthenticatedUser = async (req, res, next) => {
   try {
-    // get toke form cookie
+    // get token form cookie
     const { token } = req.cookies;
 
     if (!token) {

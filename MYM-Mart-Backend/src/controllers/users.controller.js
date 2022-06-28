@@ -1,5 +1,6 @@
 const User = require("../models/users.model");
 const jwtToken = require("../lib/jwtToken");
+const jwt = require("jsonwebtoken");
 
 // make a controller for register new user
 exports.register = async (req, res) => {
@@ -102,24 +103,37 @@ exports.loginUser = async (req, res) => {
 // make a controller for logout user
 exports.logoutUser = async (req, res) => {
   try {
-    const { userId } = req.body;
+    // get token form cookie
+    const { token } = req.cookies;
+    if (token) {
+      // verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    if (userId) {
-      // update user status & updateAt time
-      await User.findByIdAndUpdate(userId, { status: "logout", updatedAt: Date.now() }, { new: true });
+      // check if user exists
+      const user = await User.findById(decoded.id);
 
-      // remove cookie
-      res.clearCookie("token");
+      if (!user) {
+        return res.status(401).json({
+          statusCode: 401,
+          message: "Unauthorized access. Please login to continue.",
+        });
+      } else {
+        // update user status & updateAt time
+        await User.findByIdAndUpdate(user._id, { status: "logout", updatedAt: Date.now() }, { new: true });
 
-      // response user
-      res.status(200).json({
-        statusCode: 200,
-        message: "User logged out successfully.",
-      });
+        // remove cookie
+        res.clearCookie("token");
+
+        // response user
+        res.status(200).json({
+          statusCode: 200,
+          message: "User logged out successfully.",
+        });
+      }
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         statusCode: 400,
-        message: "User ID is required.",
+        message: "Please login first. Then logout.",
       });
     }
   } catch (error) {
