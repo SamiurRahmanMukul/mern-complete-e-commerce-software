@@ -44,3 +44,46 @@ exports.isAuthenticatedUser = async (req, res, next) => {
     });
   }
 };
+
+exports.isAdmin = async (req, res, next) => {
+  try {
+    // get token form cookie
+    const { token } = req.cookies;
+
+    if (!token) {
+      return res.status(401).json({
+        statusCode: 401,
+        message: "Unauthorized access. Please login to continue.",
+      });
+    } else {
+      // verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+      // check if user exists
+      const user = await User.findById(decoded.id);
+
+      if (!user) {
+        return res.status(401).json({
+          statusCode: 401,
+          message: "Unauthorized access. Please login to continue.",
+        });
+      } else {
+        // check if user is logged in
+        if (user.status === "login" && user.role === "admin") {
+          next();
+        } else {
+          return res.status(401).json({
+            statusCode: 401,
+            message: "Unauthorized access. Only authorized user access here.",
+          });
+        }
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "User identify failed.",
+      error: error,
+    });
+  }
+};
