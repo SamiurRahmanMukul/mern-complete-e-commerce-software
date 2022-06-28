@@ -4,7 +4,7 @@ const jwtToken = require("../lib/jwtToken");
 // make a controller for register new user
 exports.register = async (req, res) => {
   try {
-    const { userName, fullName, email, phone, password } = req.body;
+    const { userName, fullName, email, phone, password, gender } = req.body;
 
     // check if userName, email or phone already exists
     const findUserName = await User.findOne({ userName });
@@ -36,6 +36,7 @@ exports.register = async (req, res) => {
         avatar: {
           url: "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png",
         },
+        gender,
       });
 
       // response user with JWT token
