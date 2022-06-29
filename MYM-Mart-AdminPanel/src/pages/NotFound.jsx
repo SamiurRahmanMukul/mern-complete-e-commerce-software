@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const NotFound = () => {
   return (
     <Result
+      className="h-screen pt-20"
       status="404"
       title="404 - Not Found!"
       subTitle="Sorry, the page you visited does not exist."

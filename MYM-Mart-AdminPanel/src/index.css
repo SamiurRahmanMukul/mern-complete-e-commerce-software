@@ -17,4 +17,10 @@ body {
   @apply text-textColorWhite bg-primaryColor hover:bg-primaryColorHover border-primaryColor hover:border-primaryColorHover !important;
 }
 
+.ant-divider-horizontal.ant-divider-with-text-center::before,
+.ant-divider-horizontal.ant-divider-with-text-center::after {
+  border-top: 2px solid !important;
+  @apply border-primaryColor w-[200px] text-center !important;
+}
+
 /* And Design Color Customize End */
