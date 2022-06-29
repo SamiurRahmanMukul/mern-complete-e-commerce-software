@@ -10,3 +10,11 @@ body {
   font-family: "Poppins", sans-serif;
   @apply bg-backgroundColorWhite;
 }
+
+/* And Design Color Customize Start */
+
+.ant-btn-primary {
+  @apply text-textColorWhite bg-primaryColor hover:bg-primaryColorHover border-primaryColor hover:border-primaryColorHover !important;
+}
+
+/* And Design Color Customize End */

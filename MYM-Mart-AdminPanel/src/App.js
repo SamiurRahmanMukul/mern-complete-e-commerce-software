@@ -1,14 +1,17 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
-    <div>
-      <h1
-        className="text-primaryColor text-4xl font-bold my-4"
-        style={{
-          textAlign: "center",
-        }}>
-        MYM-Mart AdminPanel
-      </h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/admin" element={<Dashboard />} />
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
