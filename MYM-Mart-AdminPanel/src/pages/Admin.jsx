@@ -1,17 +1,24 @@
 import { AreaChartOutlined, AuditOutlined, FileProtectOutlined, FilterOutlined, HomeOutlined, UserOutlined } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu } from "antd";
 import { useState } from "react";
+import Analytics from "../components/tabs/Analytics";
+import Catagories from "../components/tabs/Catagories";
+import Dashboard from "../components/tabs/Dashboard";
+import Orders from "../components/tabs/Orders";
+import Products from "../components/tabs/Products";
+import Users from "../components/tabs/Users";
 const { Header, Content, Footer, Sider } = Layout;
 
-const Dashboard = () => {
+const Admin = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState("1");
 
   return (
     <Layout
       style={{
         minHeight: "100vh",
       }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         {/* Slider Header Section */}
         <div className="flex flex-row items-center justify-center h-[115px]"></div>
 
@@ -52,6 +59,7 @@ const Dashboard = () => {
               label: "Analytics",
             },
           ]}
+          onClick={(e) => setSelectedKeys(e.key)}
         />
       </Sider>
 
@@ -73,8 +81,14 @@ const Dashboard = () => {
             style={{
               margin: "16px 0",
             }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>Admin</Breadcrumb.Item>
+            {selectedKeys === "1" && <Breadcrumb.Item>Dashboard</Breadcrumb.Item>}
+            {selectedKeys === "2" && <Breadcrumb.Item>Users</Breadcrumb.Item>}
+            {selectedKeys === "3" && <Breadcrumb.Item>Products</Breadcrumb.Item>}
+            {selectedKeys === "4" && <Breadcrumb.Item>Catagories</Breadcrumb.Item>}
+            {selectedKeys === "5" && <Breadcrumb.Item>Orders</Breadcrumb.Item>}
+            {selectedKeys === "6" && <Breadcrumb.Item>Analytics</Breadcrumb.Item>}
           </Breadcrumb>
 
           <div
@@ -83,7 +97,12 @@ const Dashboard = () => {
               padding: 24,
               minHeight: 360,
             }}>
-            Hello World!
+            {selectedKeys === "1" && <Dashboard />}
+            {selectedKeys === "2" && <Users />}
+            {selectedKeys === "3" && <Products />}
+            {selectedKeys === "4" && <Catagories />}
+            {selectedKeys === "5" && <Orders />}
+            {selectedKeys === "6" && <Analytics />}
           </div>
         </Content>
 
@@ -91,11 +110,11 @@ const Dashboard = () => {
           style={{
             textAlign: "center",
           }}>
-          ©2022 - MYM-Mart All Copyright Reserved
+          Copyright © 2022 MYM-Mart. All rights reserved.
         </Footer>
       </Layout>
     </Layout>
   );
 };
 
-export default Dashboard;
+export default Admin;
