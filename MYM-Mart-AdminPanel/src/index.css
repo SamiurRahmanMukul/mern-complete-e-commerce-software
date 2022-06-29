@@ -24,3 +24,11 @@ body {
 }
 
 /* And Design Color Customize End */
+
+/* Dashboard Page Style Start */
+
+.site-layout .site-layout-background {
+  @apply bg-backgroundColorWhite !important;
+}
+
+/* Dashboard Page Style End */

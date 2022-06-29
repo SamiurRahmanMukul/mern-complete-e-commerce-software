@@ -1,16 +1,16 @@
+import { SmileOutlined } from "@ant-design/icons";
 import { Button, Result } from "antd";
 import { Link } from "react-router-dom";
 
-const NotFound = () => {
+const HomePage = () => {
   return (
     <div className="flex h-screen justify-center items-center">
       <Result
-        status="404"
-        title="404 - Not Found!"
-        subTitle="Sorry, the page you visited does not exist."
+        icon={<SmileOutlined />}
+        title="Welcome to MYM-Mart AdminPanel!"
         extra={
           <Link to="/admin">
-            <Button type="primary">Back To Dashboard</Button>
+            <Button type="primary">Go To Dashboard</Button>
           </Link>
         }
       />
@@ -18,4 +18,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default HomePage;
