@@ -87,3 +87,49 @@ exports.isAdmin = async (req, res, next) => {
     });
   }
 };
+
+// make a middleware for api routes using jwt token
+exports.isAuthenticatedApiFetcher = async (req, res, next) => {
+  try {
+    // get token form headers
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return res.status(401).json({
+        statusCode: 401,
+        message: "Unauthorized access. Please login to continue.",
+      });
+    } else {
+      // verify token
+      const token = authorization.split(" ")[1];
+
+      jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            statusCode: 401,
+            message: "Unrecognized access can not be allowed.",
+            error: err,
+          });
+        } else {
+          const { url } = result;
+          const splitUrl = url.split(process.env.APP_API_PREFIX)[1];
+
+          if (url && splitUrl === req.url) {
+            next();
+          } else {
+            res.status(401).json({
+              statusCode: 401,
+              message: "Unrecognized access can not be allowed w.",
+            });
+          }
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "Unrecognized access can not be allowed.",
+      error: error,
+    });
+  }
+};

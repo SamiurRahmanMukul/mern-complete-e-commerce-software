@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const { createCategory, getAllCategories, updateCategory, deleteCategory, getCategoriesAgainstProducts } = require("../controllers/catagories.controller");
-const { isAuthenticatedUser, isAdmin } = require("../middleware/authentication");
+const { isAuthenticatedUser, isAdmin, isAuthenticatedApiFetcher } = require("../middleware/authentication");
 
-router.route("/categories/new").post(isAuthenticatedUser, isAdmin, createCategory);
-router.route("/categories").get(getAllCategories);
-router.route("/categories/:id").put(isAuthenticatedUser, isAdmin, updateCategory);
-router.route("/categories/:id").delete(isAuthenticatedUser, isAdmin, deleteCategory);
-router.route("/categories/:name").get(getCategoriesAgainstProducts);
+router.route("/categories/new").post(isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin, createCategory);
+router.route("/categories").get(isAuthenticatedApiFetcher, getAllCategories);
+router.route("/categories/:id").put(isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin, updateCategory);
+router.route("/categories/:id").delete(isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin, deleteCategory);
+router.route("/categories/:name").get(isAuthenticatedApiFetcher, getCategoriesAgainstProducts);
 
 module.exports = router;
