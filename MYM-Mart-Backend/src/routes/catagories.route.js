@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const { createCategory, getAllCategories, updateCategory, deleteCategory, getCategoriesAgainstProducts } = require("../controllers/catagories.controller");
-const { isAuthenticatedUser, isAdmin, isAuthenticatedApiFetcher } = require("../middleware/authentication");
+const { isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin } = require("../middleware/authentication");
 
 router.route("/categories/new").post(isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin, createCategory);
 router.route("/categories").get(isAuthenticatedApiFetcher, getAllCategories);

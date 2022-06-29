@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { isAuthenticatedUser, isAdmin, isAuthenticatedApiFetcher } = require("../middleware/authentication");
+const { isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin } = require("../middleware/authentication");
 const { createProduct, getAllProducts, getSingleProduct, updateProduct, deleteProduct } = require("../controllers/products.controller");
 
 router.route("/products/new").post(isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin, createProduct);

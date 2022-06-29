@@ -62,7 +62,7 @@ exports.getAllCategories = async (req, res) => {
 // make a controller for updating category
 exports.updateCategory = async (req, res) => {
   try {
-    const category = await MyQueryOptions(Products.find(), req.query).categories();
+    const category = await Categories.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
     if (!category) {
       res.status(404).json({
@@ -93,7 +93,7 @@ exports.deleteCategory = async (req, res) => {
     if (!category) {
       res.status(404).json({
         statusCode: 404,
-        message: "Category against any products not found.",
+        message: "Category not found.",
       });
     } else {
       res.status(200).json({

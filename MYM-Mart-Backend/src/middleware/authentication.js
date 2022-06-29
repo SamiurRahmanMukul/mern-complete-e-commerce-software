@@ -39,7 +39,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "User identify failed.",
+      message: "Unauthorized access. User identify failed.",
       error: error,
     });
   }
@@ -82,7 +82,7 @@ exports.isAdmin = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "User identify failed.",
+      message: "Unauthorized access. User identify failed.",
       error: error,
     });
   }
@@ -97,7 +97,7 @@ exports.isAuthenticatedApiFetcher = async (req, res, next) => {
     if (!authorization) {
       return res.status(401).json({
         statusCode: 401,
-        message: "Unauthorized access. Please login to continue.",
+        message: "Unrecognized access can not be allowed.",
       });
     } else {
       // verify token
@@ -119,7 +119,7 @@ exports.isAuthenticatedApiFetcher = async (req, res, next) => {
           } else {
             res.status(401).json({
               statusCode: 401,
-              message: "Unrecognized access can not be allowed w.",
+              message: "Unrecognized access can not be allowed.",
             });
           }
         }
