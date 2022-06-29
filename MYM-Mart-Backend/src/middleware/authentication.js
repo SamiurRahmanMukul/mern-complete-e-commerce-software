@@ -5,16 +5,16 @@ const jwt = require("jsonwebtoken");
 exports.isAuthenticatedUser = async (req, res, next) => {
   try {
     // get token form cookie
-    const { token } = req.cookies;
+    const { AccessToken } = req.cookies;
 
-    if (!token) {
+    if (!AccessToken) {
       return res.status(401).json({
         statusCode: 401,
         message: "Unauthorized access. Please login to continue.",
       });
     } else {
       // verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const decoded = jwt.verify(AccessToken, process.env.JWT_SECRET_KEY);
 
       // check if user exists
       const user = await User.findById(decoded.id);
@@ -48,16 +48,16 @@ exports.isAuthenticatedUser = async (req, res, next) => {
 exports.isAdmin = async (req, res, next) => {
   try {
     // get token form cookie
-    const { token } = req.cookies;
+    const { AccessToken } = req.cookies;
 
-    if (!token) {
+    if (!AccessToken) {
       return res.status(401).json({
         statusCode: 401,
         message: "Unauthorized access. Please login to continue.",
       });
     } else {
       // verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const decoded = jwt.verify(AccessToken, process.env.JWT_SECRET_KEY);
 
       // check if user exists
       const user = await User.findById(decoded.id);

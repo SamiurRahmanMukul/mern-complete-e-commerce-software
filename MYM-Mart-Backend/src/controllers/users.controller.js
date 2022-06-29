@@ -116,10 +116,10 @@ exports.loginUser = async (req, res) => {
 exports.logoutUser = async (req, res) => {
   try {
     // get token form cookie
-    const { token } = req.cookies;
-    if (token) {
+    const { AccessToken } = req.cookies;
+    if (AccessToken) {
       // verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const decoded = jwt.verify(AccessToken, process.env.JWT_SECRET_KEY);
 
       // check if user exists
       const user = await User.findById(decoded.id);
@@ -134,7 +134,7 @@ exports.logoutUser = async (req, res) => {
         await User.findByIdAndUpdate(user._id, { status: "logout", updatedAt: Date.now() }, { new: true });
 
         // remove cookie
-        res.clearCookie("token");
+        res.clearCookie("AccessToken");
 
         // response user
         res.status(200).json({
