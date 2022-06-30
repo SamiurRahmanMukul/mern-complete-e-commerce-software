@@ -156,3 +156,94 @@ exports.logoutUser = async (req, res) => {
     });
   }
 };
+
+// make a controller for get all users
+exports.getAllUsers = async (req, res) => {
+  try {
+    // get token form cookie
+    const { AccessToken } = req.cookies;
+    if (AccessToken) {
+      // verify token
+      const decoded = jwt.verify(AccessToken, process.env.JWT_SECRET_KEY);
+
+      // check if user exists
+      const user = await User.findById(decoded.id);
+
+      if (!user) {
+        return res.status(401).json({
+          statusCode: 401,
+          message: "Unauthorized access. Please login to continue.",
+        });
+      } else {
+        // check if user is admin
+        if (user.role !== "admin") {
+          return res.status(400).json({
+            statusCode: 400,
+            message: "Only authorized user not access here.",
+          });
+        } else {
+          // get all users
+          const users = await User.find({});
+
+          // response users
+          res.status(200).json({
+            statusCode: 200,
+            message: "Users fetched successfully.",
+            totalUsers: users.length,
+            data: users,
+          });
+        }
+      }
+    } else {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Please login first. Then get all users.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "Failed to get all users.",
+      error: error,
+    });
+  }
+};
+
+// make a controller for get user by id
+exports.getUserById = async (req, res) => {
+  try {
+    // get token form cookie
+    const { AccessToken } = req.cookies;
+
+    if (AccessToken) {
+      // verify token
+      const decoded = jwt.verify(AccessToken, process.env.JWT_SECRET_KEY);
+
+      // check if user exists
+      const user = await User.findById(decoded.id);
+
+      if (!user) {
+        return res.status(401).json({
+          statusCode: 401,
+          message: "User not found.",
+        });
+      } else {
+        // get user by id
+        const userById = await User.findById(req.params.id);
+
+        // response user
+        res.status(200).json({
+          statusCode: 200,
+          message: "User fetched successfully.",
+          data: userById,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "Failed to get a user.",
+      error: error,
+    });
+  }
+};
