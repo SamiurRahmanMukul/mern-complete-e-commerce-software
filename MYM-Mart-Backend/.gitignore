@@ -22,3 +22,6 @@ bin-release/
 
 # environment variables
 .env
+
+# uploads folder
+/public/uploads

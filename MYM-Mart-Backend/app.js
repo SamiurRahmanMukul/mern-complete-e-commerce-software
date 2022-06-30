@@ -4,7 +4,7 @@
  * Author: Md. Samiur Rahman (Mukul)
  * Version: v1.0.0
  * Date: 31/5/2022
- * Last Modified: 25/6/2021
+ * Last Modified: 30/6/2021
  *
  */
 
@@ -15,6 +15,7 @@ const favicon = require("serve-favicon");
 const path = require("path");
 const crossOrigin = require("cors");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 
 // imports application routes & configs
 const { notFoundRoute, errorHandler } = require("./src/config/errorHandler");
@@ -39,11 +40,15 @@ app.use(cors);
 // parses cookies from request
 app.use(cookieParser());
 
+// parses body of request
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // sets favicon in routes
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 // sets static folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 
 // parse requests of content-type - application/json
 app.use(express.json());

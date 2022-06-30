@@ -28,15 +28,15 @@ exports.register = async (req, res) => {
         message: "Phone number already exists.",
       });
     } else {
+      const name = userName.replace(/\s/g, "").toLowerCase();
+
       const user = await User.create({
-        userName,
+        userName: name,
         fullName,
         email,
         phone,
         password,
-        avatar: {
-          url: "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png",
-        },
+        avatar: req.file ? "/uploads/users/" + req.file.filename : "/avatar.png",
         gender,
       });
 

@@ -30,10 +30,7 @@ const usersSchema = new mongoose.Schema({
     select: false,
   },
   avatar: {
-    url: {
-      type: String,
-      default: "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png",
-    },
+    type: String,
   },
   gender: {
     type: String,
