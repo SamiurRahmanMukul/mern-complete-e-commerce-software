@@ -44,12 +44,12 @@ exports.register = async (req, res) => {
       const updatedUser = await User.findByIdAndUpdate(user._id, { status: "login", updatedAt: Date.now() }, { new: true });
 
       // response user with JWT token
-      jwtToken(updatedUser, 201, "User registered successfully.", res);
+      jwtToken(updatedUser, 201, "User registered successfully", res);
     }
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "User registration failed.",
+      message: "User registration failed",
       error: error,
     });
   }
@@ -65,7 +65,7 @@ exports.loginUser = async (req, res) => {
       // check if email or password is empty
       return res.status(400).json({
         statusCode: 400,
-        message: "Please enter email and password.",
+        message: "Please enter email and password",
       });
     }
 
@@ -74,7 +74,7 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         statusCode: 400,
-        message: "User not found.",
+        message: "User was not found",
       });
     }
 
@@ -84,7 +84,7 @@ exports.loginUser = async (req, res) => {
       if (user.role !== "admin") {
         return res.status(400).json({
           statusCode: 400,
-          message: "Only authorized user access here.",
+          message: "Only authorized user access here",
         });
       }
     }
@@ -94,7 +94,7 @@ exports.loginUser = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(400).json({
         statusCode: 400,
-        message: "Password does not match.",
+        message: "User credentials are incorrect",
       });
     }
 
@@ -102,11 +102,11 @@ exports.loginUser = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(user._id, { status: "login", updatedAt: Date.now() }, { new: true });
 
     // response user with JWT token
-    jwtToken(updatedUser, 200, "User logged in successfully.", res);
+    jwtToken(updatedUser, 200, "User logged in successfully", res);
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "User login failed.",
+      message: "User login failed",
       error: error,
     });
   }
@@ -127,7 +127,7 @@ exports.logoutUser = async (req, res) => {
       if (!user) {
         return res.status(401).json({
           statusCode: 401,
-          message: "Unauthorized access. Please login to continue.",
+          message: "Unauthorized access. Please login to continue",
         });
       } else {
         // update user status & updateAt time
@@ -139,19 +139,19 @@ exports.logoutUser = async (req, res) => {
         // response user
         res.status(200).json({
           statusCode: 200,
-          message: "User logged out successfully.",
+          message: "User logged out successfully",
         });
       }
     } else {
       return res.status(400).json({
         statusCode: 400,
-        message: "Please login first. Then logout.",
+        message: "Please login first. Then logout",
       });
     }
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "User logout failed.",
+      message: "User logout failed",
       error: error,
     });
   }
@@ -172,14 +172,14 @@ exports.getAllUsers = async (req, res) => {
       if (!user) {
         return res.status(401).json({
           statusCode: 401,
-          message: "Unauthorized access. Please login to continue.",
+          message: "Unauthorized access. Please login to continue",
         });
       } else {
         // check if user is admin
         if (user.role !== "admin") {
           return res.status(400).json({
             statusCode: 400,
-            message: "Only authorized user not access here.",
+            message: "Only authorized user not access here",
           });
         } else {
           // get all users
@@ -188,7 +188,7 @@ exports.getAllUsers = async (req, res) => {
           // response users
           res.status(200).json({
             statusCode: 200,
-            message: "Users fetched successfully.",
+            message: "Users fetched successfully",
             totalUsers: users.length,
             data: users,
           });
@@ -197,13 +197,13 @@ exports.getAllUsers = async (req, res) => {
     } else {
       return res.status(400).json({
         statusCode: 400,
-        message: "Please login first. Then get all users.",
+        message: "Please login first. Then get all users",
       });
     }
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "Failed to get all users.",
+      message: "Failed to get all users",
       error: error,
     });
   }
@@ -225,7 +225,7 @@ exports.getUserById = async (req, res) => {
       if (!user) {
         return res.status(401).json({
           statusCode: 401,
-          message: "User not found.",
+          message: "User was not found",
         });
       } else {
         // get user by id
@@ -234,7 +234,7 @@ exports.getUserById = async (req, res) => {
         // response user
         res.status(200).json({
           statusCode: 200,
-          message: "User fetched successfully.",
+          message: "User fetched successfully",
           data: userById,
         });
       }
@@ -242,7 +242,37 @@ exports.getUserById = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "Failed to get a user.",
+      message: "Failed to get a user",
+      error: error,
+    });
+  }
+};
+
+// make a controller for jsonwebtoken encoded token generated for user
+exports.jwtEncodedToken = (req, res) => {
+  try {
+    const { url, jwtSecret } = req.body;
+
+    if (url && jwtSecret) {
+      // generate token
+      const token = jwt.sign({ url }, jwtSecret);
+
+      // response token
+      res.status(200).json({
+        statusCode: 200,
+        message: "Token generated successfully",
+        jwtToken: token,
+      });
+    } else {
+      return res.status(400).json({
+        statusCode: 400,
+        message: "Please enter required fields",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "Failed to generate JWT token",
       error: error,
     });
   }

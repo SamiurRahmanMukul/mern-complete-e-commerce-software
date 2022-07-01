@@ -2,7 +2,7 @@ const multer = require("multer");
 const router = require("express").Router();
 const avatarUpload = require("../middleware/userAvatarUpload");
 const { isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin } = require("../middleware/authentication");
-const { register, loginUser, logoutUser, getAllUsers, getUserById } = require("../controllers/users.controller");
+const { register, loginUser, logoutUser, getAllUsers, getUserById, jwtEncodedToken } = require("../controllers/users.controller");
 
 const upload = multer();
 
@@ -10,6 +10,7 @@ const upload = multer();
 router.route("/auth/register").post(isAuthenticatedApiFetcher, avatarUpload.single("avatar"), register);
 router.route("/auth/login").post(isAuthenticatedApiFetcher, upload.none(), loginUser);
 router.route("/auth/logout").post(isAuthenticatedApiFetcher, logoutUser);
+router.route("/auth/token").post(jwtEncodedToken);
 
 // get all, delete & update users routes
 router.route("/user/all").get(isAuthenticatedApiFetcher, isAdmin, getAllUsers);
