@@ -1,10 +1,40 @@
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Alert, Button, Divider, Form, Input } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCookieToken, getSessionUser, setSessionUserAndCookieToken } from "../utils/helperCommon";
+import helperUserLogin from "../utils/helperUserLogin";
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Form data: ", values);
+  const navigate = useNavigate();
+  const [errMsg, setErrMsg] = useState("");
+
+  const sessionUser = getSessionUser();
+  const cookieToken = getCookieToken();
+
+  useEffect(() => {
+    if (sessionUser && cookieToken) {
+      navigate("/admin");
+    }
+  }, [navigate, sessionUser, cookieToken]);
+
+  const onFinish = async (values) => {
+    const data = await helperUserLogin(values);
+    const { status, msg, user, token } = data;
+
+    if (status === 200) {
+      setSessionUserAndCookieToken(user, token);
+      window.location.href = "/admin";
+    } else {
+      setErrMsg(msg);
+    }
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setErrMsg("");
+    }, 3000);
+  }, [errMsg]);
 
   return (
     <section className="flex flex-col h-screen items-center justify-center">
@@ -12,7 +42,7 @@ const Login = () => {
         <h1 className="text-3xl text-center text-primaryColor font-bold md:text-4xl">MYM-Mart</h1>
 
         <Divider className="!mb-10">Login</Divider>
-        <Alert message="Error Message Show Here" type="error" className="!text-center" />
+        {errMsg && <Alert message={errMsg} type="error" className="!text-center" />}
 
         <Form
           name="normal_login"

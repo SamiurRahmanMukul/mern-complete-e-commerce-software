@@ -1,26 +1,47 @@
-import { AreaChartOutlined, AuditOutlined, FileProtectOutlined, FilterOutlined, HomeOutlined, UserOutlined } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu } from "antd";
-import { useState } from "react";
+import { AreaChartOutlined, AuditOutlined, DashboardOutlined, FileProtectOutlined, FilterOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Analytics from "../components/tabs/Analytics";
 import Catagories from "../components/tabs/Catagories";
 import Dashboard from "../components/tabs/Dashboard";
 import Orders from "../components/tabs/Orders";
 import Products from "../components/tabs/Products";
 import Users from "../components/tabs/Users";
+import { getCookieToken, getSessionUser } from "../utils/helperCommon";
+import helperUserLogout from "../utils/helperUserLogout";
 const { Header, Content, Footer, Sider } = Layout;
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState("1");
+
+  const sessionUser = getSessionUser();
+  const cookieToken = getCookieToken();
+
+  useEffect(() => {
+    if (!sessionUser && !cookieToken) {
+      navigate("/auth/login");
+    }
+  }, [navigate, sessionUser, cookieToken]);
 
   return (
     <Layout
       style={{
         minHeight: "100vh",
       }}>
-      <Sider width={250} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider width={300} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         {/* Slider Header Section */}
-        <div className="flex flex-row items-center justify-center h-[115px]"></div>
+        <div className="flex flex-row items-center justify-start h-[115px]">
+          <img src={process.env.REACT_APP_API_BASE_URL + sessionUser?.avatar} alt="user-avatar" className="w-[60px] h-[60px] mx-2 rounded-full shadow-md" />
+
+          {!collapsed && (
+            <Tag color="default" className="text-[16px] font-bold capitalize my-1">
+              {sessionUser?.fullName}
+            </Tag>
+          )}
+        </div>
 
         {/* Slider Menu Section */}
         <Menu
@@ -30,7 +51,7 @@ const Admin = () => {
           items={[
             {
               key: "1",
-              icon: <HomeOutlined />,
+              icon: <DashboardOutlined />,
               label: "Dashboard",
             },
             {
@@ -58,8 +79,16 @@ const Admin = () => {
               icon: <AreaChartOutlined />,
               label: "Analytics",
             },
+            {
+              key: "7",
+              icon: <LogoutOutlined />,
+              label: "Logout",
+            },
           ]}
-          onClick={(e) => setSelectedKeys(e.key)}
+          onClick={(e) => {
+            setSelectedKeys(e.key);
+            e.key === "7" && helperUserLogout();
+          }}
         />
       </Sider>
 
@@ -110,7 +139,11 @@ const Admin = () => {
           style={{
             textAlign: "center",
           }}>
-          Copyright © 2022 MYM-Mart. All rights reserved.
+          Copyright © {new Date().getFullYear()}{" "}
+          <Link to="/admin" className="text-primaryColor font-bold">
+            MYM-Mart
+          </Link>
+          . All rights reserved.
         </Footer>
       </Layout>
     </Layout>
