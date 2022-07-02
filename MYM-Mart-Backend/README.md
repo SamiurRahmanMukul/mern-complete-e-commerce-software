@@ -10,7 +10,7 @@
 
 <!-- INSTALL PROJECT PACKAGES -->
 
-## Installing Packages
+## INSTALLING PACKAGES
 
 ```sh
 # PACKAGES FOR BASIC APPLICATION
@@ -24,14 +24,13 @@ npm install cors            // allow cors policy
 npm install bcryptjs        // password encryption
 npm install jsonwebtoken    // generate jwt token
 npm install validator       // password & email validation check
-npm install nodemailer      // user email OTP sending
 npm install cookie-parser   // parse HTTP request cookies
 npm install body-parser     // node.js body parsing middleware
 ```
 
 <!-- EXTENSIONS & LINTING SETUP -->
 
-## VS-Code Extensions
+## VS-CODE EXTENSIONS
 
 Install the below extensions:
 
