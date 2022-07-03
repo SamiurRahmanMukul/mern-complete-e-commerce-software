@@ -75,7 +75,17 @@ exports.register = async (req, res) => {
         res.status(201).json({
           statusCode: 201,
           message: "User registered successfully",
-          user: user,
+          user: {
+            userName: user.userName,
+            fullName: user.fullName,
+            email: user.email,
+            phone: user.phone,
+            avatar: process.env.APP_BASE_URL + user.avatar,
+            role: user.role,
+            status: user.status,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+          },
         });
       }
     } else {

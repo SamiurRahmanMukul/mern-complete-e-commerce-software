@@ -8,12 +8,27 @@ const jwtToken = (user, status, message, res) => {
     httpOnly: true,
   };
 
-  res.status(status).cookie("AccessToken", token, options).json({
-    statusCode: status,
-    message: message,
-    AccessToken: token,
-    data: user,
-  });
+  res
+    .status(status)
+    .cookie("AccessToken", token, options)
+    .json({
+      statusCode: status,
+      message: message,
+      AccessToken: token,
+      data: {
+        id: user._id,
+        useName: user.userName,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        avatar: process.env.APP_BASE_URL + user.avatar,
+        gender: user.gender,
+        role: user.role,
+        status: user.status,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
 };
 
 module.exports = jwtToken;
