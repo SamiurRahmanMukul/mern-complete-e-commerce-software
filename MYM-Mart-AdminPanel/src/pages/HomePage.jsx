@@ -3,6 +3,8 @@ import { Button, Result } from "antd";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
+  window.document.title = "MYM-Mart — Home";
+
   return (
     <div className="flex h-screen justify-center items-center">
       <Result

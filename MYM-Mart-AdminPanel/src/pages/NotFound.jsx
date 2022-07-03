@@ -2,6 +2,8 @@ import { Button, Result } from "antd";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
+  window.document.title = "MYM-Mart — Not Found";
+
   return (
     <div className="flex h-screen justify-center items-center">
       <Result

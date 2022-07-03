@@ -8,23 +8,24 @@ import Dashboard from "../components/tabs/Dashboard";
 import Orders from "../components/tabs/Orders";
 import Products from "../components/tabs/Products";
 import Users from "../components/tabs/Users";
-import { getCookieToken, getSessionUser } from "../utils/helperCommon";
+import { getSessionToken, getSessionUser } from "../utils/helperCommon";
 import helperUserLogout from "../utils/helperUserLogout";
 const { Header, Content, Footer, Sider } = Layout;
 
 const Admin = () => {
+  window.document.title = "MYM-Mart — Admin Panel";
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState("1");
 
   const sessionUser = getSessionUser();
-  const cookieToken = getCookieToken();
+  const sessionToken = getSessionToken();
 
   useEffect(() => {
-    if (!sessionUser && !cookieToken) {
+    if (!sessionUser && !sessionToken) {
       navigate("/auth/login");
     }
-  }, [navigate, sessionUser, cookieToken]);
+  }, [navigate, sessionUser, sessionToken]);
 
   return (
     <Layout
@@ -33,15 +34,17 @@ const Admin = () => {
       }}>
       <Sider width={300} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         {/* Slider Header Section */}
-        <div className="flex flex-row items-center justify-start h-[115px]">
-          <img src={process.env.REACT_APP_API_BASE_URL + sessionUser?.avatar} alt="user-avatar" className="w-[60px] h-[60px] mx-2 rounded-full shadow-md" />
+        {sessionUser && (
+          <div className="flex flex-row items-center justify-start h-[115px]">
+            <img src={sessionUser.avatar} alt="user-avatar" className="w-[60px] h-[60px] mx-2 rounded-full shadow-md" />
 
-          {!collapsed && (
-            <Tag color="default" className="text-[16px] font-bold capitalize my-1">
-              {sessionUser?.fullName}
-            </Tag>
-          )}
-        </div>
+            {!collapsed && (
+              <Tag color="default" className="h-[50px] text-[16px] font-bold capitalize py-3 my-1">
+                {sessionUser.fullName}
+              </Tag>
+            )}
+          </div>
+        )}
 
         {/* Slider Menu Section */}
         <Menu

@@ -1,4 +1,5 @@
 import axios from "axios";
+import openNotificationWithIcon from "./andNotification";
 
 const jwtEncodeUrl = async (getUrl) => {
   try {
@@ -19,6 +20,7 @@ const jwtEncodeUrl = async (getUrl) => {
     const response = await axios(config);
     return response.data.jwtToken || null;
   } catch (error) {
+    openNotificationWithIcon("error", "Fetch Error ", error.message);
     console.log("Catch error: ", error);
   }
 };

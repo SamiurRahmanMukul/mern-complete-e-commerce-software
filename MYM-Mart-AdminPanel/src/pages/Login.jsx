@@ -2,28 +2,29 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Alert, Button, Divider, Form, Input } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCookieToken, getSessionUser, setSessionUserAndCookieToken } from "../utils/helperCommon";
+import { getSessionToken, getSessionUser, setSessionUserAndToken } from "../utils/helperCommon";
 import helperUserLogin from "../utils/helperUserLogin";
 
 const Login = () => {
+  window.document.title = "MYM-Mart — Login";
   const navigate = useNavigate();
   const [errMsg, setErrMsg] = useState("");
 
   const sessionUser = getSessionUser();
-  const cookieToken = getCookieToken();
+  const sessionToken = getSessionToken();
 
   useEffect(() => {
-    if (sessionUser && cookieToken) {
+    if (sessionUser && sessionToken) {
       navigate("/admin");
     }
-  }, [navigate, sessionUser, cookieToken]);
+  }, [navigate, sessionUser, sessionToken]);
 
   const onFinish = async (values) => {
     const data = await helperUserLogin(values);
     const { status, msg, user, token } = data;
 
     if (status === 200) {
-      setSessionUserAndCookieToken(user, token);
+      setSessionUserAndToken(user, token);
       window.location.href = "/admin";
     } else {
       setErrMsg(msg);

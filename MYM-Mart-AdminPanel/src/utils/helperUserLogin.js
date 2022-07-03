@@ -1,3 +1,4 @@
+import openNotificationWithIcon from "./andNotification";
 import jwtEncodeUrl from "./helperJwtEncoder";
 
 const helperUserLogin = async (user) => {
@@ -30,6 +31,7 @@ const helperUserLogin = async (user) => {
         token: data.AccessToken || null,
       };
     } catch (error) {
+      openNotificationWithIcon("error", "Login Error", error.message);
       console.log("Catch error: ", error);
     }
   }
