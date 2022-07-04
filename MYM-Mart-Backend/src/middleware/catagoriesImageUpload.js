@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const uploadPath = () => {
-  const UPLOADS_FOLDER = "./public/uploads/users";
+  const UPLOADS_FOLDER = "./public/uploads/catagories";
 
   if (!fs.existsSync(UPLOADS_FOLDER)) {
     fs.mkdirSync(UPLOADS_FOLDER);
@@ -26,13 +26,13 @@ const storage = multer.diskStorage({
 });
 
 // prepare the final multer upload object
-var avatarUpload = multer({
+var catagoriesImageUpload = multer({
   storage: storage,
   limits: {
     fileSize: 1000000, // 1MB
   },
   fileFilter: (req, file, cb) => {
-    if (file.fieldname === "avatar") {
+    if (file.fieldname === "image") {
       if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
         cb(null, true);
       } else {
@@ -44,4 +44,4 @@ var avatarUpload = multer({
   },
 });
 
-module.exports = avatarUpload;
+module.exports = catagoriesImageUpload;

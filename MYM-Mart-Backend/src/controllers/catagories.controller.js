@@ -4,29 +4,43 @@ const Products = require("../models/products.model");
 // make a controller for creating category
 exports.createCategory = async (req, res) => {
   try {
-    const category = new Categories(req.body);
+    const { name } = req.body;
+    const image = req.file;
 
-    // check if category name is already exists
-    const categoryExists = await Categories.findOne({ name: category.name });
-
-    if (categoryExists) {
-      return res.status(400).json({
+    if (!name || !image) {
+      res.status(400).json({
         statusCode: 400,
-        message: "Category name already exists.",
+        message: "Category name and image is required field",
       });
     } else {
-      await category.save();
+      const newName = name.replace(/\s/g, "").toLowerCase();
 
-      res.status(201).json({
-        statusCode: 201,
-        message: "Category created successfully.",
-        data: category,
-      });
+      // check if category name is exists
+      let findCategory = await Categories.findOne({ name: newName });
+
+      if (findCategory) {
+        res.status(400).json({
+          statusCode: 400,
+          message: "Category name already exists",
+        });
+      } else {
+        // create new category
+        const category = await Categories.create({
+          name: newName,
+          image: "/uploads/catagories/" + image.filename,
+        });
+
+        res.status(201).json({
+          statusCode: 201,
+          message: "Category created successfully",
+          data: category,
+        });
+      }
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Category creation failed.",
+      message: "Category creation failed",
       error: err,
     });
   }
@@ -37,23 +51,31 @@ exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Categories.find();
 
-    if (categories.length === 0) {
+    if (!categories) {
       res.status(404).json({
         statusCode: 404,
-        message: "Sorry, no categories found in database. Please inset your first catagories. Thanks",
+        message: "No categories found",
       });
     } else {
       res.status(200).json({
         statusCode: 200,
-        message: "Categories fetched successfully.",
+        message: "Categories fetched successfully",
         totalCategories: categories.length,
-        data: categories,
+        data: [
+          ...categories.map((category) => {
+            return {
+              id: category._id,
+              name: category.name,
+              image: process.env.APP_BASE_URL + category.image,
+            };
+          }),
+        ],
       });
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Categories fetching failed.",
+      message: "Categories fetching failed",
       error: err,
     });
   }
@@ -62,19 +84,55 @@ exports.getAllCategories = async (req, res) => {
 // make a controller for updating category
 exports.updateCategory = async (req, res) => {
   try {
-    const category = await Categories.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const category = await Categories.findById(req.params.id);
+    const { name } = req.body;
+    const image = req.file;
 
     if (!category) {
       res.status(404).json({
         statusCode: 404,
-        message: "Category not found.",
+        message: "Category not found",
       });
     } else {
-      res.status(200).json({
-        statusCode: 200,
-        message: "Category updated successfully.",
-        data: category,
-      });
+      const newName = name.replace(/\s/g, "").toLowerCase();
+
+      if (name && image) {
+        // update category
+        const updatedCategory = await Categories.findByIdAndUpdate(
+          req.params.id,
+          {
+            name: newName,
+            image: "/uploads/catagories/" + image.filename,
+          },
+          { new: true }
+        );
+
+        res.status(200).json({
+          statusCode: 200,
+          message: "Category updated successfully",
+          data: updatedCategory,
+        });
+      } else if (name) {
+        // update category
+        const updatedCategory = await Categories.findByIdAndUpdate(
+          req.params.id,
+          {
+            name: newName,
+          },
+          { new: true }
+        );
+
+        res.status(200).json({
+          statusCode: 200,
+          message: "Category updated successfully",
+          data: updatedCategory,
+        });
+      } else {
+        res.status(400).json({
+          statusCode: 400,
+          message: "Category name and image is required field",
+        });
+      }
     }
   } catch (err) {
     res.status(500).json({
@@ -88,23 +146,26 @@ exports.updateCategory = async (req, res) => {
 // make a controller for deleting category
 exports.deleteCategory = async (req, res) => {
   try {
-    const category = await Categories.findByIdAndDelete(req.params.id);
+    const category = await Categories.findById(req.params.id);
 
     if (!category) {
       res.status(404).json({
         statusCode: 404,
-        message: "Category not found.",
+        message: "Category not found",
       });
     } else {
+      // delete category
+      await Categories.findByIdAndDelete(req.params.id);
+
       res.status(200).json({
         statusCode: 200,
-        message: "Category deleted successfully.",
+        message: "Category deleted successfully",
       });
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Category deletion failed.",
+      message: "Category deletion failed",
       error: err,
     });
   }
