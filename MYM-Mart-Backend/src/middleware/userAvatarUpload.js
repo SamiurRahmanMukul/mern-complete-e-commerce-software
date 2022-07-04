@@ -1,12 +1,20 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
 
-const UPLOADS_FOLDER = "./public/uploads/users";
+const uploadPath = () => {
+  const UPLOADS_FOLDER = "./public/uploads/users";
+  if (!fs.existsSync(UPLOADS_FOLDER)) {
+    fs.mkdirSync(UPLOADS_FOLDER);
+  }
+
+  return UPLOADS_FOLDER;
+};
 
 // define the storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, UPLOADS_FOLDER);
+    cb(null, uploadPath());
   },
   filename: (req, file, cb) => {
     const fileExt = path.extname(file.originalname);

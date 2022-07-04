@@ -35,9 +35,9 @@ exports.jwtTokenGenerate = (req, res) => {
 // make a controller for register new user
 exports.register = async (req, res) => {
   try {
-    const { userName, fullName, email, phone, password, gender } = req.body;
+    const { userName, fullName, email, phone, password, address, gender } = req.body;
 
-    if (userName && fullName && email && phone && password) {
+    if (userName && fullName && email && phone && password && address) {
       // check if userName, email or phone already exists
       const findUserName = await User.findOne({ userName });
       const findEmail = await User.findOne({ email });
@@ -69,6 +69,7 @@ exports.register = async (req, res) => {
           password,
           avatar: req.file ? "/uploads/users/" + req.file.filename : "/avatar.png",
           gender,
+          address,
         });
 
         // response user with JWT token
@@ -81,6 +82,8 @@ exports.register = async (req, res) => {
             email: user.email,
             phone: user.phone,
             avatar: process.env.APP_BASE_URL + user.avatar,
+            gender: user.gender,
+            address: user.address,
             role: user.role,
             status: user.status,
             createdAt: user.createdAt,

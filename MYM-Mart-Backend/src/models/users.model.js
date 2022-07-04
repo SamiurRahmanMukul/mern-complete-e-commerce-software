@@ -37,6 +37,10 @@ const usersSchema = new mongoose.Schema({
     type: String,
     enum: ["male", "female"],
   },
+  address: {
+    type: String,
+    required: [true, "Address field is required."],
+  },
   role: {
     type: String,
     enum: ["admin", "user"],

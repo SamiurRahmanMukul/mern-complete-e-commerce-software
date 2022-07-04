@@ -4,10 +4,9 @@
   "email": "example@mail.com",
   "phone": "01711111111",
   "password": "123456",
-  "avatar": {
-    "url": "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png"
-  },
+  "avatar": "https://toppng.com//public/uploads/preview/avatar-png-11554021661asazhxmdnu.png",
   "gender": "male",
+  "address": "ABC Road, Dhaka",
   "role": "user",
   "verified": false,
   "status": "registered",
