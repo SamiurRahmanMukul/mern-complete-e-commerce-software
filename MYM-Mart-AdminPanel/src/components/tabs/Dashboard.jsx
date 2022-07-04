@@ -1,7 +1,7 @@
 const Dashboard = () => {
   return (
-    <div>
-      <h1 className="text-2xl text-center font-bold">Dashboard</h1>
+    <div className="min-h-[68vh]">
+      <h1 className="text-2xl text-center font-bold my-2 uppercase">Dashboard</h1>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 const Products = () => {
   return (
-    <div>
-      <h1 className="text-2xl text-center font-bold">Products</h1>
+    <div className="min-h-[68vh]">
+      <h1 className="text-2xl text-center font-bold my-2 uppercase">Products</h1>
     </div>
   );
 };

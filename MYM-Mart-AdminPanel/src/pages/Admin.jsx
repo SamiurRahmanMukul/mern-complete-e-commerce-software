@@ -8,6 +8,7 @@ import Dashboard from "../components/tabs/Dashboard";
 import Orders from "../components/tabs/Orders";
 import Products from "../components/tabs/Products";
 import Users from "../components/tabs/Users";
+import useScreenWidth from "../hooks/useScreenWidth";
 import { getSessionToken, getSessionUser } from "../utils/helperCommon";
 import helperUserLogout from "../utils/helperUserLogout";
 const { Header, Content, Footer, Sider } = Layout;
@@ -17,6 +18,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState("1");
+  const screenSize = useScreenWidth();
 
   const sessionUser = getSessionUser();
   const sessionToken = getSessionToken();
@@ -26,6 +28,14 @@ const Admin = () => {
       navigate("/auth/login");
     }
   }, [navigate, sessionUser, sessionToken]);
+
+  useEffect(() => {
+    if (screenSize < 1020) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  }, [screenSize]);
 
   return (
     <Layout
@@ -39,7 +49,7 @@ const Admin = () => {
             <img src={sessionUser.avatar} alt="user-avatar" className="w-[60px] h-[60px] mx-2 rounded-full shadow-md" />
 
             {!collapsed && (
-              <Tag color="default" className="h-[50px] text-[16px] font-bold capitalize py-3 my-1">
+              <Tag color="default" className="text-[16px] font-bold capitalize py-2 my-1">
                 {sessionUser.fullName}
               </Tag>
             )}
