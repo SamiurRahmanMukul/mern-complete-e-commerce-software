@@ -33,7 +33,11 @@ exports.createCategory = async (req, res) => {
         res.status(201).json({
           statusCode: 201,
           message: "Category created successfully",
-          data: category,
+          data: {
+            id: category._id,
+            name: category.name,
+            image: process.env.APP_BASE_URL + category.image,
+          },
         });
       }
     }
@@ -125,7 +129,11 @@ exports.updateCategory = async (req, res) => {
         res.status(200).json({
           statusCode: 200,
           message: "Category updated successfully",
-          data: updatedCategory,
+          data: {
+            id: updatedCategory._id,
+            name: updatedCategory.name,
+            image: process.env.APP_BASE_URL + updatedCategory.image,
+          },
         });
       } else {
         res.status(400).json({
