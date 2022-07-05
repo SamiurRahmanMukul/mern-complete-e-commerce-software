@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import jwtEncodeUrl from "../utils/helperJwtEncoder";
 
-const useFetchApiData = (url) => {
+const useFetchApiData = (url, categoryReload) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const useFetchApiData = (url) => {
       }
     };
     fetchData();
-  }, [url]);
+  }, [url, categoryReload]);
 
   return { loading, data, error };
 };
