@@ -117,11 +117,11 @@ const Admin = () => {
 
         <Content
           style={{
-            margin: "0 16px",
+            margin: "0 10px",
           }}>
           <Breadcrumb
             style={{
-              margin: "16px 0",
+              margin: "10px 0",
             }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Breadcrumb.Item>Admin</Breadcrumb.Item>
@@ -136,7 +136,7 @@ const Admin = () => {
           <div
             className="site-layout-background"
             style={{
-              padding: 24,
+              padding: 4,
               minHeight: 360,
             }}>
             {selectedKeys === "1" && <Dashboard />}

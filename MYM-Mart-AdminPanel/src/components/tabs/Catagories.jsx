@@ -4,14 +4,21 @@ import { useEffect, useState } from "react";
 import useFetchApiData from "../../hooks/useFetchApiData";
 import openNotificationWithIcon from "../../utils/andNotification";
 import { getSessionToken } from "../../utils/helperCommon";
+import jwtEncodeUrl from "../../utils/helperJwtEncoder";
 const { confirm } = Modal;
 const { Search } = Input;
 
 const Catagories = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isUpdatedModalVisible, setIsUpdatedModalVisible] = useState(false);
   const [categoryUploadedFile, setCategoryUploadedFile] = useState(null);
   const [categoryUploadedTitle, setCategoryUploadedTitle] = useState(null);
   const [categoryUploadedError, setCategoryUploadedError] = useState(null);
+  const [categoryUpdatedFile, setCategoryUpdatedFile] = useState(null);
+  const [categoryUpdatedTitle, setCategoryUpdatedTitle] = useState(null);
+  const [categoryUpdatedError, setCategoryUpdatedError] = useState(null);
+  const [isSelectedUpdatedFile, setIsSelectedUpdatedFile] = useState(false);
+  const [categoryId, setCategoryId] = useState(null);
   const [categoryReload, setCategoryReload] = useState(false);
 
   // category list api data fetch
@@ -26,14 +33,14 @@ const Catagories = () => {
       setCategoryUploadedError("Category title filed is required");
     } else {
       try {
-        var myHeaders = new Headers();
+        let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + getSessionToken());
 
-        var formdata = new FormData();
+        let formdata = new FormData();
         formdata.append("name", categoryUploadedTitle);
         formdata.append("image", categoryUploadedFile);
 
-        var requestOptions = {
+        let requestOptions = {
           method: "POST",
           headers: myHeaders,
           body: formdata,
@@ -58,15 +65,13 @@ const Catagories = () => {
       }
     }
   };
-  const handleAddNewCategoryModalCancel = () => {
-    setIsModalVisible(false);
-  };
 
   useEffect(() => {
     setTimeout(() => {
       setCategoryUploadedError(null);
+      setCategoryUpdatedError(null);
     }, 5000);
-  }, [categoryUploadedError]);
+  }, [categoryUploadedError, categoryUpdatedError]);
 
   // make a function to handle delete category
   const handleDeleteCategory = (id) => {
@@ -78,10 +83,10 @@ const Catagories = () => {
       cancelText: "No",
 
       onOk() {
-        var myHeaders = new Headers();
+        let myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + getSessionToken());
 
-        var requestOptions = {
+        let requestOptions = {
           method: "DELETE",
           headers: myHeaders,
           redirect: "follow",
@@ -102,6 +107,79 @@ const Catagories = () => {
           });
       },
     });
+  };
+
+  // make a function to handle update category
+  const handleUpdatedCategory = async (id) => {
+    // get the category data from the server
+    const url2 = process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/" + id;
+    const token2 = await jwtEncodeUrl(url2);
+
+    let myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${token2}`);
+
+    let requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(url2, requestOptions);
+      const jsonData = await response.json();
+
+      if (jsonData.statusCode === 200 && jsonData.data) {
+        setCategoryUpdatedFile(jsonData.data.image);
+        setCategoryUpdatedTitle(jsonData.data.name);
+        setIsUpdatedModalVisible(true);
+        setCategoryId(id);
+      } else {
+        openNotificationWithIcon("error", "Category Fetching", jsonData.message);
+      }
+    } catch (err2) {
+      console.log("error", err2);
+      openNotificationWithIcon("error", "Category Fetching", err2.message);
+    }
+  };
+
+  // make a function to confirm update category
+  const handleConfirmUpdateCategory = async () => {
+    const url3 = process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/" + categoryId;
+
+    let myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + getSessionToken());
+
+    let formdata = new FormData();
+    formdata.append("name", categoryUpdatedTitle);
+    formdata.append("image", categoryUpdatedFile);
+
+    let requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: formdata,
+      redirect: "follow",
+    };
+
+    try {
+      const response2 = await fetch(url3, requestOptions);
+      const jsonData2 = await response2.json();
+
+      if (jsonData2.statusCode === 200 && jsonData2.data) {
+        openNotificationWithIcon("success", "Category Update", jsonData2.message);
+        setCategoryUpdatedError(null);
+        setCategoryUpdatedFile(null);
+        setCategoryUpdatedTitle(null);
+        setIsSelectedUpdatedFile(false);
+        setCategoryReload(!categoryReload);
+        setCategoryId(null);
+        setIsUpdatedModalVisible(false);
+      } else {
+        setCategoryUpdatedError(jsonData2.message);
+      }
+    } catch (err2) {
+      console.log("error", err2);
+      setCategoryUpdatedError(err2.message);
+    }
   };
 
   return (
@@ -152,7 +230,7 @@ const Catagories = () => {
                       </Button>
                     </td>
                     <td className="text-left p-1">
-                      <Button type="primary" size="middle">
+                      <Button type="primary" size="middle" onClick={() => handleUpdatedCategory(item.id)}>
                         UPDATE
                       </Button>
                       <Button type="default" size="middle" danger className="ml-2" onClick={() => handleDeleteCategory(item.id)}>
@@ -167,7 +245,7 @@ const Catagories = () => {
       </div>
 
       {/* ADD NEW CATEGORY MODAL */}
-      <Modal title="Add New Category" visible={isModalVisible} onOk={handleAddNewCategory} onCancel={handleAddNewCategoryModalCancel}>
+      <Modal title="Add New Category" visible={isModalVisible} onOk={handleAddNewCategory} onCancel={() => setIsModalVisible(false)}>
         {categoryUploadedError && <Alert message={categoryUploadedError} type="error" className="!text-center mb-4" />}
 
         {categoryUploadedFile && <img src={URL.createObjectURL(categoryUploadedFile)} alt="upload_img" className="w-[200px] h-[180px] ml-[28%] mb-2" />}
@@ -175,6 +253,32 @@ const Catagories = () => {
         <Input type="file" name="category_img" accept="image/jpg, image/jpeg, image/png" onChange={(e) => setCategoryUploadedFile(e.target.files[0])} />
 
         <Input type="text" name="category_title" placeholder="Input here category title" className="mt-4" value={categoryUploadedTitle} onChange={(e) => setCategoryUploadedTitle(e.target.value)} />
+      </Modal>
+
+      {/* UPDATED CATEGORY MODAL */}
+      <Modal
+        title="Updated Category"
+        visible={isUpdatedModalVisible}
+        onOk={handleConfirmUpdateCategory}
+        onCancel={() => {
+          setIsUpdatedModalVisible(false);
+          setIsSelectedUpdatedFile(false);
+        }}>
+        {categoryUpdatedError && <Alert message={categoryUpdatedError} type="error" className="!text-center mb-4" />}
+
+        {categoryUpdatedFile && <img src={isSelectedUpdatedFile ? URL.createObjectURL(categoryUpdatedFile) : categoryUpdatedFile} alt="upload_img" className="w-[200px] h-[180px] ml-[28%] mb-2" />}
+
+        <Input
+          type="file"
+          name="category_img"
+          accept="image/jpg, image/jpeg, image/png"
+          onChange={(e) => {
+            setCategoryUpdatedFile(e.target.files[0]);
+            setIsSelectedUpdatedFile(true);
+          }}
+        />
+
+        <Input type="text" name="category_title" placeholder="Input here category title" className="mt-4" value={categoryUpdatedTitle} onChange={(e) => setCategoryUpdatedTitle(e.target.value)} />
       </Modal>
     </>
   );
