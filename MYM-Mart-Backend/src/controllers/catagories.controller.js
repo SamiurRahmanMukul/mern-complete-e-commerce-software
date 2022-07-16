@@ -1,7 +1,8 @@
 const Categories = require("../models/catagories.model");
 const Products = require("../models/products.model");
+const fs = require("fs");
 
-// make a controller for creating category
+// make a controller for creating new category
 exports.createCategory = async (req, res) => {
   try {
     const { name } = req.body;
@@ -45,6 +46,46 @@ exports.createCategory = async (req, res) => {
     res.status(500).json({
       statusCode: 500,
       message: "Category creation failed",
+      error: err,
+    });
+  }
+};
+
+// make a controller for getting category by id
+exports.getCategoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(400).json({
+        statusCode: 400,
+        message: "Category id is required field",
+      });
+    } else {
+      // get category by id
+      const category = await Categories.findById(id);
+
+      if (!category) {
+        res.status(404).json({
+          statusCode: 404,
+          message: "Category not found",
+        });
+      } else {
+        res.status(200).json({
+          statusCode: 200,
+          message: "Category found successfully",
+          data: {
+            id: category._id,
+            name: category.name,
+            image: process.env.APP_BASE_URL + category.image,
+          },
+        });
+      }
+    }
+  } catch (err) {
+    res.status(500).json({
+      statusCode: 500,
+      message: "Category fetching failed",
       error: err,
     });
   }
@@ -101,6 +142,13 @@ exports.updateCategory = async (req, res) => {
       const newName = name.replace(/\s/g, "").toLowerCase();
 
       if (name && image) {
+        // delete old category image
+        fs.unlink(`${__dirname}/../../public${category.image}`, (err) => {
+          if (err) {
+            console.log("Category image delete error: ", err.message);
+          }
+        });
+
         // update category
         const updatedCategory = await Categories.findByIdAndUpdate(
           req.params.id,
@@ -164,6 +212,13 @@ exports.deleteCategory = async (req, res) => {
     } else {
       // delete category
       await Categories.findByIdAndDelete(req.params.id);
+
+      // delete category image
+      fs.unlink(`${__dirname}/../../public${category.image}`, (err) => {
+        if (err) {
+          console.log("Category image delete error: ", err.message);
+        }
+      });
 
       res.status(200).json({
         statusCode: 200,

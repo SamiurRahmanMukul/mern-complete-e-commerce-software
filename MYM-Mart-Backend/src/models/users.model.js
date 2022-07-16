@@ -52,7 +52,7 @@ const usersSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["register", "login", "logout", "blocked"],
+    enum: ["register", "login", "logout"],
     default: "register",
   },
   resetPasswordToken: {
