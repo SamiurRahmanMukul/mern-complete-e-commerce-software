@@ -1,5 +1,6 @@
 const Categories = require("../models/catagories.model");
 const Products = require("../models/products.model");
+const MyQueryOptions = require("../lib/queryOptions");
 const fs = require("fs");
 
 // make a controller for creating new category
@@ -29,6 +30,7 @@ exports.createCategory = async (req, res) => {
         const category = await Categories.create({
           name: newName,
           image: "/uploads/catagories/" + image.filename,
+          createdBy: req.user._id,
         });
 
         res.status(201).json({
@@ -38,6 +40,7 @@ exports.createCategory = async (req, res) => {
             id: category._id,
             name: category.name,
             image: process.env.APP_BASE_URL + category.image,
+            createdBy: category.createdBy,
           },
         });
       }
@@ -78,6 +81,7 @@ exports.getCategoryById = async (req, res) => {
             id: category._id,
             name: category.name,
             image: process.env.APP_BASE_URL + category.image,
+            createdBy: category.createdBy,
           },
         });
       }
@@ -96,6 +100,10 @@ exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Categories.find();
 
+    // product filtering based on searching or sorting queries
+    const categoryQuery = new MyQueryOptions(Categories.find(), req.query).search().paginate();
+    const categoryNew = await categoryQuery.query;
+
     if (!categories) {
       res.status(404).json({
         statusCode: 404,
@@ -106,12 +114,15 @@ exports.getAllCategories = async (req, res) => {
         statusCode: 200,
         message: "Categories fetched successfully",
         totalCategories: categories.length,
+        numOfPages: Math.ceil(categories.length / req.query.limit),
+        numOfItems: categoryNew.length,
         data: [
-          ...categories.map((category) => {
+          ...categoryNew.map((category) => {
             return {
               id: category._id,
               name: category.name,
               image: process.env.APP_BASE_URL + category.image,
+              createdBy: category.createdBy,
             };
           }),
         ],
@@ -155,6 +166,7 @@ exports.updateCategory = async (req, res) => {
           {
             name: newName,
             image: "/uploads/catagories/" + image.filename,
+            createdBy: req.user._id,
           },
           { new: true }
         );
@@ -193,7 +205,7 @@ exports.updateCategory = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Category updating failed.",
+      message: "Category updating failed",
       error: err,
     });
   }
@@ -243,7 +255,7 @@ exports.getCategoriesAgainstProducts = async (req, res) => {
     if (!category) {
       res.status(404).json({
         statusCode: 404,
-        message: "Category not found.",
+        message: "Category not found",
       });
     } else {
       // get all products against category
@@ -254,12 +266,12 @@ exports.getCategoriesAgainstProducts = async (req, res) => {
       if (products.length === 0) {
         res.status(404).json({
           statusCode: 404,
-          message: "No products found.",
+          message: "No products found",
         });
       } else {
         res.status(200).json({
           statusCode: 200,
-          message: "Products fetched successfully.",
+          message: "Products fetched successfully",
           totalProducts: products.length,
           data: products,
         });
@@ -268,7 +280,7 @@ exports.getCategoriesAgainstProducts = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Categories fetching failed.",
+      message: "Categories products fetching failed",
       error: err,
     });
   }

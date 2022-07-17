@@ -19,10 +19,12 @@ class MyQueryOptions {
     return this;
   }
 
-  // limited products based on limit number
-  limit() {
+  // paginate products based on page number and limit number
+  paginate() {
+    const page = this.queryStr.page ? parseInt(this.queryStr.page) : 1;
     const limit = this.queryStr.limit ? parseInt(this.queryStr.limit) : 100;
-    this.query = this.query.limit(limit);
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
     return this;
   }
 }
@@ -32,6 +34,7 @@ module.exports = MyQueryOptions;
 /*
  * // ! SEARCHING & SORTING PRODUCTS
  * // ? search products based on keywords [*IMPLEMENTED]
+ * // ? paginate products based on page number and limit number [*IMPLEMENTED]
  * // ? sort products based on price (High to Low)
  * // ? sort products based on price (Low to High)
  * // ? sort products based on name (A to Z)
@@ -40,6 +43,5 @@ module.exports = MyQueryOptions;
  * // ? sort products based on createdAt (Oldest to Newest)
  * // ? sort products based on most rated products
  * // ? sort products based on most sold products
- * // ? paginate products based on page number
- * // ? limited products based on limit number [*IMPLEMENTED]
+ *
  */
