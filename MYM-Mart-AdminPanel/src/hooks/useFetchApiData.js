@@ -4,7 +4,7 @@ import jwtEncodeUrl from "../utils/helperJwtEncoder";
 
 const useFetchApiData = (url, categoryReload) => {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -12,12 +12,12 @@ const useFetchApiData = (url, categoryReload) => {
       const token = await jwtEncodeUrl(url);
 
       try {
-        const response = await axios.get(url, {
+        const res = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setData(response.data.data);
+        setResponse(res.data);
         setLoading(false);
       } catch (err) {
         setError(err);
@@ -27,7 +27,7 @@ const useFetchApiData = (url, categoryReload) => {
     fetchData();
   }, [url, categoryReload]);
 
-  return { loading, data, error };
+  return { loading, response, error };
 };
 
 export default useFetchApiData;

@@ -1,5 +1,5 @@
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Alert, Button, Input, Modal, Skeleton } from "antd";
+import { Alert, Button, Input, Modal, Pagination, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import useFetchApiData from "../../hooks/useFetchApiData";
 import openNotificationWithIcon from "../../utils/andNotification";
@@ -19,11 +19,13 @@ const Catagories = () => {
   const [categoryUpdatedError, setCategoryUpdatedError] = useState(null);
   const [isSelectedUpdatedFile, setIsSelectedUpdatedFile] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
   const [categoryReload, setCategoryReload] = useState(false);
 
   // category list api data fetch
-  const url = process.env.REACT_APP_API_BASE_URL + "/api/v1/categories";
-  const { loading, data, error } = useFetchApiData(url, categoryReload);
+  const url = process.env.REACT_APP_API_BASE_URL + `/api/v1/categories?keyword=${searchKeyword}&limit=9&page=${pageNumber}`;
+  const { loading, response, error } = useFetchApiData(url, categoryReload);
 
   // make a function to handle create new category
   const handleAddNewCategory = async () => {
@@ -47,8 +49,8 @@ const Catagories = () => {
           redirect: "follow",
         };
 
-        const response = await fetch(process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/new", requestOptions);
-        const JsonData = await response.json();
+        const res2 = await fetch(process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/new", requestOptions);
+        const JsonData = await res2.json();
 
         if (JsonData.statusCode === 201) {
           openNotificationWithIcon("success", "Category Create", JsonData.message);
@@ -93,7 +95,7 @@ const Catagories = () => {
         };
 
         fetch(process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/" + id, requestOptions)
-          .then((response) => response.json())
+          .then((res3) => res3.json())
           .then((result) => {
             if (result.statusCode === 200) {
               openNotificationWithIcon("success", "Category Delete", result.message);
@@ -125,8 +127,8 @@ const Catagories = () => {
     };
 
     try {
-      const response = await fetch(url2, requestOptions);
-      const jsonData = await response.json();
+      const res4 = await fetch(url2, requestOptions);
+      const jsonData = await res4.json();
 
       if (jsonData.statusCode === 200 && jsonData.data) {
         setCategoryUpdatedFile(jsonData.data.image);
@@ -182,6 +184,11 @@ const Catagories = () => {
     }
   };
 
+  // reset pageNumber state when category searching
+  useEffect(() => {
+    setPageNumber(1);
+  }, [searchKeyword]);
+
   return (
     <>
       <div className="min-h-[68vh]">
@@ -190,7 +197,7 @@ const Catagories = () => {
             ADD NEW CATEGORY
           </Button>
 
-          <Search placeholder="input search text" allowClear enterButton="Search" size="middle" className="w-[40%]" />
+          <Search placeholder="Type here to searching categories" allowClear enterButton="Search" size="middle" className="w-[40%]" onChange={(e) => setSearchKeyword(e.target.value)} />
         </div>
 
         {loading === true ? (
@@ -202,7 +209,7 @@ const Catagories = () => {
             active
           />
         ) : error ? (
-          <h1 className="mt-10 text-center text-4xl text-errorColor">{error?.message}</h1>
+          <h1 className="mt-10 text-center text-2xl text-errorColor">{error?.message}</h1>
         ) : (
           <table className="w-full">
             {/* TABLE HEAD */}
@@ -216,8 +223,8 @@ const Catagories = () => {
             </thead>
 
             {/* TABLE BODY */}
-            {data &&
-              data.map((item, index) => (
+            {response.data && response.data.length > 0 ? (
+              response.data.map((item, index) => (
                 <tbody key={index}>
                   <tr>
                     <td className="text-left p-1">
@@ -239,8 +246,29 @@ const Catagories = () => {
                     </td>
                   </tr>
                 </tbody>
-              ))}
+              ))
+            ) : (
+              <tbody>
+                <tr>
+                  <td className="text-center text-2xl text-errorColor py-4" colSpan={4}>
+                    No category found!
+                  </td>
+                </tr>
+              </tbody>
+            )}
           </table>
+        )}
+
+        {/* PAGINATION */}
+        {response?.numOfPages && (
+          <Pagination
+            className="flex items-center justify-center my-2"
+            defaultCurrent={pageNumber}
+            total={response?.numOfPages * 10}
+            onChange={(e) => {
+              setPageNumber(e);
+            }}
+          />
         )}
       </div>
 
