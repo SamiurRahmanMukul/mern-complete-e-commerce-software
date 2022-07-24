@@ -5,34 +5,31 @@ const jwt = require("jsonwebtoken");
 exports.isAuthenticatedApiFetcher = async (req, res, next) => {
   try {
     // get token form headers
-    const { authorization } = req.headers;
+    const { x_ecommymmart } = req.headers;
 
-    if (!authorization) {
+    if (!x_ecommymmart) {
       return res.status(401).json({
         statusCode: 401,
-        message: "Unrecognized access can not be allowed.",
+        message: "Unrecognized access can not be allowed",
       });
     } else {
-      // verify token
-      const token = authorization.split(" ")[1];
-
-      jwt.verify(token, process.env.JWT_SECRET_KEY, (err, result) => {
+      jwt.verify(x_ecommymmart, process.env.JWT_SECRET_KEY, (err, result) => {
         if (err) {
           return res.status(401).json({
             statusCode: 401,
-            message: "Unrecognized access can not be allowed.",
+            message: "Unrecognized access can not be allowed",
             error: err,
           });
         } else {
           const { url } = result;
           const splitUrl = url.split(process.env.APP_API_PREFIX)[1];
 
-          if (url && splitUrl === req.url) {
+          if (splitUrl === req.path || splitUrl === req.url) {
             next();
           } else {
             res.status(401).json({
               statusCode: 401,
-              message: "Unrecognized access can not be allowed.",
+              message: "Unrecognized access can not be allowed",
             });
           }
         }
@@ -41,7 +38,7 @@ exports.isAuthenticatedApiFetcher = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "Unrecognized access can not be allowed.",
+      message: "Unrecognized access can not be allowed",
       error: error,
     });
   }
@@ -56,7 +53,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
     if (!authorization) {
       return res.status(401).json({
         statusCode: 401,
-        message: "Authorization headers is required.",
+        message: "Authorization headers is required",
       });
     } else {
       // split token from authorization header
@@ -71,7 +68,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({
           statusCode: 401,
-          message: "Authorization headers are invalid.",
+          message: "Authorization headers are invalid",
         });
       } else {
         // check if user is logged in
@@ -81,7 +78,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
         } else {
           return res.status(401).json({
             statusCode: 401,
-            message: "Unauthorized access. Please login to continue.",
+            message: "Unauthorized access. Please login to continue",
           });
         }
       }
@@ -89,7 +86,7 @@ exports.isAuthenticatedUser = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "Unauthorized access. User identify failed.",
+      message: "Unauthorized access. User identify failed",
       error: error,
     });
   }
@@ -113,14 +110,14 @@ exports.isAdmin = async (req, res, next) => {
       } else {
         return res.status(401).json({
           statusCode: 401,
-          message: "Unauthorized access. Only authorized user access here.",
+          message: "Unauthorized access. Only authorized user access here",
         });
       }
     }
   } catch (error) {
     res.status(500).json({
       statusCode: 500,
-      message: "Unauthorized access. User identify failed.",
+      message: "Unauthorized access. User identify failed",
       error: error,
     });
   }
