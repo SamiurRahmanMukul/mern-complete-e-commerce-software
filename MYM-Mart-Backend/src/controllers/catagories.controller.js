@@ -9,7 +9,7 @@ exports.createCategory = async (req, res) => {
     const { name } = req.body;
     const image = req.file;
 
-    if (!name || !image) {
+    if (!name && !image) {
       res.status(400).json({
         statusCode: 400,
         message: "Category name and image is required field",
@@ -156,7 +156,11 @@ exports.updateCategory = async (req, res) => {
         // delete old category image
         fs.unlink(`${__dirname}/../../public${category.image}`, (err) => {
           if (err) {
-            console.log("Category image delete error: ", err.message);
+            res.status(500).json({
+              statusCode: 500,
+              message: "Category old image deletion failed",
+              error: err,
+            });
           }
         });
 
@@ -228,7 +232,11 @@ exports.deleteCategory = async (req, res) => {
       // delete category image
       fs.unlink(`${__dirname}/../../public${category.image}`, (err) => {
         if (err) {
-          console.log("Category image delete error: ", err.message);
+          res.status(500).json({
+            statusCode: 500,
+            message: "Category image deletion failed",
+            error: err,
+          });
         }
       });
 
