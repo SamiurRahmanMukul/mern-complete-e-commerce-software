@@ -94,7 +94,7 @@ exports.register = async (req, res) => {
     } else {
       return res.status(400).json({
         statusCode: 400,
-        message: "Please enter required fields",
+        message: "Please enter all required fields",
       });
     }
   } catch (error) {
@@ -125,7 +125,7 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         statusCode: 400,
-        message: "User was not found",
+        message: "User does not exist",
       });
     }
 

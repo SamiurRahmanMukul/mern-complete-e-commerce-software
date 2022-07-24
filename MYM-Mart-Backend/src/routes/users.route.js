@@ -14,19 +14,19 @@ router.route("/auth/register").post(isAuthenticatedApiFetcher, avatarUpload.sing
 router.route("/auth/login").post(isAuthenticatedApiFetcher, upload.none(), loginUser);
 
 // make a router for logout user
-router.route("/auth/logout").post(isAuthenticatedUser, logoutUser);
-
-// make a router for get all & single user
-router.route("/user/all").get(isAuthenticatedUser, isAdmin, getAllUsers);
-router.route("/user/:id").get(isAuthenticatedUser, getUserById);
-
-// make a router for update and delete user account
-// router.route("/user/update-account").put();
-// router.route("/user/delete-account").delete();
+router.route("/auth/logout").post(isAuthenticatedApiFetcher, isAuthenticatedUser, logoutUser);
 
 // make a router for user change, forgot password & verify account
 // router.route("/auth/change-password").post();
 // router.route("/auth/forgot-password").post();
 // router.route("/auth/verify-account").post();
+
+// make a router for get all & single user
+router.route("/user/all").get(isAuthenticatedApiFetcher, isAuthenticatedUser, isAdmin, getAllUsers);
+router.route("/user/:id").get(isAuthenticatedApiFetcher, isAuthenticatedUser, getUserById);
+
+// make a router for update and delete user account
+// router.route("/user/update-account").put();
+// router.route("/user/delete-account").delete();
 
 module.exports = router;
