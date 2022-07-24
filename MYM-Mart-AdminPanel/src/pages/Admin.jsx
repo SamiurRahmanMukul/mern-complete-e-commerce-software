@@ -1,7 +1,7 @@
 import { AreaChartOutlined, AuditOutlined, DashboardOutlined, FileProtectOutlined, FilterOutlined, LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, Tag } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Analytics from "../components/tabs/Analytics";
 import Catagories from "../components/tabs/Catagories";
 import Dashboard from "../components/tabs/Dashboard";
@@ -9,25 +9,17 @@ import Orders from "../components/tabs/Orders";
 import Products from "../components/tabs/Products";
 import Users from "../components/tabs/Users";
 import useScreenWidth from "../hooks/useScreenWidth";
-import { getSessionToken, getSessionUser } from "../utils/helperCommon";
-import helperUserLogout from "../utils/helperUserLogout";
+import { getSessionUser } from "../utils/helpers/helperAuthentication";
+import helperUserLogout from "../utils/helpers/helperUserLogout";
 const { Header, Content, Footer, Sider } = Layout;
 
 const Admin = () => {
   window.document.title = "MYM-Mart — Admin Panel";
-  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState("1");
   const screenSize = useScreenWidth();
 
   const sessionUser = getSessionUser();
-  const sessionToken = getSessionToken();
-
-  useEffect(() => {
-    if (!sessionUser && !sessionToken) {
-      navigate("/auth/login");
-    }
-  }, [navigate, sessionUser, sessionToken]);
 
   useEffect(() => {
     if (screenSize < 1020) {
@@ -48,7 +40,7 @@ const Admin = () => {
           <div className="flex flex-row items-center justify-start h-[115px]">
             <img src={sessionUser.avatar} alt="user-avatar" className="w-[60px] h-[60px] mx-2 rounded-full shadow-md" />
 
-            {!collapsed && (
+            {!collapsed && sessionUser && (
               <Tag color="default" className="text-[16px] font-bold capitalize py-2 my-1">
                 {sessionUser.fullName}
               </Tag>

@@ -1,16 +1,16 @@
 import axios from "axios";
-import openNotificationWithIcon from "./andNotification";
+import openNotificationWithIcon from "../common/andNotification";
 
 const jwtEncodeUrl = async (getUrl) => {
   try {
-    var data = JSON.stringify({
+    let data = JSON.stringify({
       url: getUrl,
       jwtSecret: process.env.REACT_APP_JWT_SECRET_KEY,
     });
 
-    var config = {
+    let config = {
       method: "post",
-      url: process.env.REACT_APP_API_BASE_URL + "/api/v1/auth/token",
+      url: process.env.REACT_APP_API_BASE_URL + "/auth/token",
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,7 +20,7 @@ const jwtEncodeUrl = async (getUrl) => {
     const response = await axios(config);
     return response.data.jwtToken || null;
   } catch (error) {
-    openNotificationWithIcon("error", "Fetch Error ", error.message);
+    openNotificationWithIcon("error", "Fetch Error", error.message);
     console.log("Catch error: ", error);
   }
 };

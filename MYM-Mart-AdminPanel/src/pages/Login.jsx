@@ -1,23 +1,12 @@
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Alert, Button, Divider, Form, Input } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getSessionToken, getSessionUser, setSessionUserAndToken } from "../utils/helperCommon";
-import helperUserLogin from "../utils/helperUserLogin";
+import { setSessionUserAndToken } from "../utils/helpers/helperAuthentication";
+import helperUserLogin from "../utils/helpers/helperUserLogin";
 
 const Login = () => {
   window.document.title = "MYM-Mart — Login";
-  const navigate = useNavigate();
   const [errMsg, setErrMsg] = useState("");
-
-  const sessionUser = getSessionUser();
-  const sessionToken = getSessionToken();
-
-  useEffect(() => {
-    if (sessionUser && sessionToken) {
-      navigate("/admin");
-    }
-  }, [navigate, sessionUser, sessionToken]);
 
   const onFinish = async (values) => {
     const data = await helperUserLogin(values);

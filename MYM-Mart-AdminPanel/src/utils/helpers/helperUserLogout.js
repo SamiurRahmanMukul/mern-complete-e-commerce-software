@@ -1,13 +1,16 @@
 import axios from "axios";
-import openNotificationWithIcon from "./andNotification";
-import { getSessionToken, removeSessionUserTokenAndCookieToken } from "./helperCommon";
+import openNotificationWithIcon from "../common/andNotification";
+import { getSessionToken, removeSessionUserTokenAndCookieToken } from "./helperAuthentication";
+import jwtEncodeUrl from "./helperJwtEncoder";
 
 const helperUserLogout = async () => {
+  const url = process.env.REACT_APP_API_BASE_URL + "/auth/logout";
   try {
-    var config = {
+    let config = {
       method: "post",
-      url: process.env.REACT_APP_API_BASE_URL + "/api/v1/auth/logout",
+      url: url,
       headers: {
+        X_Ecommymmart: await jwtEncodeUrl(url),
         Authorization: "Bearer " + getSessionToken(),
       },
     };

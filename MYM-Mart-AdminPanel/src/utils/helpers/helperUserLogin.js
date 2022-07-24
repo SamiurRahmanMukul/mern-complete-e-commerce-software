@@ -1,27 +1,27 @@
-import openNotificationWithIcon from "./andNotification";
+import openNotificationWithIcon from "../common/andNotification";
 import jwtEncodeUrl from "./helperJwtEncoder";
 
 const helperUserLogin = async (user) => {
-  const url = process.env.REACT_APP_API_BASE_URL + "/api/v1/auth/login?loginType=admin";
+  const url = process.env.REACT_APP_API_BASE_URL + "/auth/login";
   const token = await jwtEncodeUrl(url);
 
   if (token) {
     try {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", "Bearer " + token);
+      let myHeaders = new Headers();
+      myHeaders.append("X_Ecommymmart", token);
 
-      var formdata = new FormData();
+      let formdata = new FormData();
       formdata.append("email", user.email);
       formdata.append("password", user.password);
 
-      var requestOptions = {
+      let requestOptions = {
         method: "POST",
         headers: myHeaders,
         body: formdata,
         redirect: "follow",
       };
 
-      const response = await fetch(url, requestOptions);
+      const response = await fetch(url + "?loginType=admin", requestOptions);
       const data = await response.json();
 
       return {

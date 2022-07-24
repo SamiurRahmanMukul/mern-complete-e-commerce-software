@@ -2,9 +2,9 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Alert, Button, Input, Modal, Pagination, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import useFetchApiData from "../../hooks/useFetchApiData";
-import openNotificationWithIcon from "../../utils/andNotification";
-import { getSessionToken } from "../../utils/helperCommon";
-import jwtEncodeUrl from "../../utils/helperJwtEncoder";
+import openNotificationWithIcon from "../../utils/common/andNotification";
+import { getSessionToken } from "../../utils/helpers/helperAuthentication";
+import jwtEncodeUrl from "../../utils/helpers/helperJwtEncoder";
 const { confirm } = Modal;
 const { Search } = Input;
 
@@ -21,11 +21,11 @@ const Catagories = () => {
   const [categoryId, setCategoryId] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
-  const [categoryReload, setCategoryReload] = useState(false);
+  const [fetchAgain, setFetchAgain] = useState(false);
 
   // category list api data fetch
-  const url = process.env.REACT_APP_API_BASE_URL + `/api/v1/categories?keyword=${searchKeyword}&limit=9&page=${pageNumber}`;
-  const { loading, response, error } = useFetchApiData(url, categoryReload);
+  const url = process.env.REACT_APP_API_BASE_URL + `/categories?keyword=${searchKeyword}&limit=9&page=${pageNumber}`;
+  const { loading, response, error } = useFetchApiData(url, fetchAgain);
 
   // make a function to handle create new category
   const handleAddNewCategory = async () => {
@@ -34,8 +34,12 @@ const Catagories = () => {
     } else if (categoryUploadedTitle === null) {
       setCategoryUploadedError("Category title filed is required");
     } else {
+      const url2 = process.env.REACT_APP_API_BASE_URL + "/categories/new";
+      const token2 = await jwtEncodeUrl(url2);
+
       try {
         let myHeaders = new Headers();
+        myHeaders.append("X_Ecommymmart", token2);
         myHeaders.append("Authorization", "Bearer " + getSessionToken());
 
         let formdata = new FormData();
@@ -49,18 +53,18 @@ const Catagories = () => {
           redirect: "follow",
         };
 
-        const res2 = await fetch(process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/new", requestOptions);
-        const JsonData = await res2.json();
+        const res2 = await fetch(url2, requestOptions);
+        const JsonData2 = await res2.json();
 
-        if (JsonData.statusCode === 201) {
-          openNotificationWithIcon("success", "Category Create", JsonData.message);
+        if (JsonData2.statusCode === 201) {
+          openNotificationWithIcon("success", "Category Create", JsonData2.message);
           setCategoryUploadedError(null);
           setCategoryUploadedFile(null);
           setCategoryUploadedTitle(null);
-          setCategoryReload(!categoryReload);
+          setFetchAgain(!fetchAgain);
           setIsModalVisible(false);
         } else {
-          setCategoryUploadedError(JsonData.message);
+          setCategoryUploadedError(JsonData2.message);
         }
       } catch (err) {
         setCategoryUploadedError(err.message);
@@ -76,7 +80,10 @@ const Catagories = () => {
   }, [categoryUploadedError, categoryUpdatedError]);
 
   // make a function to handle delete category
-  const handleDeleteCategory = (id) => {
+  const handleDeleteCategory = async (id) => {
+    const url3 = process.env.REACT_APP_API_BASE_URL + "/categories/" + id;
+    const token3 = await jwtEncodeUrl(url3);
+
     confirm({
       title: "Are you sure delete this category?",
       icon: <ExclamationCircleOutlined />,
@@ -86,6 +93,7 @@ const Catagories = () => {
 
       onOk() {
         let myHeaders = new Headers();
+        myHeaders.append("X_Ecommymmart", token3);
         myHeaders.append("Authorization", "Bearer " + getSessionToken());
 
         let requestOptions = {
@@ -94,12 +102,12 @@ const Catagories = () => {
           redirect: "follow",
         };
 
-        fetch(process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/" + id, requestOptions)
+        fetch(url3, requestOptions)
           .then((res3) => res3.json())
           .then((result) => {
             if (result.statusCode === 200) {
               openNotificationWithIcon("success", "Category Delete", result.message);
-              setCategoryReload(!categoryReload);
+              setFetchAgain(!fetchAgain);
             } else {
               openNotificationWithIcon("error", "Category Delete", result.message);
             }
@@ -114,11 +122,12 @@ const Catagories = () => {
   // make a function to handle update category
   const handleUpdatedCategory = async (id) => {
     // get the category data from the server
-    const url2 = process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/" + id;
-    const token2 = await jwtEncodeUrl(url2);
+    const url4 = process.env.REACT_APP_API_BASE_URL + "/categories/" + id;
+    const token4 = await jwtEncodeUrl(url4);
 
     let myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${token2}`);
+    myHeaders.append("X_Ecommymmart", token4);
+    myHeaders.append("Authorization", `Bearer ${token4}`);
 
     let requestOptions = {
       method: "GET",
@@ -127,16 +136,16 @@ const Catagories = () => {
     };
 
     try {
-      const res4 = await fetch(url2, requestOptions);
-      const jsonData = await res4.json();
+      const res4 = await fetch(url4, requestOptions);
+      const jsonData4 = await res4.json();
 
-      if (jsonData.statusCode === 200 && jsonData.data) {
-        setCategoryUpdatedFile(jsonData.data.image);
-        setCategoryUpdatedTitle(jsonData.data.name);
+      if (jsonData4.statusCode === 200 && jsonData4.data) {
+        setCategoryUpdatedFile(jsonData4.data.image);
+        setCategoryUpdatedTitle(jsonData4.data.name);
         setIsUpdatedModalVisible(true);
         setCategoryId(id);
       } else {
-        openNotificationWithIcon("error", "Category Fetching", jsonData.message);
+        openNotificationWithIcon("error", "Category Fetching", jsonData4.message);
       }
     } catch (err2) {
       console.log("error", err2);
@@ -146,9 +155,11 @@ const Catagories = () => {
 
   // make a function to confirm update category
   const handleConfirmUpdateCategory = async () => {
-    const url3 = process.env.REACT_APP_API_BASE_URL + "/api/v1/categories/" + categoryId;
+    const url5 = process.env.REACT_APP_API_BASE_URL + "/categories/" + categoryId;
+    const token5 = await jwtEncodeUrl(url5);
 
     let myHeaders = new Headers();
+    myHeaders.append("X_Ecommymmart", token5);
     myHeaders.append("Authorization", "Bearer " + getSessionToken());
 
     let formdata = new FormData();
@@ -163,20 +174,20 @@ const Catagories = () => {
     };
 
     try {
-      const response2 = await fetch(url3, requestOptions);
-      const jsonData2 = await response2.json();
+      const response5 = await fetch(url5, requestOptions);
+      const jsonData5 = await response5.json();
 
-      if (jsonData2.statusCode === 200 && jsonData2.data) {
-        openNotificationWithIcon("success", "Category Update", jsonData2.message);
+      if (jsonData5.statusCode === 200 && jsonData5.data) {
+        openNotificationWithIcon("success", "Category Update", jsonData5.message);
         setCategoryUpdatedError(null);
         setCategoryUpdatedFile(null);
         setCategoryUpdatedTitle(null);
         setIsSelectedUpdatedFile(false);
-        setCategoryReload(!categoryReload);
+        setFetchAgain(!fetchAgain);
         setCategoryId(null);
         setIsUpdatedModalVisible(false);
       } else {
-        setCategoryUpdatedError(jsonData2.message);
+        setCategoryUpdatedError(jsonData5.message);
       }
     } catch (err2) {
       console.log("error", err2);

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import jwtEncodeUrl from "../utils/helperJwtEncoder";
+import jwtEncodeUrl from "../utils/helpers/helperJwtEncoder";
 
-const useFetchApiData = (url, categoryReload) => {
+const useFetchApiData = (url, fetchAgain) => {
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
@@ -14,6 +14,7 @@ const useFetchApiData = (url, categoryReload) => {
       try {
         const res = await axios.get(url, {
           headers: {
+            X_Ecommymmart: token,
             Authorization: `Bearer ${token}`,
           },
         });
@@ -25,7 +26,7 @@ const useFetchApiData = (url, categoryReload) => {
       }
     };
     fetchData();
-  }, [url, categoryReload]);
+  }, [url, fetchAgain]);
 
   return { loading, response, error };
 };
