@@ -8,7 +8,7 @@ import Dashboard from "../components/tabs/Dashboard";
 import Orders from "../components/tabs/Orders";
 import Products from "../components/tabs/Products";
 import Users from "../components/tabs/Users";
-import useScreenWidth from "../hooks/useScreenWidth";
+import useScreenSize from "../hooks/useScreenSize";
 import { getSessionUser } from "../utils/helpers/helperAuthentication";
 import helperUserLogout from "../utils/helpers/helperUserLogout";
 const { Header, Content, Footer, Sider } = Layout;
@@ -17,17 +17,17 @@ const Admin = () => {
   window.document.title = "MYM-Mart — Admin Panel";
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState("1");
-  const screenSize = useScreenWidth();
+  const { screenWidth } = useScreenSize();
 
   const sessionUser = getSessionUser();
 
   useEffect(() => {
-    if (screenSize < 1020) {
+    if (screenWidth < 1020) {
       setCollapsed(true);
     } else {
       setCollapsed(false);
     }
-  }, [screenSize]);
+  }, [screenWidth]);
 
   return (
     <Layout

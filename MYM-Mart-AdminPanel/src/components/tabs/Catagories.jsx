@@ -1,11 +1,14 @@
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Alert, Button, Input, Modal, Pagination, Skeleton } from "antd";
+import { Alert, Button, Input, Modal, Pagination, Select, Skeleton } from "antd";
+import { Scrollbars } from "rc-scrollbars";
 import { useEffect, useState } from "react";
 import useFetchApiData from "../../hooks/useFetchApiData";
+import useScreenSize from "../../hooks/useScreenSize";
 import openNotificationWithIcon from "../../utils/common/andNotification";
 import { getSessionToken } from "../../utils/helpers/helperAuthentication";
 import jwtEncodeUrl from "../../utils/helpers/helperJwtEncoder";
 const { confirm } = Modal;
+const { Option } = Select;
 const { Search } = Input;
 
 const Catagories = () => {
@@ -20,11 +23,13 @@ const Catagories = () => {
   const [isSelectedUpdatedFile, setIsSelectedUpdatedFile] = useState(false);
   const [categoryId, setCategoryId] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [perPageData, setPerPageData] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [fetchAgain, setFetchAgain] = useState(false);
+  const { screenHeight } = useScreenSize();
 
   // category list api data fetch
-  const url = process.env.REACT_APP_API_BASE_URL + `/categories?keyword=${searchKeyword}&limit=9&page=${pageNumber}`;
+  const url = process.env.REACT_APP_API_BASE_URL + `/categories?keyword=${searchKeyword}&limit=${perPageData}&page=${pageNumber}`;
   const { loading, response, error } = useFetchApiData(url, fetchAgain);
 
   // make a function to handle create new category
@@ -203,72 +208,91 @@ const Catagories = () => {
   return (
     <>
       <div className="min-h-[68vh]">
-        <div className="flex flex-row items-center justify-between mb-2">
-          <Button type="primary" size="middle" onClick={() => setIsModalVisible(true)}>
-            ADD NEW CATEGORY
-          </Button>
+        <Scrollbars
+          style={{
+            height: `${screenHeight - 235}px`,
+            width: "auto",
+          }}>
+          <div className="flex flex-col items-start justify-start mb-2 md:flex-row md:items-center md:justify-between">
+            <div className="w-full flex flex-row items-center justify-between">
+              <Button className="mr-2" type="primary" size="middle" onClick={() => setIsModalVisible(true)}>
+                ADD NEW CATEGORY
+              </Button>
 
-          <Search placeholder="Type here to searching categories" allowClear enterButton="Search" size="middle" className="w-[40%]" onChange={(e) => setSearchKeyword(e.target.value)} />
-        </div>
+              <Select
+                defaultValue="Show Per Page Data"
+                onChange={(value) => {
+                  setPerPageData(value);
+                  setFetchAgain(!fetchAgain);
+                }}>
+                <Option value={10}>10 Rows</Option>
+                <Option value={20}>20 Rows</Option>
+                <Option value={30}>30 Rows</Option>
+              </Select>
+            </div>
 
-        {loading === true ? (
-          <Skeleton
-            paragraph={{
-              rows: 6,
-            }}
-            avatar
-            active
-          />
-        ) : error ? (
-          <h1 className="mt-10 text-center text-2xl text-errorColor">{error?.message}</h1>
-        ) : (
-          <table className="w-full">
-            {/* TABLE HEAD */}
-            <thead className="bg-primaryColor">
-              <tr>
-                <th className="text-left p-1 text-textColorWhite text-[16px] font-medium">Image</th>
-                <th className="text-left p-1 text-textColorWhite text-[16px] font-medium">Category Name</th>
-                <th className="text-left p-1 text-textColorWhite text-[16px] font-medium">Catagories Products</th>
-                <th className="text-left p-1 text-textColorWhite text-[16px] font-medium">Actions</th>
-              </tr>
-            </thead>
+            <Search placeholder="Type here to searching categories" allowClear enterButton="Search" size="middle" className="w-full mt-2 md:w-[60%] md:ml-2 md:mt-0" onChange={(e) => setSearchKeyword(e.target.value)} />
+          </div>
 
-            {/* TABLE BODY */}
-            {response.data && response.data.length > 0 ? (
-              response.data.map((item, index) => (
-                <tbody key={index}>
+          {loading === true ? (
+            <Skeleton
+              paragraph={{
+                rows: 6,
+              }}
+              avatar
+              active
+            />
+          ) : error ? (
+            <h1 className="mt-10 text-center text-2xl text-errorColor">{error?.message}</h1>
+          ) : (
+            <table className="w-full">
+              {/* TABLE HEAD */}
+              <thead className="bg-primaryColor">
+                <tr>
+                  <th className="text-left p-1 text-textColorWhite text-[16px] font-medium whitespace-nowrap">Image</th>
+                  <th className="text-left p-1 text-textColorWhite text-[16px] font-medium whitespace-nowrap">Category Name</th>
+                  <th className="text-left p-1 text-textColorWhite text-[16px] font-medium whitespace-nowrap">Catagories Products</th>
+                  <th className="text-left p-1 text-textColorWhite text-[16px] font-medium whitespace-nowrap">Actions</th>
+                </tr>
+              </thead>
+
+              {/* TABLE BODY */}
+              {response.data && response.data.length > 0 ? (
+                response.data.map((item, index) => (
+                  <tbody key={index}>
+                    <tr>
+                      <td className="text-left p-1">
+                        <img src={item?.image} alt="category_image" className="w-[40px] h-[40px] rounded-full" />
+                      </td>
+                      <td className="text-left p-1 text-[18px] capitalize whitespace-nowrap">{item?.name}</td>
+                      <td className="text-left p-1">
+                        <Button type="default" size="middle">
+                          VIEW PRODUCTS
+                        </Button>
+                      </td>
+                      <td className="whitespace-nowrap">
+                        <Button type="primary" size="middle" onClick={() => handleUpdatedCategory(item.id)}>
+                          UPDATE
+                        </Button>
+                        <Button type="default" size="middle" danger className="ml-2" onClick={() => handleDeleteCategory(item.id)}>
+                          DELETE
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                ))
+              ) : (
+                <tbody>
                   <tr>
-                    <td className="text-left p-1">
-                      <img src={item?.image} alt="category_image" className="w-[40px] h-[40px] rounded-full" />
-                    </td>
-                    <td className="text-left p-1 text-[18px] capitalize">{item?.name}</td>
-                    <td className="text-left p-1">
-                      <Button type="default" size="middle">
-                        VIEW PRODUCTS
-                      </Button>
-                    </td>
-                    <td className="text-left p-1">
-                      <Button type="primary" size="middle" onClick={() => handleUpdatedCategory(item.id)}>
-                        UPDATE
-                      </Button>
-                      <Button type="default" size="middle" danger className="ml-2" onClick={() => handleDeleteCategory(item.id)}>
-                        DELETE
-                      </Button>
+                    <td className="text-center text-2xl text-errorColor py-4" colSpan={4}>
+                      No category found!
                     </td>
                   </tr>
                 </tbody>
-              ))
-            ) : (
-              <tbody>
-                <tr>
-                  <td className="text-center text-2xl text-errorColor py-4" colSpan={4}>
-                    No category found!
-                  </td>
-                </tr>
-              </tbody>
-            )}
-          </table>
-        )}
+              )}
+            </table>
+          )}
+        </Scrollbars>
 
         {/* PAGINATION */}
         {response?.numOfPages && (
