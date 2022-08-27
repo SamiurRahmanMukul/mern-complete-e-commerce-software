@@ -1,6 +1,6 @@
-const MyQueryOptions = require("../lib/queryOptions");
-const Products = require("../models/products.model");
-const Catagories = require("../models/catagories.model");
+const MyQueryOptions = require('../lib/queryOptions');
+const Products = require('../models/products.model');
+const Catagories = require('../models/catagories.model');
 
 // make a controller to create a new product
 exports.createProduct = async (req, res) => {
@@ -11,32 +11,34 @@ exports.createProduct = async (req, res) => {
     const productExists = await Products.findOne({ name: product.name });
 
     // check if product category is already exists
-    const categoryExists = await Catagories.findOne({ name: { $regex: new RegExp(`^${req.body.category}$`), $options: "i" } });
+    const categoryExists = await Catagories.findOne({ name: { $regex: new RegExp(`^${req.body.category}$`), $options: 'i' } });
 
     if (productExists) {
       return res.status(400).json({
         statusCode: 400,
-        message: "Product name already exists.",
-      });
-    } else if (!categoryExists) {
-      return res.status(400).json({
-        statusCode: 400,
-        message: "Product category does not exists.",
-      });
-    } else {
-      await product.save();
-
-      res.status(201).json({
-        statusCode: 201,
-        message: "Product created successfully.",
-        data: product,
+        message: 'Product name already exists'
       });
     }
+
+    if (!categoryExists) {
+      return res.status(400).json({
+        statusCode: 400,
+        message: 'Product category does not exists'
+      });
+    }
+
+    await product.save();
+
+    res.status(201).json({
+      statusCode: 201,
+      message: 'Product created successful',
+      data: product
+    });
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Product creation failed.",
-      error: err,
+      message: 'Product creation failed',
+      error: err
     });
   }
 };
@@ -54,27 +56,27 @@ exports.getAllProducts = async (req, res) => {
     if (totalProducts === 0) {
       res.status(404).json({
         statusCode: 404,
-        message: "Currently any products not found in database. Please insert your first products. Thanks",
+        message: 'Currently any products not found in database. Please insert your first products. Thanks'
       });
     } else if (products.length === 0) {
       res.status(404).json({
         statusCode: 404,
-        message: "Searching or Sorting queries based any products not found.",
+        message: 'Searching or Sorting queries based any products not found'
       });
     } else {
       res.status(200).json({
         statusCode: 200,
-        message: "Products fetched successfully.",
-        totalProducts: totalProducts,
+        message: 'Products fetched successful',
+        totalProducts,
         responseProducts: products.length,
-        data: products,
+        data: products
       });
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Products fetching failed.",
-      error: err,
+      message: 'Products fetching failed',
+      error: err
     });
   }
 };
@@ -87,20 +89,20 @@ exports.getSingleProduct = async (req, res) => {
     if (!product) {
       res.status(404).json({
         statusCode: 404,
-        message: "Product not found.",
+        message: 'Product not found'
       });
     } else {
       res.status(200).json({
         statusCode: 200,
-        message: "Product fetched successfully.",
-        data: product,
+        message: 'Product fetched successful',
+        data: product
       });
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Product fetching failed.",
-      error: err,
+      message: 'Product fetching failed',
+      error: err
     });
   }
 };
@@ -109,26 +111,26 @@ exports.getSingleProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const product = await Products.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      new: true
     });
 
     if (!product) {
       res.status(404).json({
         statusCode: 404,
-        message: "Product not found.",
+        message: 'Product not found'
       });
     } else {
       res.status(200).json({
         statusCode: 200,
-        message: "Product updated successfully.",
-        data: product,
+        message: 'Product updated successful',
+        data: product
       });
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Product updating failed.",
-      error: err,
+      message: 'Product updating failed',
+      error: err
     });
   }
 };
@@ -141,19 +143,19 @@ exports.deleteProduct = async (req, res) => {
     if (!product) {
       res.status(404).json({
         statusCode: 404,
-        message: "Product not found.",
+        message: 'Product not found'
       });
     } else {
       res.status(200).json({
         statusCode: 200,
-        message: "Product deleted successfully.",
+        message: 'Product deleted successful.'
       });
     }
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
-      message: "Product deletion failed.",
-      error: err,
+      message: 'Product deletion failed',
+      error: err
     });
   }
 };

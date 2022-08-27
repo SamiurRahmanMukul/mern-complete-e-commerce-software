@@ -5,15 +5,15 @@ const jwtToken = (user, status, message, res) => {
   // options for cookie
   const options = {
     expires: new Date(Date.now() + process.env.JWT_TOKEN_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
-    httpOnly: true,
+    httpOnly: true
   };
 
   res
     .status(status)
-    .cookie("AccessToken", token, options)
+    .cookie('AccessToken', token, options)
     .json({
       statusCode: status,
-      message: message,
+      message,
       AccessToken: token,
       data: {
         id: user._id,
@@ -26,8 +26,8 @@ const jwtToken = (user, status, message, res) => {
         role: user.role,
         status: user.status,
         createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
+        updatedAt: user.updatedAt
+      }
     });
 };
 

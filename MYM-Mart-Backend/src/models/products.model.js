@@ -1,76 +1,75 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const productsSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Product name is required field."],
-    trim: true,
+    required: [true, 'Product name is required field.'],
+    trim: true
   },
   description: {
-    type: String,
-    required: [true, "Product description is required field."],
+    type: String
   },
   price: {
     type: Number,
-    required: [true, "Product price is required field."],
-    maxLength: [10, "Product price must be less than 10 characters."],
+    required: [true, 'Product price is required field.'],
+    maxLength: [10, 'Product price must be less than 10 characters.']
   },
   images: [
     {
       url: {
         type: String,
-        required: true,
-      },
-    },
+        required: true
+      }
+    }
   ],
   youtube_url: {
-    type: String,
+    type: String
   },
   category: {
     type: String,
-    required: [true, "Product category is required field."],
+    required: [true, 'Product category is required field.']
   },
   stock: {
     type: Number,
-    required: [true, "Product stock is required field."],
-    maxLength: [4, "Product stock must be less than 4 characters."],
+    required: [true, 'Product stock is required field.'],
+    maxLength: [4, 'Product stock must be less than 4 characters.']
   },
   rating: {
     type: Number,
-    default: 0,
+    default: 0
   },
   totalReviews: {
     type: Number,
-    default: 0,
+    default: 0
   },
   reviews: [
     {
       user_id: {
         type: Number,
-        required: true,
+        required: true
       },
       user_name: {
         type: String,
-        required: true,
+        required: true
       },
       rating: {
         type: Number,
-        required: true,
+        required: true
       },
       comment: {
         type: String,
-        required: true,
-      },
-    },
+        required: true
+      }
+    }
   ],
   created_at: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
   updated_at: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
-module.exports = mongoose.model("Products", productsSchema);
+module.exports = mongoose.model('Products', productsSchema);

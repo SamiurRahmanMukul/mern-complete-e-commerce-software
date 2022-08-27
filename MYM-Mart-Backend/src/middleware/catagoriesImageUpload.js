@@ -1,9 +1,9 @@
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const uploadPath = () => {
-  const UPLOADS_FOLDER = "./public/uploads/catagories";
+  const UPLOADS_FOLDER = './public/uploads/catagories';
 
   if (!fs.existsSync(UPLOADS_FOLDER)) {
     fs.mkdirSync(UPLOADS_FOLDER);
@@ -14,34 +14,34 @@ const uploadPath = () => {
 
 // define the storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_req, _file, cb) => {
     cb(null, uploadPath());
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     const fileExt = path.extname(file.originalname);
-    const fileName = file.originalname.replace(fileExt, "").toLowerCase().split(" ").join("-") + "-" + Date.now();
+    const fileName = `${file.originalname.replace(fileExt, '').toLowerCase().split(' ').join('-')}-${Date.now()}`;
 
     cb(null, fileName + fileExt);
-  },
+  }
 });
 
 // prepare the final multer upload object
-var catagoriesImageUpload = multer({
-  storage: storage,
+const catagoriesImageUpload = multer({
+  storage,
   limits: {
-    fileSize: 1000000, // 1MB
+    fileSize: 1000000 // 1MB
   },
-  fileFilter: (req, file, cb) => {
-    if (file.fieldname === "image") {
-      if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
+  fileFilter: (_req, file, cb) => {
+    if (file.fieldname === 'image') {
+      if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
         cb(null, true);
       } else {
-        cb(new Error("Only .jpg, .png or .jpeg format allowed!"));
+        cb(new Error('Only .jpg, .png or .jpeg format allowed!'));
       }
     } else {
-      cb(new Error("There was an unknown error!"));
+      cb(new Error('There was an unknown error!'));
     }
-  },
+  }
 });
 
 module.exports = catagoriesImageUpload;
