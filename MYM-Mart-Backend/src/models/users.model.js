@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -66,7 +67,7 @@ const usersSchema = new mongoose.Schema({
 });
 
 // after save, hash password
-usersSchema.pre('save', async (next) => {
+usersSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -75,11 +76,15 @@ usersSchema.pre('save', async (next) => {
 });
 
 // JWT Token
-usersSchema.methods.getJWTToken = () => jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
-  expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES
-});
+usersSchema.methods.getJWTToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES
+  });
+};
 
 // compare password
-usersSchema.methods.comparePassword = async (password) => bcrypt.compare(password, this.password);
+usersSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model('Users', usersSchema);
