@@ -3,15 +3,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,500;0,700;1,300;1,500;1,700&display=swap");
-
-body {
-  font-family: "Poppins", sans-serif;
-  @apply bg-backgroundColorWhite;
+html {
+  scroll-behavior: smooth;
 }
 
-/* And Design Color Customize Start */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* And Design Customize Start */
 
 .ant-btn-primary {
   @apply text-textColorWhite bg-primaryColor hover:bg-primaryColorHover border-primaryColor hover:border-primaryColorHover !important;
@@ -20,10 +20,22 @@ body {
 .ant-divider-horizontal.ant-divider-with-text-center::before,
 .ant-divider-horizontal.ant-divider-with-text-center::after {
   border-top: 2px solid !important;
-  @apply border-primaryColor w-[200px] text-center !important;
+  @apply border-primaryColor text-center !important;
 }
 
-/* And Design Color Customize End */
+.ant-message-custom-content {
+  @apply inline-flex items-center;
+}
+
+.ant-popover-title {
+  @apply bg-backgroundColorBlack;
+}
+
+.ant-image-preview-img {
+  margin: auto !important;
+}
+
+/* And Design Customize End */
 
 /* Dashboard Page Style Start */
 

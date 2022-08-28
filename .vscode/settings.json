@@ -6,6 +6,9 @@
     "source.fixAll": true
   },
 
+  // EDITOR SPELL CHECKER
+  "cSpell.words": ["Ecommymmart"],
+
   // ESLINT CONFIGURATION
   "eslint.alwaysShowStatus": true,
   "eslint.validate": ["javascript", "javascriptreact"],

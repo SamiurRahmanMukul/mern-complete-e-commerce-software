@@ -1,15 +1,14 @@
-import { Navigate } from "react-router-dom";
-import { getSessionToken, getSessionUser } from "../../utils/helpers/helperAuthentication";
+import { Navigate } from 'react-router-dom';
+import { getSessionToken, getSessionUser } from '../../utils/helpers/helperAuthentication';
 
-const PublicRoute = ({ children }) => {
+function PublicRoute({ children }) {
   const user = getSessionUser();
   const token = getSessionToken();
 
   if (user && token) {
-    return <Navigate to="/admin" replace={true} />;
-  } else {
-    return children;
+    return <Navigate to='/admin' replace />;
   }
-};
+  return children;
+}
 
 export default PublicRoute;
