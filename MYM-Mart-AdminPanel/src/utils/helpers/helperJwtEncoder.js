@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import axios from 'axios';
 import openNotificationWithIcon from '../common/andNotification';
 

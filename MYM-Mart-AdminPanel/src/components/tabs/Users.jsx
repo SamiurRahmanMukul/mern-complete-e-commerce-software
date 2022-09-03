@@ -45,27 +45,22 @@ function Users() {
             <td className='text-left p-1'>
               <img src={Avatar} alt='category_image' className='w-[25px] h-[25px] rounded-full' />
             </td>
+
             <td className='text-left p-1 text-[16px] capitalize'>Samiur Rahman</td>
             <td className='text-left p-1 text-[16px]'>mukul@mail.com</td>
             <td className='text-left p-1 text-[16px]'>01641-861442</td>
             <td className='text-left p-1 text-[16px] capitalize'>ABC Road, Dhaka</td>
+
             <td className='text-left p-1 text-[16px] capitalize'>
-              <Tag color='green' className='text-md uppercase'>
-                Login
-              </Tag>
+              <Tag color='green' className='text-md uppercase'>Login</Tag>
             </td>
             <td className='text-left p-1 text-[16px] capitalize'>
-              <Tag color='magenta' className='text-md uppercase'>
-                Admin
-              </Tag>
+              <Tag color='magenta' className='text-md uppercase'>Admin</Tag>
             </td>
+
             <td className='text-left p-1'>
-              <Button type='primary' size='small'>
-                UPDATE
-              </Button>
-              <Button type='default' size='small' danger className='ml-2'>
-                DELETE
-              </Button>
+              <Button type='primary' size='small'>UPDATE</Button>
+              <Button className='ml-2' type='default' size='small' danger>DELETE</Button>
             </td>
           </tr>
         </tbody>

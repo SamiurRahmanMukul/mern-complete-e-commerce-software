@@ -24,6 +24,7 @@
     "no-prototype-builtins": "off",
     "no-nested-ternary": "off",
     "no-param-reassign": "off",
+    "consistent-return": "off",
     "no-undef": "off",
     "no-use-before-define": [
       "error",

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import jwtEncodeUrl from '../utils/helpers/helperJwtEncoder';
 
-const useFetchApiData = (url, fetchAgain) => {
+const useFetchData = (url, fetchAgain) => {
   const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
@@ -28,7 +28,7 @@ const useFetchApiData = (url, fetchAgain) => {
     fetchData();
   }, [url, fetchAgain]);
 
-  return { loading, response, error };
+  return [loading, response, error];
 };
 
-export default useFetchApiData;
+export default useFetchData;

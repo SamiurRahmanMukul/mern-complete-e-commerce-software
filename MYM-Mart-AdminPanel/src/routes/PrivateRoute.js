@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { getSessionToken, getSessionUser } from '../../utils/helpers/helperAuthentication';
+import { getSessionToken, getSessionUser } from '../utils/helpers/helperAuthentication';
 
 function PrivateRoute({ children }) {
   const user = getSessionUser();

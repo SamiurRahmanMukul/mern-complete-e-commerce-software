@@ -7,7 +7,7 @@
   },
 
   // EDITOR SPELL CHECKER
-  "cSpell.words": ["Ecommymmart"],
+  "cSpell.words": ["Ecommymmart", "Sider"],
 
   // ESLINT CONFIGURATION
   "eslint.alwaysShowStatus": true,

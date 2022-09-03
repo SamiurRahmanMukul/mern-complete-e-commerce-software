@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import PrivateRoute from './components/routes/PrivateRoute';
-import PublicRoute from './components/routes/PublicRoute';
 import Admin from './pages/Admin';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
 
 function App() {
   return (

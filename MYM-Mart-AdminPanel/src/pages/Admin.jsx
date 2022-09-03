@@ -42,21 +42,33 @@ function Admin() {
         minHeight: '100vh'
       }}
     >
-      <Sider width={300} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        {/* Slider Header Section */}
+      <Sider
+        width={300}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        {/* Sider Header Section */}
         {sessionUser && (
           <div className='flex flex-row items-center justify-start h-[115px]'>
-            <img src={sessionUser.avatar} alt='user-avatar' className='w-[60px] h-[60px] mx-2 rounded-full shadow-md' />
+            <img
+              className='w-[60px] h-[60px] mx-2 rounded-full shadow-md'
+              src={sessionUser.avatar}
+              alt='user-avatar'
+            />
 
             {!collapsed && sessionUser && (
-              <Tag color='default' className='text-[16px] font-bold capitalize py-2 my-1'>
+              <Tag
+                className='text-[16px] font-bold capitalize py-2 my-1'
+                color='default'
+              >
                 {sessionUser.fullName}
               </Tag>
             )}
           </div>
         )}
 
-        {/* Slider Menu Section */}
+        {/* Sider Menu Section */}
         <Menu
           theme='dark'
           mode='inline'
@@ -161,7 +173,10 @@ function Admin() {
           {' '}
           {new Date().getFullYear()}
           {' '}
-          <Link to='/admin' className='text-primaryColor font-bold'>
+          <Link
+            className='text-primaryColor font-bold'
+            to='/admin'
+          >
             MYM-Mart
           </Link>
           . All rights reserved.

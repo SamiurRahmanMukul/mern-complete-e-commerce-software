@@ -57,8 +57,12 @@ function Login() {
               }
             ]}
           >
-            <Input prefix={<MailOutlined className='site-form-item-icon mr-2' />} placeholder='Type here your email' />
+            <Input
+              prefix={<MailOutlined className='site-form-item-icon mr-2' />}
+              placeholder='Type here your email'
+            />
           </Form.Item>
+
           <Form.Item
             name='password'
             rules={[
@@ -68,10 +72,21 @@ function Login() {
               }
             ]}
           >
-            <Input.Password prefix={<LockOutlined className='site-form-item-icon mr-2' />} type='password' placeholder='Type here your password' />
+            <Input.Password
+              prefix={<LockOutlined className='site-form-item-icon mr-2' />}
+              type='password'
+              placeholder='Type here your password'
+            />
           </Form.Item>
+
+          {/* FORM SUBMIT BUTTON */}
           <Form.Item>
-            <Button type='primary' htmlType='submit' className='login-form-button' block>
+            <Button
+              className='login-form-button'
+              htmlType='submit'
+              type='primary'
+              block
+            >
               Login
             </Button>
           </Form.Item>

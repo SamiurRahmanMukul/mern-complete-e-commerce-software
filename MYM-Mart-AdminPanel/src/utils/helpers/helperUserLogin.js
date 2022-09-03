@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import openNotificationWithIcon from '../common/andNotification';
 import jwtEncodeUrl from './helperJwtEncoder';
 

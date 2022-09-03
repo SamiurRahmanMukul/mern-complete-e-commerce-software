@@ -5,6 +5,7 @@ import jwtEncodeUrl from './helperJwtEncoder';
 
 const helperUserLogout = async () => {
   const url = `${process.env.REACT_APP_API_BASE_URL}/auth/logout`;
+
   try {
     const config = {
       method: 'post',
