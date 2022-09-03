@@ -1,7 +1,7 @@
 {
   "name": "mym-mart-backend",
   "version": "1.0.0",
-  "description": "mym-mart-backend development with node.js, express.js & mongoDB",
+  "description": "MYM-Mart backend development with Node.js, Express.js & MongoDB",
   "main": "app.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon app.js",
@@ -10,21 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SamiurRahmanMukul/Complete-MERN-E-commerce-Website.git"
+    "url": "git+https://github.com/SamiurRahmanMukul/Complete-MERN-E-commerce-Website"
   },
   "bugs": {
     "url": "https://github.com/SamiurRahmanMukul/Complete-MERN-E-commerce-Website/issues"
   },
-  "homepage": "https://github.com/SamiurRahmanMukul/Complete-MERN-E-commerce-Website/MYM-Mart-Backend#readme",
+  "homepage": "https://github.com/SamiurRahmanMukul/Complete-MERN-E-commerce-Website/tree/master/MYM-Mart-Backend#readme",
   "keywords": [
     "E-commerce",
     "MERN",
     "MongoDB",
-    "NodeJS",
-    "ExpressJS",
-    "ReactJS",
-    "Mongoose",
-    "Express",
+    "Node.js",
+    "Express.js",
+    "Mongoose.js",
     "MongoDB"
   ],
   "author": "Samiur Rahman Mukul",

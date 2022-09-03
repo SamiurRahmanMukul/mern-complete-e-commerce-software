@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const jwt = require('jsonwebtoken');
 const User = require('../models/users.model');
 
@@ -6,8 +5,10 @@ const User = require('../models/users.model');
 exports.isAuthenticatedApiFetcher = async (req, res, next) => {
   try {
     // get token form headers
+    // eslint-disable-next-line camelcase
     const { x_ecommymmart } = req.headers;
 
+    // eslint-disable-next-line camelcase
     if (!x_ecommymmart) {
       return res.status(401).json({
         statusCode: 401,

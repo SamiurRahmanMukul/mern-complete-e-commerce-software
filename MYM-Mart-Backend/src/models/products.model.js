@@ -62,6 +62,11 @@ const productsSchema = new mongoose.Schema({
       }
     }
   ],
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Product created by is required field.']
+  },
   created_at: {
     type: Date,
     default: Date.now

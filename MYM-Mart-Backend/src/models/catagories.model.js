@@ -13,7 +13,7 @@ const categoriesSchema = new mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Category createdBy is required field.']
+    required: [true, 'Category created by is required field.']
   },
   createdAt: {
     type: Date,
