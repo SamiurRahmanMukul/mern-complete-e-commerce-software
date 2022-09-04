@@ -16,7 +16,7 @@ function App() {
 
         {/* PRIVATE ROUTE'S */}
         <Route
-          path='/admin'
+          path='/admin/:tab'
           element={(<PrivateRoute><Admin /></PrivateRoute>)}
         />
 

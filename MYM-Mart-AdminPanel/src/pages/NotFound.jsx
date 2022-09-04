@@ -11,8 +11,14 @@ function NotFound() {
         title='404 - Not Found!'
         subTitle='Sorry, the page you visited does not exist.'
         extra={(
-          <Link to='/admin'>
-            <Button type='primary'>Back To Dashboard</Button>
+          <Link to='/'>
+            <Button
+              type='primary'
+              shape='round'
+              size='large'
+            >
+              Back To Home
+            </Button>
           </Link>
         )}
       />

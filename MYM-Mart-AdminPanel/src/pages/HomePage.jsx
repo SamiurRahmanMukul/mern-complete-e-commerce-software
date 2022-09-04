@@ -11,8 +11,14 @@ function HomePage() {
         icon={<SmileOutlined />}
         title='Welcome to MYM-Mart AdminPanel!'
         extra={(
-          <Link to='/admin'>
-            <Button type='primary'>Go To Dashboard</Button>
+          <Link to='/admin/dashboard'>
+            <Button
+              type='primary'
+              shape='round'
+              size='large'
+            >
+              Go To Dashboard
+            </Button>
           </Link>
         )}
       />

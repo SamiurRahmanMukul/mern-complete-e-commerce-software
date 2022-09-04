@@ -3,6 +3,7 @@ import {
   Alert, Button, Divider, Form, Input
 } from 'antd';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { setSessionUserAndToken } from '../utils/helpers/helperAuthentication';
 import helperUserLogin from '../utils/helpers/helperUserLogin';
 
@@ -18,7 +19,7 @@ function Login() {
 
     if (status === 200) {
       setSessionUserAndToken(user, token);
-      window.location.href = '/admin';
+      window.location.href = '/admin/dashboard';
     } else {
       setErrMsg(msg);
     }
@@ -33,9 +34,15 @@ function Login() {
   return (
     <section className='flex flex-col h-screen items-center justify-center'>
       <div className='w-[400px] md:w-[450px]'>
-        <h1 className='text-3xl text-center text-primaryColor font-bold md:text-4xl'>MYM-Mart</h1>
+        <Link to='/'>
+          <h1
+            className='text-3xl text-center text-primaryColor font-bold md:text-4xl hover:text-primaryColorHover'
+          >
+            MYM-Mart
+          </h1>
+        </Link>
 
-        <Divider className='!mb-10'>Login</Divider>
+        <Divider className='!mb-10'>LOGIN</Divider>
         {errMsg && <Alert message={errMsg} type='error' className='!text-center' />}
 
         <Form
