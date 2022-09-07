@@ -1,10 +1,9 @@
 /*
  * Name: MYM-Mart-Backend
- * Description: MYM-Mart-Backend with Node.js, Express, MongoDB
+ * Description: MYM-Mart-Backend with Node.js, Express.js, MongoDB
  * Author: Md. Samiur Rahman (Mukul)
  * Version: v1.0.0
- * Date: 31/5/2022
- * Last Modified: 30/6/2021
+ * Last Modified: 05/09/2022
  *
  */
 
@@ -16,6 +15,7 @@ const path = require('path');
 const crossOrigin = require('cors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const formattedResponse = require('./src/config/formattedResponse');
 
 // imports application routes & configs
 const { notFoundRoute, errorHandler } = require('./src/config/errorHandler');
@@ -57,15 +57,29 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// sets default route
+// response default (welcome) route
 app.get('/', (_req, res) => {
-  res.json({ message: 'Welcome to MYM-Mart E-commerce application backend.' });
+  try {
+    res.status(200).json(formattedResponse(
+      0,
+      'SUCCESS',
+      'Welcome to MYM-Mart E-commerce application backend.'
+    ));
+  } catch (error) {
+    res.status(500).json(formattedResponse(
+      2,
+      'SERVER SIDE ERROR',
+      'Something went wrong! Data fetching failed.',
+      {},
+      error
+    ));
+  }
 });
 
 // sets application routes
-app.use(process.env.APP_API_PREFIX, productsRoute); // products routes
-app.use(process.env.APP_API_PREFIX, catagoriesRoute); // catagories routes
 app.use(process.env.APP_API_PREFIX, usersRoute); // users routes
+app.use(process.env.APP_API_PREFIX, catagoriesRoute); // catagories routes
+app.use(process.env.APP_API_PREFIX, productsRoute); // products routes
 
 // 404 - not found error handler
 app.use(notFoundRoute);
