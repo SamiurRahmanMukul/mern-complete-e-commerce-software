@@ -20,6 +20,9 @@ bin-release/
 # ignore node_modules
 /node_modules
 
+# logger logs
+/logs
+
 # environment variables
 .env
 

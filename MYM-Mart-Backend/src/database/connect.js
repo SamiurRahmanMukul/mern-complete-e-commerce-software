@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-// external modules import
 const mongoose = require('mongoose');
 
 const connectionString = process.env.MONGO_URI;
@@ -14,7 +13,7 @@ const connectDatabase = async () => {
         // useFindAndModify: false, // for mongoose 6.x
       })
       .then(() => {
-        console.log('Connection establish to MongoDB database successful.');
+        console.log('Connection establish to MongoDB database successful!');
       })
       .catch((error) => {
         console.log('Error connecting to MongoDB: ', error.message);
