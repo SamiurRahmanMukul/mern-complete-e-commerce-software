@@ -68,7 +68,7 @@ exports.isAdmin = async (req, res, next) => {
     }
 
     // check user status & role is admin
-    if (user.status === 'login' && user.role === 'admin') {
+    if (user.role === 'admin') {
       next();
     } else {
       return res.status(406).json(formattedResponse(

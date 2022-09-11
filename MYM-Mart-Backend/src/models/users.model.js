@@ -7,27 +7,27 @@ const usersSchema = new mongoose.Schema({
   userName: {
     type: String,
     unique: true,
-    required: [true, 'User name is required.']
+    required: [true, 'User name is required']
   },
   fullName: {
     type: String,
-    required: [true, 'Full name filed is required.']
+    required: [true, 'Full name filed is required']
   },
   email: {
     type: String,
     unique: true,
-    required: [true, 'Email filed is required.'],
-    validate: [validator.isEmail, 'Please enter a valid email address.']
+    required: [true, 'Email filed is required'],
+    validate: [validator.isEmail, 'Please enter a valid email address']
   },
   phone: {
     type: String,
     unique: true,
-    validate: [validator.isMobilePhone, 'Please enter a valid phone number.']
+    validate: [validator.isMobilePhone, 'Please enter a valid phone number']
   },
   password: {
     type: String,
-    required: [true, 'Password filed is required.'],
-    minlength: [6, 'Password must be at least 6 characters.'],
+    required: [true, 'Password filed is required'],
+    minlength: [6, 'Password must be at least 6 characters'],
     select: false
   },
   avatar: {
@@ -39,7 +39,7 @@ const usersSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, 'Address field is required.']
+    required: [true, 'Address field is required']
   },
   role: {
     type: String,
@@ -52,7 +52,7 @@ const usersSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['register', 'login', 'logout'],
+    enum: ['register', 'login', 'logout', 'blocked'],
     default: 'register'
   },
   createdAt: {

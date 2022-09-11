@@ -1,42 +1,13 @@
-const jwt = require('jsonwebtoken');
 const User = require('../models/users.model');
-const jwtToken = require('../lib/jwtToken');
+const formattedResponse = require('../config/formattedResponse');
+const loginResponse = require('../config/loginResponse');
+const MyQueryHelper = require('../config/queryHelper');
 
-// make a controller for jsonwebtoken encoded token generated for user
-exports.jwtTokenGenerate = (req, res) => {
-  try {
-    const { url, jwtSecret } = req.body;
-
-    if (url && jwtSecret) {
-      // generate token
-      const token = jwt.sign({ url }, jwtSecret);
-
-      // response token
-      res.status(200).json({
-        statusCode: 200,
-        message: 'Token generated successful',
-        jwtToken: token
-      });
-    } else {
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'Please enter required fields'
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: 'Failed to generate JWT token',
-      error
-    });
-  }
-};
-
-// make a controller for register new user
+// !controller for register new user
 exports.register = async (req, res) => {
   try {
     const {
-      userName, fullName, email, phone, password, address, gender
+      userName, fullName, email, phone, password, address, gender, role
     } = req.body;
 
     if (userName && fullName && email && phone && password && address) {
@@ -46,44 +17,48 @@ exports.register = async (req, res) => {
       const findPhone = await User.findOne({ phone });
 
       if (findUserName) {
-        return res.status(400).json({
-          statusCode: 400,
-          message: 'User name already exists'
-        });
+        return res.status(409).json(formattedResponse(
+          9,
+          'ALREADY EXIST',
+          'Sorry, Username already exists'
+        ));
       }
 
       if (findEmail) {
-        return res.status(400).json({
-          statusCode: 400,
-          message: 'Email already exists'
-        });
+        return res.status(409).json(formattedResponse(
+          9,
+          'ALREADY EXIST',
+          'Sorry, Email already exists'
+        ));
       }
 
       if (findPhone) {
-        return res.status(400).json({
-          statusCode: 400,
-          message: 'Phone number already exists'
-        });
+        return res.status(409).json(formattedResponse(
+          9,
+          'ALREADY EXIST',
+          'Sorry, Phone number already exists'
+        ));
       }
 
-      const name = userName.replace(/\s/g, '').toLowerCase();
-
+      // create new user and store in database
       const user = await User.create({
-        userName: name,
+        userName,
         fullName,
         email,
         phone,
         password,
         avatar: req.file ? `/uploads/users/${req.file.filename}` : '/avatar.png',
         gender,
-        address
+        address,
+        role
       });
 
-      // response user with JWT token
-      res.status(201).json({
-        statusCode: 201,
-        message: 'User registered successful',
-        user: {
+      // success response with register new user
+      res.status(201).json(formattedResponse(
+        0,
+        'SUCCESS',
+        'User registered successful',
+        {
           userName: user.userName,
           fullName: user.fullName,
           email: user.email,
@@ -96,157 +71,194 @@ exports.register = async (req, res) => {
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
         }
-      });
+      ));
     } else {
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'Please enter all required fields'
-      });
+      return res.status(400).json(formattedResponse(
+        1,
+        'FAILED',
+        'Please enter all required fields'
+      ));
     }
-  } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: 'User registration failed',
-      error
-    });
+  } catch (err) {
+    res.status(500).json(formattedResponse(
+      2,
+      'SERVER SIDE ERROR',
+      'Something wen wrong! User registration failed',
+      null,
+      err
+    ));
   }
 };
 
-// make a controller for login user
+// !controller for login existing user
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const { loginType } = req.query;
 
-    if (!email && !password) {
-      // check if email or password is empty
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'Please enter email and password'
-      });
+    // check if email or password is empty
+    if (!email || !password) {
+      return res.status(400).json(formattedResponse(
+        1,
+        'FAILED',
+        'Please enter email and password'
+      ));
     }
 
-    // check user if exists
+    // check user already exists
     const user = await User.findOne({ email }).select('+password');
+
     if (!user) {
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'User does not exist'
-      });
+      return res.status(404).json(formattedResponse(
+        4,
+        'UNKNOWN ACCESS',
+        'User does not exist'
+      ));
     }
 
     // if query loginType is "admin"
     if (loginType === 'admin') {
-      // check if user is admin
       if (user.role !== 'admin') {
-        return res.status(400).json({
-          statusCode: 400,
-          message: 'Only authorized user access here'
-        });
+        return res.status(406).json(formattedResponse(
+          6,
+          'UNABLE TO ACCESS',
+          'Accessing the page or resource you were trying to reach is forbidden'
+        ));
       }
     }
 
     // check password matched
     const isPasswordMatch = await user.comparePassword(password);
     if (!isPasswordMatch) {
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'User credentials are incorrect'
-      });
+      return res.status(400).json(formattedResponse(
+        1,
+        'FAILED',
+        'User credentials are incorrect'
+      ));
     }
 
     // update user status & updateAt time
-    const updatedUser = await User.findByIdAndUpdate(user._id, { status: 'login', updatedAt: Date.now() }, { new: true });
+    const logUser = await User.findByIdAndUpdate(
+      user._id,
+      { status: 'login', updatedAt: Date.now() },
+      { new: true }
+    );
 
-    // response user with JWT token
-    jwtToken(updatedUser, 200, 'User logged in successful', res);
+    // response user with JWT access token token
+    loginResponse(res, 201, 0, 'SUCCESS', 'User login successful', logUser);
   } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: 'User login failed',
+    res.status(500).json(formattedResponse(
+      1,
+      'FAILED',
+      'Sorry! User login failed',
+      null,
       error
-    });
+    ));
   }
 };
 
-// make a controller for logout user
+// !controller for logout user
 exports.logoutUser = async (req, res) => {
   try {
     const { user } = req;
 
     if (!user) {
-      return res.status(401).json({
-        statusCode: 401,
-        message: 'Unauthorized access. Please login to continue'
-      });
+      return res.status(404).json(formattedResponse(
+        4,
+        'UNKNOWN ACCESS',
+        'Unauthorized access. Please login to continue'
+      ));
     }
+
     // update user status & updateAt time
-    await User.findByIdAndUpdate(user._id, { status: 'logout', updatedAt: Date.now() }, { new: true });
+    await User.findByIdAndUpdate(
+      user._id,
+      { status: 'logout', updatedAt: Date.now() },
+      { new: true }
+    );
 
     // remove cookie
     res.clearCookie('AccessToken');
 
     // response user
-    res.status(200).json({
-      statusCode: 200,
-      message: 'User logged out successful'
-    });
+    res.status(200).json(formattedResponse(
+      0,
+      'SUCCESS',
+      'User logged out successful'
+    ));
   } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: 'User logout failed',
+    res.status(500).json(formattedResponse(
+      2,
+      'SERVER SIDE ERROR',
+      'Sorry! User logout failed',
+      null,
       error
-    });
+    ));
   }
 };
 
-// make a controller for get all users
+// !controller for get all users
 exports.getAllUsers = async (req, res) => {
   try {
     const { user } = req;
 
     if (!user) {
-      return res.status(401).json({
-        statusCode: 401,
-        message: 'Unauthorized access. Please login to continue'
-      });
+      return res.status(401).json(formattedResponse(
+        1,
+        'FAILED',
+        'Unauthorized access. Please login to continue'
+      ));
     }
+
     // check if user is admin
     if (user.role !== 'admin') {
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'Only authorized user access here'
-      });
+      return res.status(406).json(formattedResponse(
+        6,
+        'UNABLE TO ACCESS',
+        'Accessing the page or resource you were trying to reach is forbidden'
+      ));
     }
+
     // get all users
     const users = await User.find({});
 
+    // product filtering based on searching or sorting queries
+    const userQuery = new MyQueryHelper(User.find(), req.query).search().paginate();
+    const newUser = await userQuery.query;
+
     // response users
-    res.status(200).json({
-      statusCode: 200,
-      message: 'Users fetched successful',
-      totalUsers: users.length,
-      data: [
-        ...users.map((mapUser) => ({
-          id: mapUser._id,
-          userName: mapUser.userName,
-          fullName: mapUser.fullName,
-          email: mapUser.email,
-          phone: mapUser.phone,
-          avatar: process.env.APP_BASE_URL + mapUser.avatar,
-          role: mapUser.role,
-          status: mapUser.status,
-          createdAt: mapUser.createdAt,
-          updatedAt: mapUser.updatedAt
-        }))
-      ]
-    });
+    res.status(200).json(formattedResponse(
+      0,
+      'SUCCESS',
+      'Users fetched successful',
+      {
+        total_user: users.length,
+        num_of_page: Math.ceil(users.length / req.query.limit),
+        num_of_rows: newUser.length,
+        rows: [
+          ...newUser.map((mapUser) => ({
+            id: mapUser._id,
+            userName: mapUser.userName,
+            fullName: mapUser.fullName,
+            email: mapUser.email,
+            phone: mapUser.phone,
+            avatar: process.env.APP_BASE_URL + mapUser.avatar,
+            role: mapUser.role,
+            status: mapUser.status,
+            createdAt: mapUser.createdAt,
+            updatedAt: mapUser.updatedAt
+          }))
+        ]
+      }
+    ));
   } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: 'Failed to get all users',
+    res.status(500).json(formattedResponse(
+      2,
+      'SEVER SIDER ERROR',
+      'Sorry! Failed to get all users',
+      null,
       error
-    });
+    ));
   }
 };
 
@@ -256,27 +268,31 @@ exports.getUserById = async (req, res) => {
     const { user } = req;
 
     if (!user) {
-      return res.status(401).json({
-        statusCode: 401,
-        message: 'Unauthorized access. Please login to continue'
-      });
+      return res.status(401).json(formattedResponse(
+        1,
+        'FAILED',
+        'Unauthorized access. Please login to continue'
+      ));
     }
+
     // get user by id
     const userId = req.params.id;
     const userById = await User.findById(userId);
 
     if (!userById) {
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'User was not found'
-      });
+      return res.status(404).json(formattedResponse(
+        4,
+        'UNKNOWN ACCESS',
+        'User was not found'
+      ));
     }
 
-    // response user
-    res.status(200).json({
-      statusCode: 200,
-      message: 'User fetched successful',
-      data: {
+    // response single by id user
+    res.status(200).json(formattedResponse(
+      0,
+      'SUCCESS',
+      'User fetched successful',
+      {
         id: userById._id,
         userName: userById.userName,
         fullName: userById.fullName,
@@ -288,12 +304,14 @@ exports.getUserById = async (req, res) => {
         createdAt: userById.createdAt,
         updatedAt: userById.updatedAt
       }
-    });
+    ));
   } catch (error) {
-    res.status(500).json({
-      statusCode: 500,
-      message: 'Failed to get a user',
+    res.status(500).json(formattedResponse(
+      2,
+      'SERVER SIDE ERROR',
+      'Sorry! Failed to get a user',
+      null,
       error
-    });
+    ));
   }
 };

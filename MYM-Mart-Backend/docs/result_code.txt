@@ -8,3 +8,4 @@
   #5: UNKNOWN ACCESS (Not Found) = 4 (STATUS === 404)
   #6: UNABLE TO ACCESS (Only Admin Accessible)  = 6 (STATUS === 406)
   #7: ALREADY EXIST (Conflict) = 9 (STATUS === 409)
+  #8: TOO MANY REQUEST = 29 (STATUS === 429)
