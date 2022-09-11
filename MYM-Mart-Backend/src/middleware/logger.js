@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { format } = require('date-fns');
 const { v4: uuid } = require('uuid');
 const fs = require('fs');
@@ -15,13 +14,13 @@ const logEvents = async (message, logFileName) => {
     }
     await fsPromises.appendFile(path.join(__dirname, '..', '../logs', logFileName), logItem);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log('Logger error: ', err);
   }
 };
 
 const logger = (req, _res, next) => {
   logEvents(`${req.method}\t${req.url}\t${req.headers.origin}`, 'req-log.log');
-  // console.log(`${req.method} ${req.path}`);
   next();
 };
 
