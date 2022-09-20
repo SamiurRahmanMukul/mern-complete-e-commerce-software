@@ -14,8 +14,7 @@ import Products from '../components/tabs/Products';
 import Settings from '../components/tabs/Settings';
 import Users from '../components/tabs/Users';
 import useScreenSize from '../hooks/useScreenSize';
-import { getSessionUser } from '../utils/helpers/helperAuthentication';
-import helperUserLogout from '../utils/helpers/helperUserLogout';
+import { getSessionUser } from '../utils/helperAuthentication';
 
 const {
   Header, Content, Footer, Sider
@@ -61,7 +60,7 @@ function Admin() {
         break;
       }
       case '8': {
-        helperUserLogout();
+        // here user logout functionality implement
         break;
       }
       default: {

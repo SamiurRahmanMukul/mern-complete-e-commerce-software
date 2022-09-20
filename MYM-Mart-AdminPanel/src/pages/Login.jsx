@@ -4,31 +4,19 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { setSessionUserAndToken } from '../utils/helpers/helperAuthentication';
-import helperUserLogin from '../utils/helpers/helperUserLogin';
 
 function Login() {
   window.document.title = 'MYM-Mart — Login';
   const [errMsg, setErrMsg] = useState('');
 
-  const onFinish = async (values) => {
-    const data = await helperUserLogin(values);
-    const {
-      status, msg, user, token
-    } = data;
-
-    if (status === 200) {
-      setSessionUserAndToken(user, token);
-      window.location.href = '/admin/dashboard';
-    } else {
-      setErrMsg(msg);
-    }
+  const onFinish = async () => {
+    // here user login functionality implement
   };
 
   useEffect(() => {
     setTimeout(() => {
       setErrMsg('');
-    }, 3000);
+    }, 6000);
   }, [errMsg]);
 
   return (
