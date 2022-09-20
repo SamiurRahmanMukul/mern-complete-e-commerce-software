@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Categories = require('../models/catagories.model');
 const Products = require('../models/products.model');
-const MyQueryOptions = require('../lib/queryOptions');
+const MyQueryHelper = require('../config/queryHelper');
 
 // make a controller for creating new category
 exports.createCategory = async (req, res) => {
@@ -101,7 +101,7 @@ exports.getAllCategories = async (req, res) => {
     const categories = await Categories.find();
 
     // product filtering based on searching or sorting queries
-    const categoryQuery = new MyQueryOptions(Categories.find(), req.query).search().paginate();
+    const categoryQuery = new MyQueryHelper(Categories.find(), req.query).search().paginate();
     const categoryNew = await categoryQuery.query;
 
     if (!categories) {

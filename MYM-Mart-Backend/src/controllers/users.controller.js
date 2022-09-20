@@ -1,7 +1,7 @@
 const User = require('../models/users.model');
 const formattedResponse = require('../config/formattedResponse');
-const loginResponse = require('../config/loginResponse');
 const MyQueryHelper = require('../config/queryHelper');
+const { loginResponse } = require('../config/appResponse');
 
 // !controller for register new user
 exports.register = async (req, res) => {

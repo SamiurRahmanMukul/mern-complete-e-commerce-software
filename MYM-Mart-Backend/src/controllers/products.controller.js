@@ -1,6 +1,6 @@
-const MyQueryOptions = require('../lib/queryOptions');
 const Products = require('../models/products.model');
 const Catagories = require('../models/catagories.model');
+const MyQueryHelper = require('../config/queryHelper');
 
 // make a controller to create a new product
 exports.createProduct = async (req, res) => {
@@ -50,7 +50,7 @@ exports.getAllProducts = async (req, res) => {
     const totalProducts = (await Products.find()).length;
 
     // product filtering based on searching or sorting queries
-    const productQuery = new MyQueryOptions(Products.find(), req.query).search().limit();
+    const productQuery = new MyQueryHelper(Products.find(), req.query).search().paginate();
     const products = await productQuery.query;
 
     if (totalProducts === 0) {

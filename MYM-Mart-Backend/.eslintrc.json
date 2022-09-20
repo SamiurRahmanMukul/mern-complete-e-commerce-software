@@ -10,10 +10,10 @@
     "ecmaVersion": "latest"
   },
   "rules": {
+    "func-names": "off",
     "consistent-return": "off",
     "no-underscore-dangle": "off",
     "comma-dangle": ["error", "never"],
-    "max-len": ["error", { "code": 200 }],
-    "func-names": "off"
+    "max-len": ["error", { "code": 200 }]
   }
 }
