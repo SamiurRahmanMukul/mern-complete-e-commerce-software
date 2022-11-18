@@ -7,17 +7,17 @@ const useFetchData = (url, fetchAgain) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-      try {
-        const res = axios.get(url, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+    try {
+      const res = axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-        setResponse(res.data);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        setError(err);
-      }
+      setResponse(res.data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setError(err);
+    }
   }, [url, fetchAgain]);
 
   return [loading, error, response];

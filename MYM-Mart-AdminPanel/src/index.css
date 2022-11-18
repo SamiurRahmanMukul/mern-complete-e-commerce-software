@@ -8,19 +8,32 @@ html {
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+input,
+select,
+button,
+textarea,
+a {
+  border-radius: 0;
+  -webkit-appearance: none;
 }
 
 /* And Design Customize Start */
 
 .ant-btn-primary {
-  @apply text-textColorWhite bg-primaryColor hover:bg-primaryColorHover border-primaryColor hover:border-primaryColorHover !important;
+  @apply text-textColorWhite bg-primaryColor border-primaryColor hover:bg-primaryColorHover hover:border-primaryColorHover disabled:text-gray-200 disabled:bg-blue-400 disabled:border-blue-400;
 }
 
 .ant-divider-horizontal.ant-divider-with-text-center::before,
 .ant-divider-horizontal.ant-divider-with-text-center::after {
   border-top: 2px solid !important;
-  @apply border-primaryColor text-center !important;
+  @apply border-primaryColor text-center;
+}
+
+.site-layout .site-layout-background {
+  @apply bg-backgroundColorWhite !important;
 }
 
 .ant-message-custom-content {
@@ -31,16 +44,12 @@ body {
   @apply bg-backgroundColorBlack;
 }
 
+.ant-image-preview-img-wrapper img {
+  display: inline !important;
+}
+
 .ant-image-preview-img {
   margin: auto !important;
 }
 
 /* And Design Customize End */
-
-/* Dashboard Page Style Start */
-
-.site-layout .site-layout-background {
-  @apply bg-backgroundColorWhite !important;
-}
-
-/* Dashboard Page Style End */
