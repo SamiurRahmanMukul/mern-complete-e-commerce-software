@@ -1,0 +1,80 @@
+/* tailwind css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* root css */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 14px;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply !font-body-font;
+  -ms-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+input,
+select,
+button,
+textarea,
+a {
+  border-radius: 6 !important;
+  -webkit-appearance: none;
+}
+
+/* antd customize start */
+
+.ant-btn-primary {
+  @apply text-txt-white bg-color-primary border-color-primary hover:!bg-color-secondary hover:border-color-secondary active:!bg-color-primary disabled:text-txt-grey disabled:bg-bg-gray disabled:border-bg-gray;
+}
+
+.ant-divider-horizontal.ant-divider-with-text-center::before,
+.ant-divider-horizontal.ant-divider-with-text-center::after {
+  border-top: 2px solid !important;
+  @apply border-color-primary text-center;
+}
+
+.ant-message-custom-content {
+  @apply inline-flex items-center;
+}
+
+.ant-popover-title {
+  @apply bg-bg-black;
+}
+
+.ant-image-preview-img {
+  margin: auto !important;
+}
+
+.ant-image-preview-img-wrapper img {
+  display: inline !important;
+}
+
+.ant-layout-header {
+  padding-inline: 0 !important;
+}
+
+.ant-tabs-tab {
+  @apply !text-[12px] font-bold md:!text-[20px];
+}
+
+.ant-picker-calendar-date-content {
+  @apply !h-[25px];
+}
+
+.ant-picker-content thead tr {
+  @apply !h-[40px] border-b-bg-black border-b-2;
+}
+
+/* antd customize end */
