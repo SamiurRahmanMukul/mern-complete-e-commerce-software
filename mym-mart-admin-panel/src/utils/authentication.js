@@ -1,9 +1,13 @@
+const APP_USER_STORAGE = 'MYM-MART-USER-STORAGE';
+const APP_ACCESS_TOKEN = 'MYM-MART-ACCESS-TOKEN';
+const APP_REFRESH_TOKEN = 'MYM-MART-REFRESH-TOKEN';
+
 /**
  * function to get session user details
  * @returns if session user return user object otherwise return null
  */
 export const getSessionUser = () => {
-  const userStr = localStorage.getItem('MYM-MART-USER');
+  const userStr = localStorage.getItem(APP_USER_STORAGE);
 
   if (userStr) {
     return JSON.parse(userStr);
@@ -16,7 +20,7 @@ export const getSessionUser = () => {
  * @returns if session user return access-token otherwise return null
  */
 export const getSessionToken = () => {
-  const tokenStr = localStorage.getItem('MYM-MART-ACCESS-TOKEN');
+  const tokenStr = localStorage.getItem(APP_ACCESS_TOKEN);
 
   if (tokenStr) {
     return tokenStr;
@@ -29,7 +33,7 @@ export const getSessionToken = () => {
  * @returns if session user return refresh-token otherwise return null
  */
 export const getRefreshToken = () => {
-  const tokenStr = localStorage.getItem('MYM-MART-REFRESH-TOKEN');
+  const tokenStr = localStorage.getItem(APP_REFRESH_TOKEN);
 
   if (tokenStr) {
     return tokenStr;
@@ -44,9 +48,9 @@ export const getRefreshToken = () => {
  * @param {*} refreshToken user JWT refresh-token
  */
 export const setSessionUserAndToken = (user, accessToken, refreshToken) => {
-  localStorage.setItem('MYM-MART-USER', JSON.stringify(user));
-  localStorage.setItem('MYM-MART-ACCESS-TOKEN', accessToken);
-  localStorage.setItem('MYM-MART-REFRESH-TOKEN', refreshToken);
+  localStorage.setItem(APP_USER_STORAGE, JSON.stringify(user));
+  localStorage.setItem(APP_ACCESS_TOKEN, accessToken);
+  localStorage.setItem(APP_REFRESH_TOKEN, refreshToken);
 };
 
 /**
@@ -55,8 +59,8 @@ export const setSessionUserAndToken = (user, accessToken, refreshToken) => {
  * @param {*} refreshToken user JWT refresh-token
  */
 export const setSessionAccessAndRefreshToken = (accessToken, refreshToken) => {
-  localStorage.setItem('MYM-MART-ACCESS-TOKEN', accessToken);
-  localStorage.setItem('MYM-MART-REFRESH-TOKEN', refreshToken);
+  localStorage.setItem(APP_ACCESS_TOKEN, accessToken);
+  localStorage.setItem(APP_REFRESH_TOKEN, refreshToken);
 };
 
 /**
@@ -64,7 +68,7 @@ export const setSessionAccessAndRefreshToken = (accessToken, refreshToken) => {
  * @param {*} user user object
  */
 export const setSessionUser = (user) => {
-  localStorage.setItem('MYM-MART-USER', JSON.stringify(user));
+  localStorage.setItem(APP_USER_STORAGE, JSON.stringify(user));
 };
 
 /**
@@ -73,22 +77,22 @@ export const setSessionUser = (user) => {
  * @param {*} value session user object key's value
  */
 export const setSessionUserKeyAgainstValue = (key, value) => {
-  const userStr = localStorage.getItem('MYM-MART-USER');
+  const userStr = localStorage.getItem(APP_USER_STORAGE);
   let userStrObj = JSON.parse(userStr);
 
   userStrObj = {
     ...userStrObj, [key]: value
   };
 
-  localStorage.setItem('MYM-MART-USER', JSON.stringify(userStrObj));
+  localStorage.setItem(APP_USER_STORAGE, JSON.stringify(userStrObj));
 };
 
 /**
  * function to removed in session and logout user
  */
 export const removeSessionAndLogoutUser = () => {
-  localStorage.removeItem('MYM-MART-USER');
-  localStorage.removeItem('MYM-MART-ACCESS-TOKEN');
-  localStorage.removeItem('MYM-MART-REFRESH-TOKEN');
+  localStorage.removeItem(APP_USER_STORAGE);
+  localStorage.removeItem(APP_ACCESS_TOKEN);
+  localStorage.removeItem(APP_REFRESH_TOKEN);
   window.location.href = '/auth/login';
 };
