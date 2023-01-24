@@ -12,7 +12,7 @@ function App() {
         <Route path='/' element={<Home />} />
 
         {/* DASHBOARD ROUTE */}
-        <Route path='/dashboard/:tab' element={(<Dashboard />)} />
+        <Route path='/dashboard' element={(<Dashboard />)} />
 
         {/* LOGIN ROUTE */}
         <Route path='/auth/login' element={(<Login />)} />

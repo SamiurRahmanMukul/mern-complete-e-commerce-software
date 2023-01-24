@@ -78,3 +78,15 @@ a {
 }
 
 /* antd customize end */
+
+/* app entry style start */
+
+.default-transition {
+  @apply transition-all duration-200;
+}
+
+.app-branding-text {
+  @apply text-3xl text-center text-color-primary font-text-font font-bold default-transition md:text-4xl hover:text-color-secondary;
+}
+
+/* app entry style end */
