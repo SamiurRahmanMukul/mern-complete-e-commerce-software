@@ -15,8 +15,8 @@ Hello 👋, I'm Samiur Rahman Mukul. At this repository i will be build a `Compl
 ## Development With MERN E-commerce Software
 
 - `Backend` - Node.js, Express.js & MongoDB Database
-- `Admin Panel` - React.js, Redux.js, Ant Design, Tailwind CSS
-- `Frontend` - Next.js, Redux.js, Ant-design & Tailwind CSS
+- `Admin Panel` - React.js, Redux.js, Ant Design & Tailwind CSS
+- `Frontend` - Next.js, Redux.js, Ant Design & Tailwind CSS
 
 <!-- my social media links -->
 

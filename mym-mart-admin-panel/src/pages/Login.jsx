@@ -72,7 +72,7 @@ function Login() {
           {/* FORM SUBMIT BUTTON */}
           <Form.Item>
             <Button
-              className='login-form-button'
+              className='login-form-button mt-5'
               htmlType='submit'
               type='primary'
               block
