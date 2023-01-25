@@ -7,6 +7,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Avatar from '../assets/images/avatar.png';
 import Main from '../components/tabs/Main';
 import Users from '../components/tabs/Users';
+import ApiService from '../utils/apiService';
+import { removeSessionAndLogoutUser } from '../utils/authentication';
+import notificationWithIcon from '../utils/notification';
 
 const {
   Header, Content, Footer, Sider
@@ -17,6 +20,20 @@ function Dashboard() {
   const [selectedKeys, setSelectedKeys] = useState('1');
   const navigate = useNavigate();
   const { tab } = useParams();
+
+  // function to handle user logout
+  const userLogout = async () => {
+    try {
+      const response = await ApiService.post('/api/v1/auth/logout');
+      if (response?.result_code === 0) {
+        removeSessionAndLogoutUser();
+      } else {
+        notificationWithIcon('error', 'Sorry! Something went wrong. App server error');
+      }
+    } catch (error) {
+      notificationWithIcon('error', error?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+    }
+  };
 
   const handleTabChange = (key) => {
     switch (key) {
@@ -49,7 +66,7 @@ function Dashboard() {
         break;
       }
       case '8': {
-        navigate('/dashboard/logout');
+        userLogout();
         break;
       }
       default: {

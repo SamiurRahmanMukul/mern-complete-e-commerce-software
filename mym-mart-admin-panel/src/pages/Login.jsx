@@ -1,13 +1,17 @@
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { LoadingOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import {
   Alert, Button, Divider, Form, Input
 } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useTimeout from '../hooks/useTimeout';
+import ApiService from '../utils/apiService';
+import { setSessionUserAndToken } from '../utils/authentication';
+import notificationWithIcon from '../utils/notification';
 
 function Login() {
   window.document.title = 'MYM Mart — Login';
+  const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
   // timeout callback
@@ -17,9 +21,26 @@ function Login() {
 
   timeout();
 
-  const onFinish = (values) => {
-    // eslint-disable-next-line no-console
-    console.log(values);
+  // function to handle user login
+  const onFinish = async (values) => {
+    try {
+      setLoading(true);
+      const response = await ApiService.post('/api/v1/auth/login?loginType=admin', values);
+
+      if (response?.result_code === 0) {
+        setSessionUserAndToken(response?.result?.data, response?.access_token, response?.refresh_token);
+        notificationWithIcon('success', response?.result?.message);
+        window.location.href = '/dashboard/main';
+        setLoading(false);
+      } else {
+        setErrMsg('Sorry! Something went wrong. App server error');
+        setLoading(false);
+      }
+      setLoading(false);
+    } catch (error) {
+      setErrMsg(error?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,11 +94,13 @@ function Login() {
           <Form.Item>
             <Button
               className='login-form-button mt-5'
+              disabled={loading}
+              loading={loading}
               htmlType='submit'
               type='primary'
               block
             >
-              Login
+              {loading ? <LoadingOutlined /> : 'Login'}
             </Button>
           </Form.Item>
         </Form>
