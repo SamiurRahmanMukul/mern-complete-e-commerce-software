@@ -5,6 +5,8 @@ import { Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Avatar from '../assets/images/avatar.png';
+import Main from '../components/tabs/Main';
+import Users from '../components/tabs/Users';
 
 const {
   Header, Content, Footer, Sider
@@ -98,6 +100,46 @@ function Dashboard() {
     }
   }, [tab, navigate]);
 
+  useEffect(() => {
+    switch (selectedKeys) {
+      case '1': {
+        window.document.title = 'MYM Mart — Dashboard';
+        break;
+      }
+      case '2': {
+        window.document.title = 'MYM Mart — Users';
+        break;
+      }
+      case '3': {
+        window.document.title = 'MYM Mart — Categories';
+        break;
+      }
+      case '4': {
+        window.document.title = 'MYM Mart — Products';
+        break;
+      }
+      case '5': {
+        window.document.title = 'MYM Mart — Orders';
+        break;
+      }
+      case '6': {
+        window.document.title = 'MYM Mart — Analytics';
+        break;
+      }
+      case '7': {
+        window.document.title = 'MYM Mart — Settings';
+        break;
+      }
+      case '8': {
+        window.document.title = 'MYM Mart — Logout';
+        break;
+      }
+      default: {
+        window.document.title = 'MYM Mart — Dashboard';
+      }
+    }
+  }, [selectedKeys]);
+
   return (
     <Layout className='w-full h-screen'>
       <Sider width={250} breakpoint='lg' collapsedWidth='0'>
@@ -172,10 +214,13 @@ function Dashboard() {
           </Link>
         </Header>
 
-        <Content className='m-2 !bg-bg-white' />
+        <Content className='m-2 !bg-bg-white'>
+          {selectedKeys === '1' && (<Main />)}
+          {selectedKeys === '2' && (<Users />)}
+        </Content>
 
         <Footer className='text-center font-text-font font-medium '>
-          MYM Mart ©2023 Developed by Samiur Rahman Mukul
+          ©2023 MYM Mart — Developed By Samiur Rahman Mukul
         </Footer>
       </Layout>
     </Layout>
