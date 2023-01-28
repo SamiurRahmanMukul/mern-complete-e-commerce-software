@@ -4,7 +4,7 @@ import {
 import { Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import Avatar from '../assets/images/avatar.png';
+import LoginBox from '../components/shared/LoginBox';
 import Main from '../components/tabs/Main';
 import Users from '../components/tabs/Users';
 import ApiService from '../utils/apiService';
@@ -160,16 +160,7 @@ function Dashboard() {
   return (
     <Layout className='w-full h-screen'>
       <Sider width={250} breakpoint='lg' collapsedWidth='0'>
-        <div className='logo-box'>
-          <img
-            className='w-[50px] h-auto rounded-full'
-            src={Avatar}
-            alt='avatar-img'
-          />
-          <h2 className='user-name'>
-            John Smith
-          </h2>
-        </div>
+        <LoginBox />
 
         <Menu
           theme='dark'
@@ -222,6 +213,7 @@ function Dashboard() {
           ]}
         />
       </Sider>
+
       <Layout>
         <Header className='p-0 !bg-bg-white'>
           <Link to='/'>

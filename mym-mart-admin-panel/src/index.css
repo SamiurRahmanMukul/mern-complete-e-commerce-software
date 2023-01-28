@@ -97,7 +97,7 @@ a {
   @apply px-2 py-4 flex flex-row items-center justify-start space-x-2;
 }
 .user-name {
-  @apply whitespace-nowrap text-txt-white text-[25px] font-text-font font-medium;
+  @apply whitespace-nowrap text-txt-white text-[25px] font-text-font font-medium truncate block;
 }
 
 /* dashboard components style end */
