@@ -2,16 +2,16 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session';
 import thunk from 'redux-thunk';
-import counterSlices from './slice/counter';
+import appSlices from './slice/appSlice';
 
 const rootReducer = combineReducers({
-  counter: counterSlices
+  app: appSlices
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['counter'] // only that's reducer will be persisted
+  whitelist: [] // only that's reducer will be persisted
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
