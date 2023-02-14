@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../assets/images/logo.png';
 import useTimeout from '../hooks/useTimeout';
 import ApiService from '../utils/apiService';
 import { setSessionUserAndToken } from '../utils/authentication';
@@ -47,9 +48,11 @@ function Login() {
     <section className='flex flex-col h-screen items-center justify-center'>
       <div className='w-[90%] md:w-[450px]'>
         <Link to='/'>
-          <h2 className='app-branding-text'>
-            MYM Mart
-          </h2>
+          <img
+            className='w-[200px] h-[140px] mx-auto'
+            alt='mym-mart-logo'
+            src={Logo}
+          />
         </Link>
 
         <Divider className='!mb-10'>LOGIN AUTHORIZED USER ONLY</Divider>
@@ -72,7 +75,7 @@ function Login() {
           >
             <Input
               prefix={<MailOutlined className='site-form-item-icon mr-2' />}
-              placeholder='Enter here your email'
+              placeholder='Enter here your Email'
             />
           </Form.Item>
 
@@ -85,7 +88,7 @@ function Login() {
           >
             <Input.Password
               prefix={<LockOutlined className='site-form-item-icon mr-2' />}
-              placeholder='Enter here your password'
+              placeholder='Enter here your Password'
               type='password'
             />
           </Form.Item>

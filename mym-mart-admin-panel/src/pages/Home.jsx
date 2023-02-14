@@ -22,7 +22,7 @@ function Home() {
               shape='round'
               size='large'
             >
-              Go To Dashboard
+              Go to Dashboard
             </Button>
           </Link>
         )}

@@ -26,6 +26,7 @@
     "no-param-reassign": "off",
     "consistent-return": "off",
     "linebreak-style": "off",
+    "no-plusplus": "off",
     "no-undef": "off",
     "no-use-before-define": [
       "error",

@@ -4,7 +4,8 @@ import {
 import { Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import LoginBox from '../components/shared/LoginBox';
+import Logo from '../assets/images/logo.png';
+import UserBox from '../components/shared/UserBox';
 import Main from '../components/tabs/Main';
 import Users from '../components/tabs/Users';
 import ApiService from '../utils/apiService';
@@ -160,7 +161,7 @@ function Dashboard() {
   return (
     <Layout className='w-full h-screen'>
       <Sider width={250} breakpoint='lg' collapsedWidth='0'>
-        <LoginBox />
+        <UserBox />
 
         <Menu
           theme='dark'
@@ -217,9 +218,11 @@ function Dashboard() {
       <Layout>
         <Header className='p-0 !bg-bg-white'>
           <Link to='/'>
-            <h2 className='app-branding-text mt-4'>
-              MYM Mart
-            </h2>
+            <img
+              className='w-[120px] h-[60px] mx-auto'
+              alt='mym-mart-logo'
+              src={Logo}
+            />
           </Link>
         </Header>
 
@@ -229,7 +232,17 @@ function Dashboard() {
         </Content>
 
         <Footer className='text-center font-text-font font-medium '>
-          ©2023 MYM Mart — Developed By Samiur Rahman Mukul
+          ©2023 MYM Mart — Developed By
+          {' '}
+          <a
+            className='text-color-primary hover:text-color-secondary'
+            href='http://www.samiurrahmanmukul.epizy.com'
+            target='_blank'
+            rel='noreferrer'
+          >
+            Samiur Rahman Mukul
+
+          </a>
         </Footer>
       </Layout>
     </Layout>

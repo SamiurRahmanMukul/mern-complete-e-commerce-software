@@ -13,13 +13,13 @@ function Error() {
         title='404 - Error Page!'
         subTitle='Sorry, the page you visited does not exist.'
         extra={(
-          <Link to='/dashboard/main'>
+          <Link to='/'>
             <Button
               type='primary'
               shape='round'
               size='large'
             >
-              Back To Dashboard
+              Back to Home
             </Button>
           </Link>
         )}
