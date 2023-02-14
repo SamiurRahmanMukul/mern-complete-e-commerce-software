@@ -7,7 +7,6 @@
   },
 
   // ESLINT CONFIGURATION
-  "eslint.alwaysShowStatus": true,
   "eslint.validate": ["javascript", "javascriptreact"],
 
   // LANGUAGE CONFIGURATION

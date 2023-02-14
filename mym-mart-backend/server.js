@@ -8,7 +8,7 @@
  */
 
 // imports modules & dependencies
-const app = require('./app');
+const app = require('./src/app');
 const logger = require('./src/middleware/winston.logger');
 
 // app listens to .env defined port
