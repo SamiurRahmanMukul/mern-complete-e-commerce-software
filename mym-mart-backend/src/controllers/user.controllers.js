@@ -30,6 +30,49 @@ exports.getUser = async (req, res) => {
         avatar: process.env.APP_BASE_URL + user.avatar,
         gender: user.gender,
         role: user.role,
+        verified: user.verified,
+        status: user.status,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
+      }
+    ));
+  } catch (error) {
+    res.status(500).json(errorResponse(
+      2,
+      'SERVER SIDE ERROR',
+      error
+    ));
+  }
+};
+
+// TODO: Controller for get user info using id by admin
+exports.getUserById = async (req, res) => {
+  try {
+    // check if user exists
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json(errorResponse(
+        4,
+        'UNKNOWN ACCESS',
+        'User does not exist'
+      ));
+    }
+
+    res.status(200).json(successResponse(
+      0,
+      'SUCCESS',
+      'User information get successful',
+      {
+        id: user._id,
+        userName: user.userName,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        avatar: process.env.APP_BASE_URL + user.avatar,
+        gender: user.gender,
+        role: user.role,
+        verified: user.verified,
         status: user.status,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
@@ -83,6 +126,7 @@ exports.updateUser = async (req, res) => {
           gender: updatedUser.gender,
           address: updatedUser.address,
           role: updatedUser.role,
+          verified: updatedUser.verified,
           status: updatedUser.status,
           createdAt: updatedUser.createdAt,
           updatedAt: updatedUser.updatedAt
@@ -172,6 +216,7 @@ exports.avatarUpdate = async (req, res) => {
           gender: updatedUser.gender,
           address: updatedUser.address,
           role: updatedUser.role,
+          verified: updatedUser.verified,
           status: updatedUser.status,
           createdAt: updatedUser.createdAt,
           updatedAt: updatedUser.updatedAt
@@ -204,6 +249,50 @@ exports.avatarUpdate = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const { user } = req;
+
+    if (!user) {
+      return res.status(404).json(errorResponse(
+        4,
+        'UNKNOWN ACCESS',
+        'User does not exist'
+      ));
+    }
+
+    // delete user form database
+    await User.findByIdAndDelete(user.id);
+
+    // user avatar image delete if available
+    if (user?.avatar) {
+      const userAvatar = user.avatar.includes('/uploads/users');
+
+      if (userAvatar) {
+        fs.unlink(`${appRoot}/public${user.avatar}`, (err) => {
+          if (err) {
+            logger.error(err.message);
+          }
+        });
+      }
+    }
+
+    res.status(200).json(successResponse(
+      0,
+      'SUCCESS',
+      'User delete form database successful'
+    ));
+  } catch (error) {
+    res.status(500).json(errorResponse(
+      2,
+      'SERVER SIDE ERROR',
+      error
+    ));
+  }
+};
+
+// TODO: Controller for delete user using id by admin
+exports.deleteUserById = async (req, res) => {
+  try {
+    // check if user exists
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json(errorResponse(
@@ -287,14 +376,16 @@ exports.getUsersList = async (req, res) => {
             gender: findUser.gender,
             address: findUser.address,
             role: findUser.role,
+            verified: findUser.verified,
             status: findUser.status,
             createdAt: findUser.createdAt,
             updatedAt: findUser.updatedAt
           }))
         ],
         total_rows: users.length,
-        number_of_rows: findUsers.length,
-        number_of_page: Math.ceil(users.length / req.query.limit) || 1
+        response_rows: findUsers.length,
+        total_page: Math.ceil(users.length / req.query.limit) || 1,
+        current_page: parseInt(req.query.page, 10) || 1
       }
     ));
   } catch (error) {
@@ -348,6 +439,7 @@ exports.blockedUser = async (req, res) => {
         gender: blockedUser.gender,
         address: blockedUser.address,
         role: blockedUser.role,
+        verified: blockedUser.verified,
         status: blockedUser.status,
         createdAt: blockedUser.createdAt,
         updatedAt: blockedUser.updatedAt
@@ -404,6 +496,7 @@ exports.unblockedUser = async (req, res) => {
         gender: unblockedUser.gender,
         address: unblockedUser.address,
         role: unblockedUser.role,
+        verified: unblockedUser.verified,
         status: unblockedUser.status,
         createdAt: unblockedUser.createdAt,
         updatedAt: unblockedUser.updatedAt

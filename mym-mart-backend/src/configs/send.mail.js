@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const sgMail = require('@sendgrid/mail');
 const { successResponse, errorResponse } = require('./app.response');
 
@@ -23,7 +22,9 @@ const sendEmail = async (res, user, url, subjects, message, title) => {
       `Email sent to ${user.email} successful`
     ));
   }).catch(async (error) => {
+    // eslint-disable-next-line no-param-reassign
     user.resetPasswordToken = undefined;
+    // eslint-disable-next-line no-param-reassign
     user.resetPasswordExpire = undefined;
 
     await user.save({ validateBeforeSave: false });

@@ -5,7 +5,7 @@ function defaultController(_req, res) {
     res.status(200).json(successResponse(
       0,
       'SUCCESS',
-      'Welcome to MYM-MART E-Commerce ~ Backed!'
+      'Welcome to Node, Express application boilerplate!'
     ));
   } catch (error) {
     res.status(500).json(errorResponse(

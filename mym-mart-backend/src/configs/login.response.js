@@ -37,6 +37,7 @@ const loginResponse = (res, user, maintenance) => {
           gender: user.gender,
           address: user.address,
           role: user.role,
+          verified: user.verified,
           status: user.status,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt
