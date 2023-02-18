@@ -30,9 +30,11 @@ function Dashboard() {
         removeSessionAndLogoutUser();
       } else {
         notificationWithIcon('error', 'Sorry! Something went wrong. App server error');
+        removeSessionAndLogoutUser();
       }
     } catch (error) {
       notificationWithIcon('error', error?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+      removeSessionAndLogoutUser();
     }
   };
 

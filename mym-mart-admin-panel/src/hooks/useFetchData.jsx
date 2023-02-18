@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ApiService from '../utils/apiService';
 
-const useFetchData = (url, reFetch) => {
+const useFetchData = (url, fetchAgain) => {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +21,7 @@ const useFetchData = (url, reFetch) => {
         setError(err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
         setLoading(false);
       });
-  }, [url, reFetch]);
+  }, [url, fetchAgain]);
 
   return [loading, error, response];
 };

@@ -72,7 +72,6 @@ a {
 .ant-picker-calendar-date-content {
   @apply !h-[25px];
 }
-
 .ant-picker-content thead tr {
   @apply !h-[40px] border-b-bg-black border-b-2;
 }
@@ -86,6 +85,37 @@ a {
 }
 
 /* app components style end */
+
+/* data table style start */
+
+.table-layout {
+  @apply w-full shadow bg-bg-white rounded my-2;
+}
+.table-layout-container {
+  @apply border-t-2 border-l-2 border-gray-200 w-full rounded bg-bg-white overflow-x-auto;
+}
+
+.data-table {
+  @apply w-full leading-normal font-text-font border-spacing-0 border-collapse overflow-hidden;
+}
+.data-table-head {
+  background: rgba(205, 205, 205, 0.11);
+  @apply tracking-wider text-left px-5 py-3 border-b-2 border-gray-200 hover:cursor-default;
+}
+.data-table-head-tr {
+  @apply border-b-2 border-gray-200;
+}
+.data-table-head-tr-th {
+  @apply border-r-2 py-3 px-3 text-[12px] text-gray-600 font-body-font font-bold uppercase tracking-wider whitespace-nowrap;
+}
+.data-table-body-tr {
+  @apply hover:bg-gray-100 hover:cursor-default;
+}
+.data-table-body-tr-td {
+  @apply py-3 px-3 border-b-2 border-r-2 border-gray-200 text-gray-900 text-[12px] font-body-font font-medium capitalize whitespace-nowrap;
+}
+
+/* data table style end */
 
 /* dashboard components style start */
 

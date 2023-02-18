@@ -8,7 +8,6 @@ import Logo from '../assets/images/logo.png';
 import useTimeout from '../hooks/useTimeout';
 import ApiService from '../utils/apiService';
 import { setSessionUserAndToken } from '../utils/authentication';
-import notificationWithIcon from '../utils/notification';
 
 function Login() {
   window.document.title = 'MYM Mart — Login';
@@ -30,7 +29,6 @@ function Login() {
 
       if (response?.result_code === 0) {
         setSessionUserAndToken(response?.result?.data, response?.access_token, response?.refresh_token);
-        notificationWithIcon('success', response?.result?.message);
         window.location.href = '/dashboard/main';
         setLoading(false);
       } else {
