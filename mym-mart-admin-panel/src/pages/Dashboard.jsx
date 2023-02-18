@@ -228,7 +228,7 @@ function Dashboard() {
           </Link>
         </Header>
 
-        <Content className='m-2 !bg-bg-white'>
+        <Content className='bg-bg-white overflow-y-scroll m-2 p-2'>
           {selectedKeys === '1' && (<Main />)}
           {selectedKeys === '2' && (<Users />)}
         </Content>
@@ -243,7 +243,6 @@ function Dashboard() {
             rel='noreferrer'
           >
             Samiur Rahman Mukul
-
           </a>
         </Footer>
       </Layout>

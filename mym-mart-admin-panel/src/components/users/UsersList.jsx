@@ -1,4 +1,3 @@
-import { CheckCircleOutlined } from '@ant-design/icons';
 import {
   Avatar, Button, Empty, Result, Skeleton, Tag
 } from 'antd';
@@ -58,16 +57,16 @@ function UsersList({ add }) {
                         <th className='data-table-head-tr-th' scope='col'>
                           Phone
                         </th>
-                        <th className='data-table-head-tr-th' scope='col'>
+                        <th className='data-table-head-tr-th text-center' scope='col'>
                           Role
                         </th>
-                        <th className='data-table-head-tr-th' scope='col'>
+                        <th className='data-table-head-tr-th text-center' scope='col'>
                           Status
                         </th>
-                        <th className='data-table-head-tr-th' scope='col'>
+                        <th className='data-table-head-tr-th text-center' scope='col'>
                           Verified
                         </th>
-                        <th className='data-table-head-tr-th' scope='col'>
+                        <th className='data-table-head-tr-th text-center' scope='col'>
                           Action
                         </th>
                       </tr>
@@ -119,7 +118,6 @@ function UsersList({ add }) {
                           <td className='data-table-body-tr-td !px-0 text-center'>
                             <Button
                               className='inline-flex items-center !px-2'
-                              icon={<CheckCircleOutlined />}
                               onClick={() => add(data?.id)}
                               type='link'
                             >

@@ -18,7 +18,7 @@ function UserDetails({ id }) {
           status='error'
         />
       ) : (
-        <Descriptions className='m-2' title='User Information' bordered>
+        <Descriptions title='User Information' bordered>
           <Descriptions.Item label='Avatar' span={3}>
             {response?.data?.avatar ? (
               <Image

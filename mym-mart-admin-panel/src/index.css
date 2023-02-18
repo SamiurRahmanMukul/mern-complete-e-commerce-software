@@ -84,6 +84,10 @@ a {
   @apply transition-all duration-200;
 }
 
+.two-grid-column {
+  @apply flex flex-col items-center justify-center md:flex-row md:justify-between md:space-x-4;
+}
+
 /* app components style end */
 
 /* data table style start */

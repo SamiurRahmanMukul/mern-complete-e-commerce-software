@@ -1,18 +1,34 @@
-import { Tabs } from 'antd';
+import { UserAddOutlined } from '@ant-design/icons';
+import { Button, Tabs } from 'antd';
 import React, { useRef, useState } from 'react';
+import CreateUser from '../users/CreateUser';
 import UserDetails from '../users/UserDetails';
 import UsersList from '../users/UsersList';
 
 function Users() {
-  // function to create new tab pane
+  // function to create new tab pane for user details
   const add = (id) => {
-    const newActiveKey = `newTab${newTabIndex.current++}`;
+    const newActiveKey = `newTab1${newTabIndex.current++}`;
     setItems([
       ...items,
       {
         key: newActiveKey,
         label: 'User Details',
         children: <UserDetails id={id} />
+      }
+    ]);
+    setActiveKey(newActiveKey);
+  };
+
+  // function to create new tab pane create new user
+  const add2 = () => {
+    const newActiveKey = `newTab2${newTabIndex.current++}`;
+    setItems([
+      ...items,
+      {
+        key: newActiveKey,
+        label: 'Create User',
+        children: <CreateUser />
       }
     ]);
     setActiveKey(newActiveKey);
@@ -52,8 +68,18 @@ function Users() {
 
   return (
     <Tabs
-      className='m-2'
       onChange={(key) => setActiveKey(key)}
+      tabBarExtraContent={(
+        <Button
+          className='inline-flex items-center'
+          icon={<UserAddOutlined />}
+          onClick={add2}
+          type='primary'
+          size='large'
+        >
+          Create User
+        </Button>
+      )}
       activeKey={activeKey}
       type='editable-card'
       onEdit={onEdit}
