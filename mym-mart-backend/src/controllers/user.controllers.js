@@ -29,6 +29,8 @@ exports.getUser = async (req, res) => {
         phone: user.phone,
         avatar: process.env.APP_BASE_URL + user.avatar,
         gender: user.gender,
+        dob: user.dob,
+        address: user.address,
         role: user.role,
         verified: user.verified,
         status: user.status,
@@ -71,6 +73,8 @@ exports.getUserById = async (req, res) => {
         phone: user.phone,
         avatar: process.env.APP_BASE_URL + user.avatar,
         gender: user.gender,
+        dob: user.dob,
+        address: user.address,
         role: user.role,
         verified: user.verified,
         status: user.status,
@@ -92,7 +96,7 @@ exports.updateUser = async (req, res) => {
   try {
     const { user } = req;
     const {
-      fullName, phone, gender, address
+      fullName, phone, gender, dob, address
     } = req.body;
 
     if (!user) {
@@ -103,12 +107,12 @@ exports.updateUser = async (req, res) => {
       ));
     }
 
-    if (fullName && phone && gender && address) {
+    if (fullName && phone && gender && dob && address) {
       // update user info & save database
       const updatedUser = await User.findByIdAndUpdate(
         user._id,
         {
-          fullName, phone, gender, address
+          fullName, phone, gender, dob, address
         },
         { runValidators: true, new: true }
       );
@@ -124,6 +128,7 @@ exports.updateUser = async (req, res) => {
           phone: updatedUser.phone,
           avatar: process.env.APP_BASE_URL + updatedUser.avatar,
           gender: updatedUser.gender,
+          dob: updatedUser.dob,
           address: updatedUser.address,
           role: updatedUser.role,
           verified: updatedUser.verified,
@@ -214,6 +219,7 @@ exports.avatarUpdate = async (req, res) => {
           phone: updatedUser.phone,
           avatar: process.env.APP_BASE_URL + updatedUser.avatar,
           gender: updatedUser.gender,
+          dob: updatedUser.dob,
           address: updatedUser.address,
           role: updatedUser.role,
           verified: updatedUser.verified,
@@ -374,6 +380,7 @@ exports.getUsersList = async (req, res) => {
             phone: findUser.phone,
             avatar: process.env.APP_BASE_URL + findUser.avatar,
             gender: findUser.gender,
+            dob: findUser.dob,
             address: findUser.address,
             role: findUser.role,
             verified: findUser.verified,
@@ -437,6 +444,7 @@ exports.blockedUser = async (req, res) => {
         phone: blockedUser.phone,
         avatar: process.env.APP_BASE_URL + blockedUser.avatar,
         gender: blockedUser.gender,
+        dob: blockedUser.dob,
         address: blockedUser.address,
         role: blockedUser.role,
         verified: blockedUser.verified,
@@ -494,6 +502,7 @@ exports.unblockedUser = async (req, res) => {
         phone: unblockedUser.phone,
         avatar: process.env.APP_BASE_URL + unblockedUser.avatar,
         gender: unblockedUser.gender,
+        dob: unblockedUser.dob,
         address: unblockedUser.address,
         role: unblockedUser.role,
         verified: unblockedUser.verified,

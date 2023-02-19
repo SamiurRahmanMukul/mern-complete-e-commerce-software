@@ -11,10 +11,10 @@ const sendEmail = require('../configs/send.mail');
 exports.register = async (req, res) => {
   try {
     const {
-      userName, fullName, email, phone, password, address, gender, role
+      userName, fullName, email, phone, password, dob, address, gender, role
     } = req.body;
 
-    if (userName && fullName && email && phone && password && address) {
+    if (userName && fullName && email && password && dob && address) {
       // check if userName, email or phone already exists
       const findUserName = await User.findOne({ userName });
       const findEmail = await User.findOne({ email });
@@ -74,6 +74,7 @@ exports.register = async (req, res) => {
         password,
         avatar: req.file ? `/uploads/users/${req.file.filename}` : '/avatar.png',
         gender,
+        dob,
         address,
         role
       });
@@ -90,6 +91,7 @@ exports.register = async (req, res) => {
           phone: user.phone,
           avatar: process.env.APP_BASE_URL + user.avatar,
           gender: user.gender,
+          dob: user.dob,
           address: user.address,
           role: user.role,
           verified: user.verified,

@@ -35,6 +35,7 @@ const loginResponse = (res, user, maintenance) => {
           phone: user.phone,
           avatar: process.env.APP_BASE_URL + user.avatar,
           gender: user.gender,
+          dob: user.dob,
           address: user.address,
           role: user.role,
           verified: user.verified,
