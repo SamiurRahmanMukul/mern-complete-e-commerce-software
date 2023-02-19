@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ApiService from '../utils/apiService';
 
 const useFetchData = (url, fetchAgain) => {
+  const reFetch = useSelector((state) => state.app.reFetch);
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +23,7 @@ const useFetchData = (url, fetchAgain) => {
         setError(err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
         setLoading(false);
       });
-  }, [url, fetchAgain]);
+  }, [url, fetchAgain, reFetch]);
 
   return [loading, error, response];
 };

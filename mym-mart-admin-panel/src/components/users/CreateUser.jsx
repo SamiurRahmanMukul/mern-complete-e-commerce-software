@@ -4,13 +4,56 @@ import {
 import {
   Button, DatePicker, Form, Input, Select
 } from 'antd';
-import React from 'react';
+import dayjs from 'dayjs';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { reFetchData } from '../../store/slice/appSlice';
+import ApiService from '../../utils/apiService';
+import notificationWithIcon from '../../utils/notification';
 
 function CreateUser() {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+
+  // function to handle register new user
+  const onFinish = (values) => {
+    setLoading(true);
+    const data = {
+      userName: values.userName,
+      fullName: values.fullName,
+      email: values.email,
+      phone: values.phone,
+      role: values.role,
+      gender: values.gender,
+      dob: dayjs(values.dob).format('DD-MM-YYYY'),
+      address: values.address,
+      password: values.password
+    };
+
+    ApiService.post('/api/v1/auth/registration', data)
+      .then((response) => {
+        setLoading(false);
+        if (response?.result_code === 0) {
+          notificationWithIcon('success', response?.result?.message || 'New user registration successful');
+          form.resetFields();
+          dispatch(reFetchData());
+        } else {
+          notificationWithIcon('Sorry! Something went wrong. App server error');
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        notificationWithIcon('error', err?.response?.data?.result?.error?.message || err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+      });
+  };
+
   return (
     <Form
+      form={form}
       className='login-form'
       name='create-new-user'
+      onFinish={onFinish}
       layout='vertical'
     >
       <div className='two-grid-column'>
@@ -197,6 +240,8 @@ function CreateUser() {
           htmlType='submit'
           type='primary'
           size='large'
+          loading={loading}
+          disabled={loading}
         >
           Register User
         </Button>
