@@ -32,7 +32,7 @@ connectDatabase();
 app.use(morganLogger());
 
 // secure HTTP headers setting middleware
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 
 // allow cross-origin resource sharing
 app.use(crossOrigin(corsOptions));

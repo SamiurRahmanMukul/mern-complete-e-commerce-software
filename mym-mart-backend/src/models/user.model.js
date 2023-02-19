@@ -38,6 +38,10 @@ const usersSchema = new mongoose.Schema({
     type: String,
     enum: ['male', 'female']
   },
+  dob: {
+    type: Date,
+    required: [validator.isDate, 'Date of birth filed is required']
+  },
   address: {
     type: String,
     required: [true, 'Address field is required']
