@@ -1,12 +1,12 @@
 import {
-  AreaChartOutlined, AuditOutlined, DashboardOutlined, FileProtectOutlined, FilterOutlined, LogoutOutlined, SettingOutlined, UserOutlined
+  AreaChartOutlined, AuditOutlined, CrownOutlined, DashboardOutlined, FileProtectOutlined, FilterOutlined, LogoutOutlined, SettingOutlined, TeamOutlined, UserOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
 import UserBox from '../components/shared/UserBox';
-import Main from '../components/tabs/Main';
+import Dashboard from '../components/tabs/Dashboard';
 import Users from '../components/tabs/Users';
 import ApiService from '../utils/apiService';
 import { removeSessionAndLogoutUser } from '../utils/authentication';
@@ -16,8 +16,8 @@ const {
   Header, Content, Footer, Sider
 } = Layout;
 
-function Dashboard() {
-  window.document.title = 'MYM Mart — Dashboard';
+function Main() {
+  window.document.title = 'MYM Mart — Main';
   const [selectedKeys, setSelectedKeys] = useState('1');
   const navigate = useNavigate();
   const { tab } = useParams();
@@ -41,39 +41,47 @@ function Dashboard() {
   const handleTabChange = (key) => {
     switch (key) {
       case '1': {
-        navigate('/dashboard/main');
+        navigate('/main/dashboard');
         break;
       }
       case '2': {
-        navigate('/dashboard/users');
+        navigate('/main/users');
         break;
       }
       case '3': {
-        navigate('/dashboard/categories');
+        navigate('/main/categories');
         break;
       }
       case '4': {
-        navigate('/dashboard/products');
+        navigate('/main/products');
         break;
       }
       case '5': {
-        navigate('/dashboard/orders');
+        navigate('/main/orders');
         break;
       }
       case '6': {
-        navigate('/dashboard/analytics');
+        navigate('/main/advertisements');
         break;
       }
       case '7': {
-        navigate('/dashboard/settings');
+        navigate('/main/analytics');
         break;
       }
       case '8': {
+        navigate('/main/profile');
+        break;
+      }
+      case '9': {
+        navigate('/main/settings');
+        break;
+      }
+      case '10': {
         userLogout();
         break;
       }
       default: {
-        navigate('/dashboard/main');
+        navigate('/main/dashboard');
       }
     }
   };
@@ -81,7 +89,7 @@ function Dashboard() {
   useEffect(() => {
     if (tab) {
       switch (tab) {
-        case 'main': {
+        case 'dashboard': {
           setSelectedKeys('1');
           break;
         }
@@ -101,16 +109,24 @@ function Dashboard() {
           setSelectedKeys('5');
           break;
         }
-        case 'analytics': {
+        case 'advertisements': {
           setSelectedKeys('6');
           break;
         }
-        case 'settings': {
+        case 'analytics': {
           setSelectedKeys('7');
           break;
         }
-        case 'logout': {
+        case 'profile': {
           setSelectedKeys('8');
+          break;
+        }
+        case 'settings': {
+          setSelectedKeys('9');
+          break;
+        }
+        case 'logout': {
+          setSelectedKeys('10');
           break;
         }
         default: {
@@ -143,14 +159,22 @@ function Dashboard() {
         break;
       }
       case '6': {
-        window.document.title = 'MYM Mart — Analytics';
+        window.document.title = 'MYM Mart — Advertisements';
         break;
       }
       case '7': {
-        window.document.title = 'MYM Mart — Settings';
+        window.document.title = 'MYM Mart — Analytics';
         break;
       }
       case '8': {
+        window.document.title = 'MYM Mart — Profile';
+        break;
+      }
+      case '9': {
+        window.document.title = 'MYM Mart — Settings';
+        break;
+      }
+      case '10': {
         window.document.title = 'MYM Mart — Logout';
         break;
       }
@@ -180,7 +204,7 @@ function Dashboard() {
             },
             {
               key: '2',
-              icon: <UserOutlined />,
+              icon: <TeamOutlined />,
               label: 'Users'
             },
             {
@@ -200,16 +224,26 @@ function Dashboard() {
             },
             {
               key: '6',
+              icon: <CrownOutlined />,
+              label: 'Advertisements'
+            },
+            {
+              key: '7',
               icon: <AreaChartOutlined />,
               label: 'Analytics'
             },
             {
-              key: '7',
+              key: '8',
+              icon: <UserOutlined />,
+              label: 'My Profile'
+            },
+            {
+              key: '9',
               icon: <SettingOutlined />,
               label: 'Settings'
             },
             {
-              key: '8',
+              key: '10',
               icon: <LogoutOutlined />,
               label: 'Logout'
             }
@@ -229,7 +263,7 @@ function Dashboard() {
         </Header>
 
         <Content className='bg-bg-white overflow-y-scroll m-2 p-2'>
-          {selectedKeys === '1' && (<Main />)}
+          {selectedKeys === '1' && (<Dashboard />)}
           {selectedKeys === '2' && (<Users />)}
         </Content>
 
@@ -250,4 +284,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default React.memo(Main);

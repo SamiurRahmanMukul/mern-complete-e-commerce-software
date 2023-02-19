@@ -16,7 +16,7 @@ function Home() {
         )}
         icon={<SmileOutlined />}
         extra={(
-          <Link to='/dashboard/main'>
+          <Link to='/main/dashboard'>
             <Button
               type='primary'
               shape='round'

@@ -29,7 +29,7 @@ function Login() {
 
       if (response?.result_code === 0) {
         setSessionUserAndToken(response?.result?.data, response?.access_token, response?.refresh_token);
-        window.location.href = '/dashboard/main';
+        window.location.href = '/main/dashboard';
         setLoading(false);
       } else {
         setErrMsg('Sorry! Something went wrong. App server error');
@@ -110,4 +110,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default React.memo(Login);

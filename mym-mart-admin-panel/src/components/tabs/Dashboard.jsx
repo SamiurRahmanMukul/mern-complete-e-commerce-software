@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Main() {
+function Dashboard() {
   return (
     <div>
       <h2 className='text-[20px] text-center font-text-font font-medium py-5'>
@@ -10,4 +10,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Dashboard;

@@ -44,4 +44,4 @@ function QueryOptions({ query, setQuery }) {
   );
 }
 
-export default QueryOptions;
+export default React.memo(QueryOptions);

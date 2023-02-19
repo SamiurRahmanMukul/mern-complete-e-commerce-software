@@ -8,7 +8,7 @@ import UsersList from '../users/UsersList';
 function Users() {
   // function to create new tab pane for user details
   const add = (id) => {
-    const newActiveKey = `newTab1${newTabIndex.current++}`;
+    const newActiveKey = `NewTab1${newTabIndex.current++}`;
     setItems([
       ...items,
       {
@@ -22,7 +22,7 @@ function Users() {
 
   // function to create new tab pane create new user
   const add2 = () => {
-    const newActiveKey = `newTab2${newTabIndex.current++}`;
+    const newActiveKey = `NewTab2${newTabIndex.current++}`;
     setItems([
       ...items,
       {
