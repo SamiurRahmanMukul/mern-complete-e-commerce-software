@@ -67,7 +67,14 @@ function UserDetails({ id }) {
               {response?.data?.verified ? 'Yes' : 'No'}
             </Tag>
           </Descriptions.Item>
-          <Descriptions.Item label='Registration Date' span={2}>
+          <Descriptions.Item label='Date Of Birth' span={2}>
+            {response?.data?.dob?.split('T')[0] || 'N/A'}
+          </Descriptions.Item>
+
+          <Descriptions.Item label='User Last Update Date'>
+            {response?.data?.updatedAt?.split('T')[0]}
+          </Descriptions.Item>
+          <Descriptions.Item label='User Registration Date' span={2}>
             {response?.data?.createdAt?.split('T')[0]}
           </Descriptions.Item>
         </Descriptions>

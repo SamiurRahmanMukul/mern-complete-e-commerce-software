@@ -1,7 +1,7 @@
 import {
-  Avatar, Button, Empty, Result, Skeleton, Tag
+  Avatar, Button, Empty, Pagination, Result, Skeleton, Tag
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uniqueId } from 'uuid';
 import useFetchData from '../../hooks/useFetchData';
 import { userStatusAsResponse } from '../../utils/responseAsStatus';
@@ -14,6 +14,11 @@ function UsersList({ add }) {
 
   // fetch user-list API data
   const [loading, error, response] = useFetchData(`/api/v1/all-users-list?keyword=${query.search}&limit=${query.rows}&page=${query.page}&sort=${query.sort}`);
+
+  // reset query options
+  useEffect(() => {
+    setQuery((prevState) => ({ ...prevState, page: '1' }));
+  }, [query.rows, query.search]);
 
   return (
     <div>
@@ -134,6 +139,17 @@ function UsersList({ add }) {
           </Skeleton>
         )}
       </div>
+
+      {/* user list ― pagination */}
+      {response?.data?.total_page > 1 && (
+        <Pagination
+          className='my-5'
+          onChange={(e) => setQuery((prevState) => ({ ...prevState, page: e }))}
+          defaultCurrent={query.page}
+          total={response?.data?.total_page * 10}
+          current={response?.data?.current_page}
+        />
+      )}
     </div>
   );
 }

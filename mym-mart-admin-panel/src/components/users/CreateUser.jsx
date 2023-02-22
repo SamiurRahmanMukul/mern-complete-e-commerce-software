@@ -26,7 +26,7 @@ function CreateUser() {
       phone: values.phone,
       role: values.role,
       gender: values.gender,
-      dob: dayjs(values.dob).format('DD-MM-YYYY'),
+      dob: dayjs(values.dob).format('YYYY-MM-DD'),
       address: values.address,
       password: values.password
     };
