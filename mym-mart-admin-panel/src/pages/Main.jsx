@@ -1,13 +1,16 @@
 import {
-  AreaChartOutlined, AuditOutlined, CrownOutlined, DashboardOutlined, FileProtectOutlined, FilterOutlined, LogoutOutlined, SettingOutlined, TeamOutlined, UserOutlined
+  AreaChartOutlined, AuditOutlined, CrownOutlined, DashboardOutlined, FileProtectOutlined, FilterOutlined, FullscreenExitOutlined, FullscreenOutlined, LogoutOutlined, SettingOutlined, TeamOutlined, UserOutlined
 } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import {
+  Button, Layout, Menu, Tooltip
+} from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
 import UserBox from '../components/shared/UserBox';
 import Dashboard from '../components/tabs/Dashboard';
 import Users from '../components/tabs/Users';
+import useFullScreen from '../hooks/useFullScreen';
 import ApiService from '../utils/apiService';
 import { removeSessionAndLogoutUser } from '../utils/authentication';
 import notificationWithIcon from '../utils/notification';
@@ -18,6 +21,7 @@ const {
 
 function Main() {
   window.document.title = 'MYM Mart — Main';
+  const { isFullscreen, toggleFullScreen } = useFullScreen();
   const [selectedKeys, setSelectedKeys] = useState('1');
   const navigate = useNavigate();
   const { tab } = useParams();
@@ -260,6 +264,20 @@ function Main() {
               src={Logo}
             />
           </Link>
+
+          {/* full screen toggle button */}
+          <Tooltip title='Click to toggle FullScreen!' placement='left'>
+            <Button
+              className='absolute right-5 top-5'
+              icon={isFullscreen ?
+                (<FullscreenExitOutlined className='pb-12' />) :
+                (<FullscreenOutlined className='pb-12' />)}
+              onClick={toggleFullScreen}
+              shape='default'
+              type='default'
+              size='middle'
+            />
+          </Tooltip>
         </Header>
 
         <Content className='bg-bg-white overflow-y-scroll m-2 p-2'>
