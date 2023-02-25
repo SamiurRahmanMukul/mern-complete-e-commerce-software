@@ -391,8 +391,8 @@ exports.getUsersList = async (req, res) => {
         ],
         total_rows: users.length,
         response_rows: findUsers.length,
-        total_page: Math.ceil(users.length / req.query.limit) || 1,
-        current_page: parseInt(req.query.page, 10) || 1
+        total_page: req?.query?.keyword ? Math.ceil(findUsers.length / req.query.limit) : Math.ceil(users.length / req.query.limit),
+        current_page: req?.query?.page ? parseInt(req.query.page, 10) : 1
       }
     ));
   } catch (error) {
