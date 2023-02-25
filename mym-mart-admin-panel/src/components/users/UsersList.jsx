@@ -145,9 +145,8 @@ function UsersList({ add }) {
         <Pagination
           className='my-5'
           onChange={(e) => setQuery((prevState) => ({ ...prevState, page: e }))}
-          defaultCurrent={query.page}
+          defaultCurrent={response?.data?.current_page}
           total={response?.data?.total_page * 10}
-          current={response?.data?.current_page}
         />
       )}
     </div>

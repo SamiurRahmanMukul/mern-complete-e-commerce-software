@@ -35,16 +35,16 @@ function CreateUser() {
       .then((response) => {
         setLoading(false);
         if (response?.result_code === 0) {
-          notificationWithIcon('success', response?.result?.message || 'New user registration successful');
+          notificationWithIcon('success', 'SUCCESS', response?.result?.message || 'New user registration successful');
           form.resetFields();
           dispatch(reFetchData());
         } else {
-          notificationWithIcon('Sorry! Something went wrong. App server error');
+          notificationWithIcon('error', 'ERROR', 'Sorry! Something went wrong. App server error');
         }
       })
       .catch((err) => {
         setLoading(false);
-        notificationWithIcon('error', err?.response?.data?.result?.error?.message || err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+        notificationWithIcon('error', 'ERROR', err?.response?.data?.result?.error?.message || err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
       });
   };
 

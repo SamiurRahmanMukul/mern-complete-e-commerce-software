@@ -29,11 +29,11 @@ function Main() {
       if (response?.result_code === 0) {
         removeSessionAndLogoutUser();
       } else {
-        notificationWithIcon('error', 'Sorry! Something went wrong. App server error');
+        notificationWithIcon('error', 'ERROR', 'Sorry! Something went wrong. App server error');
         removeSessionAndLogoutUser();
       }
     } catch (error) {
-      notificationWithIcon('error', error?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+      notificationWithIcon('error', 'ERROR', error?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
       removeSessionAndLogoutUser();
     }
   };
