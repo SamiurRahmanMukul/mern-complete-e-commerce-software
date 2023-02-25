@@ -1,13 +1,78 @@
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import {
-  Descriptions, Image, Result, Skeleton, Tag
+  Button, Descriptions, Image, Modal, Result, Skeleton, Tag
 } from 'antd';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import useFetchData from '../../hooks/useFetchData';
+import { reFetchData } from '../../store/slice/appSlice';
+import ApiService from '../../utils/apiService';
+import notificationWithIcon from '../../utils/notification';
 import { userStatusAsResponse } from '../../utils/responseAsStatus';
 
+const { confirm } = Modal;
+
 function UserDetails({ id }) {
+  const dispatch = useDispatch();
+
   // fetch user-details API data
   const [loading, error, response] = useFetchData(`/api/v1/get-user/${id}`);
+
+  // function to handle blocked user
+  const blockedUser = () => {
+    confirm({
+      title: 'BLOCKED USER',
+      icon: <ExclamationCircleFilled />,
+      content: 'Are you sure blocked this user?',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          ApiService.put(`/api/v1/blocked-user/${id}`)
+            .then((res) => {
+              if (res?.result_code === 0) {
+                notificationWithIcon('success', 'SUCCESS', res?.result?.message || 'User blocked successful');
+                dispatch(reFetchData());
+                resolve();
+              } else {
+                notificationWithIcon('error', 'ERROR', 'Sorry! Something went wrong. App server error');
+                reject();
+              }
+            })
+            .catch((err) => {
+              notificationWithIcon('error', 'ERROR', err?.response?.data?.result?.error?.message || err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+              reject();
+            });
+        }).catch(() => notificationWithIcon('error', 'ERROR', 'Oops errors!'));
+      }
+    });
+  };
+
+  // function to handle unblocked user
+  const unblockedUser = () => {
+    confirm({
+      title: 'UNBLOCKED USER',
+      icon: <ExclamationCircleFilled />,
+      content: 'Are you sure unblocked this user?',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          ApiService.put(`/api/v1/unblocked-user/${id}`)
+            .then((res) => {
+              if (res?.result_code === 0) {
+                notificationWithIcon('success', 'SUCCESS', res?.result?.message || 'User unblocked successful');
+                dispatch(reFetchData());
+                resolve();
+              } else {
+                notificationWithIcon('error', 'ERROR', 'Sorry! Something went wrong. App server error');
+                reject();
+              }
+            })
+            .catch((err) => {
+              notificationWithIcon('error', 'ERROR', err?.response?.data?.result?.error?.message || err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
+              reject();
+            });
+        }).catch(() => notificationWithIcon('error', 'ERROR', 'Oops errors!'));
+      }
+    });
+  };
 
   return (
     <Skeleton loading={loading} paragraph={{ rows: 10 }} active avatar>
@@ -18,7 +83,19 @@ function UserDetails({ id }) {
           status='error'
         />
       ) : (
-        <Descriptions title='User Information' bordered>
+        <Descriptions
+          title='User Information'
+          bordered
+          extra={response?.data?.status === 'blocked' ? (
+            <Button onClick={unblockedUser} type='dashed'>
+              Unblocked User
+            </Button>
+          ) : (
+            <Button onClick={blockedUser} type='dashed' danger>
+              Blocked User
+            </Button>
+          )}
+        >
           <Descriptions.Item label='Avatar' span={3}>
             {response?.data?.avatar ? (
               <Image
