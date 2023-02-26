@@ -9,6 +9,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
 import UserBox from '../components/shared/UserBox';
 import Dashboard from '../components/tabs/Dashboard';
+import MyProfile from '../components/tabs/MyProfile';
 import Users from '../components/tabs/Users';
 import useFullScreen from '../hooks/useFullScreen';
 import ApiService from '../utils/apiService';
@@ -283,6 +284,7 @@ function Main() {
         <Content className='bg-bg-white overflow-y-scroll m-2 p-2'>
           {selectedKeys === '1' && (<Dashboard />)}
           {selectedKeys === '2' && (<Users />)}
+          {selectedKeys === '8' && (<MyProfile />)}
         </Content>
 
         <Footer className='text-center font-text-font font-medium '>

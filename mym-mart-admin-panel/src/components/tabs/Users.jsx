@@ -67,32 +67,26 @@ function Users() {
   };
 
   return (
-    <div>
-      <h2 className='text-[20px] text-center font-text-font font-medium py-2'>
-        MYM Mart — Users
-      </h2>
-
-      <Tabs
-        onChange={(key) => setActiveKey(key)}
-        tabBarExtraContent={(
-          <Button
-            className='inline-flex items-center'
-            icon={<UserAddOutlined />}
-            onClick={add2}
-            type='primary'
-            size='large'
-          >
-            Create User
-          </Button>
+    <Tabs
+      onChange={(key) => setActiveKey(key)}
+      tabBarExtraContent={(
+        <Button
+          className='inline-flex items-center'
+          icon={<UserAddOutlined />}
+          onClick={add2}
+          type='primary'
+          size='large'
+        >
+          Create User
+        </Button>
       )}
-        activeKey={activeKey}
-        type='editable-card'
-        onEdit={onEdit}
-        items={items}
-        size='large'
-        hideAdd
-      />
-    </div>
+      activeKey={activeKey}
+      type='editable-card'
+      onEdit={onEdit}
+      items={items}
+      size='large'
+      hideAdd
+    />
   );
 }
 
