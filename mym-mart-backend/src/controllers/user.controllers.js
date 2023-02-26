@@ -410,6 +410,14 @@ exports.blockedUser = async (req, res) => {
     // check if user exists
     const user = await User.findById(req.params.id);
 
+    if (req?.user?._id?.toString() === req.params.id) {
+      return res.status(400).json(errorResponse(
+        1,
+        'FAILED',
+        'Sorry! You can´t possible self blocked'
+      ));
+    }
+
     if (!user) {
       return res.status(404).json(errorResponse(
         4,
@@ -468,6 +476,14 @@ exports.unblockedUser = async (req, res) => {
     // check if user exists
     const user = await User.findById(req.params.id);
 
+    if (req?.user?._id?.toString() === req.params.id) {
+      return res.status(400).json(errorResponse(
+        1,
+        'FAILED',
+        'Ops! You can´t possible self unblocked'
+      ));
+    }
+
     if (!user) {
       return res.status(404).json(errorResponse(
         4,
@@ -480,7 +496,7 @@ exports.unblockedUser = async (req, res) => {
       return res.status(400).json(errorResponse(
         1,
         'FAILED',
-        'Ops! User can´t blocked'
+        'Sorry! User already unblocked'
       ));
     }
 

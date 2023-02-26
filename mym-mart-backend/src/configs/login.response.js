@@ -29,6 +29,7 @@ const loginResponse = (res, user, maintenance) => {
         title: 'SUCCESS',
         message: 'User login successful',
         data: {
+          id: user._id,
           userName: user.userName,
           fullName: user.fullName,
           email: user.email,
