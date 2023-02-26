@@ -156,6 +156,10 @@ function UserDetails({ id }) {
           <Descriptions.Item label='User Registration Date' span={2}>
             {response?.data?.createdAt?.split('T')[0]}
           </Descriptions.Item>
+
+          <Descriptions.Item label='Address' span={3}>
+            {response?.data?.address}
+          </Descriptions.Item>
         </Descriptions>
       )}
     </Skeleton>

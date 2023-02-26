@@ -80,6 +80,10 @@ a {
 
 /* app components style start */
 
+.page-loader {
+  @apply w-full h-[50vh] flex items-center justify-center z-z-fixed;
+}
+
 .default-transition {
   @apply transition-all duration-200;
 }
@@ -124,7 +128,7 @@ a {
 /* dashboard components style start */
 
 .logo-box {
-  @apply px-2 py-4 flex flex-row items-center justify-start space-x-2;
+  @apply px-2 py-4 flex flex-row items-center justify-start space-x-2 cursor-pointer;
 }
 
 .user-name {

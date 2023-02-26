@@ -1,12 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '../../assets/images/avatar.png';
 import { getSessionUser } from '../../utils/authentication';
 
 function UserBox() {
   const user = getSessionUser();
+  const navigate = useNavigate();
 
   return (
-    <div className='logo-box'>
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      className='logo-box'
+      onClick={() => navigate('/main/profile')}
+    >
       <img
         className='w-[50px] h-auto rounded-full'
         src={user?.avatar || Avatar}
