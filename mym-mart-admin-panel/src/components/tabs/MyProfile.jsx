@@ -29,11 +29,14 @@ function MyProfile() {
         // Handle response from API
         if (info?.file?.response?.result_code === 0) {
           notificationWithIcon('success', 'SUCCESS', info?.file?.response?.result?.message || 'Your avatar change successful');
+          // update local storage session user data
           setSessionUserKeyAgainstValue('avatar', info?.file?.response?.result?.data?.avatar);
           window.location.reload();
         } else {
           notificationWithIcon('error', 'ERROR', 'Sorry! Something went wrong. App server error');
         }
+      } else {
+        notificationWithIcon('error', 'ERROR', info?.file?.response?.result?.error || 'Sorry! Something went wrong. App server error');
       }
     }
   };

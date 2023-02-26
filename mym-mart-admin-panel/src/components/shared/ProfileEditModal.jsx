@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import useFetchData from '../../hooks/useFetchData';
 import { reFetchData } from '../../store/slice/appSlice';
 import ApiService from '../../utils/apiService';
+import { setSessionUserKeyAgainstValue } from '../../utils/authentication';
 import notificationWithIcon from '../../utils/notification';
 import PageLoader from './PageLoader';
 
@@ -42,6 +43,14 @@ function ProfileEditModal({ editProfileModal, setEditProfileModal }) {
         setLoading(false);
         if (response?.result_code === 0) {
           notificationWithIcon('success', 'SUCCESS', response?.result?.message || 'Your profile information updated successful');
+
+          // update local storage session user data
+          setSessionUserKeyAgainstValue('fullName', response?.result?.data?.fullName);
+          setSessionUserKeyAgainstValue('phone', response?.result?.data?.phone);
+          setSessionUserKeyAgainstValue('gender', response?.result?.data?.gender);
+          setSessionUserKeyAgainstValue('dob', response?.result?.data?.dob);
+          setSessionUserKeyAgainstValue('address', response?.result?.data?.address);
+
           form.resetFields();
           dispatch(reFetchData());
           setEditProfileModal(false);
