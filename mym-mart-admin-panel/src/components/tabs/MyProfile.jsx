@@ -5,36 +5,37 @@ import {
 import ImgCrop from 'antd-img-crop';
 import React, { useState } from 'react';
 import useFetchData from '../../hooks/useFetchData';
-import ApiService from '../../utils/apiService';
-import { setSessionUserKeyAgainstValue } from '../../utils/authentication';
+import { getSessionToken, setSessionUserKeyAgainstValue } from '../../utils/authentication';
 import notificationWithIcon from '../../utils/notification';
 import { userStatusAsResponse } from '../../utils/responseAsStatus';
 import ProfileEditModal from '../shared/ProfileEditModal';
 
 function MyProfile() {
+  const token = getSessionToken();
   const [editProfileModal, setEditProfileModal] = useState(false);
 
   // fetch user profile API data
   const [loading, error, response] = useFetchData('/api/v1/get-user');
 
-  // function to handle change user avatar
-  const changeAvatar = (info) => {
-    const data = new FormData();
-    data.append('avatar', info.file.originFileObj);
-
-    ApiService.put('/api/v1/avatar-update', data)
-      .then((res) => {
-        if (res?.result_code === 0) {
-          notificationWithIcon('success', 'SUCCESS', res?.result?.message || 'Your avatar change successful');
-          setSessionUserKeyAgainstValue('avatar', res?.result?.data?.avatar);
+  // handle to change user avatar upload
+  const props = {
+    accept: 'image/*',
+    name: 'avatar',
+    action: `${process.env.REACT_APP_API_BASE_URL}/api/v1/avatar-update`,
+    method: 'put',
+    headers: { authorization: `Bearer ${token}` },
+    onChange(info) {
+      if (info.file.status === 'done') {
+        // Handle response from API
+        if (info?.file?.response?.result_code === 0) {
+          notificationWithIcon('success', 'SUCCESS', info?.file?.response?.result?.message || 'Your avatar change successful');
+          setSessionUserKeyAgainstValue('avatar', info?.file?.response?.result?.data?.avatar);
           window.location.reload();
         } else {
           notificationWithIcon('error', 'ERROR', 'Sorry! Something went wrong. App server error');
         }
-      })
-      .catch((err) => {
-        notificationWithIcon('error', 'ERROR', err?.response?.data?.result?.error?.message || err?.response?.data?.result?.error || 'Sorry! Something went wrong. App server error');
-      });
+      }
+    }
   };
 
   return (
@@ -74,7 +75,7 @@ function MyProfile() {
               {/* user avatar change */}
               <div className='absolute ml-24 -mt-[8.5rem]'>
                 <ImgCrop grid rotate>
-                  <Upload accept='image/*' onChange={changeAvatar}>
+                  <Upload {...props}>
                     <Tooltip title='Click to change Avatar'>
                       <Button
                         icon={<EditOutlined className='pb-14' />}

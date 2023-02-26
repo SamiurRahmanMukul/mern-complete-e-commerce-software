@@ -16,6 +16,7 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-unused-expressions": ["error", { "allowShortCircuit": true }],
     "operator-linebreak": ["error", "after"],
+    "react/jsx-props-no-spreading": "off",
     "import/prefer-default-export": "off",
     "max-len": ["error", { "code": 400 }],
     "no-unsafe-optional-chaining": "off",
