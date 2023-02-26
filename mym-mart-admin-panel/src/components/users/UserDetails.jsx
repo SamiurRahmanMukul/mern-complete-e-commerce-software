@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import useFetchData from '../../hooks/useFetchData';
 import { reFetchData } from '../../store/slice/appSlice';
 import ApiService from '../../utils/apiService';
+import { getSessionUser } from '../../utils/authentication';
 import notificationWithIcon from '../../utils/notification';
 import { userStatusAsResponse } from '../../utils/responseAsStatus';
 
@@ -14,6 +15,7 @@ const { confirm } = Modal;
 
 function UserDetails({ id }) {
   const dispatch = useDispatch();
+  const user = getSessionUser();
 
   // fetch user-details API data
   const [loading, error, response] = useFetchData(`/api/v1/get-user/${id}`);
@@ -86,15 +88,15 @@ function UserDetails({ id }) {
         <Descriptions
           title='User Information'
           bordered
-          extra={response?.data?.status === 'blocked' ? (
-            <Button onClick={unblockedUser} type='dashed'>
+          extra={user?.id !== id && (response?.data?.status === 'blocked' ? (
+            <Button onClick={unblockedUser} type='default' danger>
               Unblocked User
             </Button>
           ) : (
-            <Button onClick={blockedUser} type='dashed' danger>
+            <Button onClick={blockedUser} type='default' danger>
               Blocked User
             </Button>
-          )}
+          ))}
         >
           <Descriptions.Item label='Avatar' span={3}>
             {response?.data?.avatar ? (

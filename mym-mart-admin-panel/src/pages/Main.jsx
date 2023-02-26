@@ -266,7 +266,7 @@ function Main() {
           </Link>
 
           {/* full screen toggle button */}
-          <Tooltip title='Click to toggle FullScreen!' placement='left'>
+          <Tooltip title='Click to toggle Full Screen' placement='left'>
             <Button
               className='absolute right-5 top-5'
               icon={isFullscreen ?
